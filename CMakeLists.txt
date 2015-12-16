@@ -369,14 +369,18 @@ endif()
 # Elemental's mod's of Parallel Multiple Relatively Robust Representations
 # ------------------------------------------------------------------------
 add_subdirectory(external/pmrrr)
+add_subdirectory(external/pmrrr_extended)
 if(EL_BUILT_SCALAPACK)
   add_dependencies(pmrrr project_scalapack)
+  add_dependencies(pmrrr_extended project_scalapack)
 else()
   if(EL_BUILT_BLIS_LAPACK)
     add_dependencies(pmrrr project_blis_lapack)
+    add_dependencies(pmrrr_extended project_blis_lapack)
   endif()
   if(EL_BUILT_OPENBLAS)
     add_dependencies(pmrrr project_openblas)
+    add_dependencies(pmrrr_extended project_openblas)
   endif()
 endif()
 
@@ -445,6 +449,8 @@ if(EL_BUILT_PARMETIS)
   add_dependencies(El project_parmetis)
 endif()
 set(LINK_LIBS pmrrr ElSuiteSparse
+  ${EXTERNAL_LIBS} ${MATH_LIBS} ${MPI_CXX_LIBRARIES})
+set(LINK_LIBS pmrrr_extended ElSuiteSparse
   ${EXTERNAL_LIBS} ${MATH_LIBS} ${MPI_CXX_LIBRARIES})
 if(EL_HAVE_QT5)
   set(LINK_LIBS ${LINK_LIBS} ${Qt5Widgets_LIBRARIES})
@@ -625,7 +631,7 @@ include(CPack)
 # =====
 # Create ElConfig.cmake for find_package.
 # Add all targets to the build-tree export set
-export(TARGETS El pmrrr ElSuiteSparse
+export(TARGETS El pmrrr pmrrr_extended ElSuiteSparse
   FILE "${PROJECT_BINARY_DIR}/ElTargets.cmake")
 
 # Export the package for use from the build-tree
@@ -658,3 +664,4 @@ install(EXPORT ElTargets DESTINATION "${INSTALL_CMAKE_DIR}" COMPONENT dev)
 if(NOT CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   include(ElSub)
 endif()
+
