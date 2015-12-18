@@ -179,36 +179,36 @@ template<typename F>
 void HermitianTridiagEig
 ( Matrix<Base<F>>& d, Matrix<F>& dSub, Matrix<Base<F>>& w, 
   SortType sort=ASCENDING, 
-  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>() );
+  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), bool xtd = false );
 template<typename F>
 void HermitianTridiagEig
 ( const ElementalMatrix<Base<F>>& d, const ElementalMatrix<F>& dSub,
         ElementalMatrix<Base<F>>& w, SortType sort=ASCENDING,
-  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>() );
+  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), bool xtd = false );
 // Compute eigenpairs
 // ------------------
 template<typename F>
 void HermitianTridiagEig
 ( Matrix<Base<F>>& d, Matrix<F>& dSub, Matrix<Base<F>>& w, Matrix<F>& Z,
   SortType sort=ASCENDING,
-  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>() );
+  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), bool xtd = false );
 template<typename F>
 void HermitianTridiagEig
 ( const ElementalMatrix<Base<F>>& d, const ElementalMatrix<F>& dSub,
         ElementalMatrix<Base<F>>& w,       ElementalMatrix<F>& Z, 
   SortType sort=ASCENDING,
-  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>() );
+  const HermitianEigSubset<Base<F>>& subset=HermitianEigSubset<Base<F>>(), bool xtd = false );
 
 template<typename Real>
 Int HermitianTridiagEigEstimate
 ( const ElementalMatrix<Real>& d, const ElementalMatrix<Real>& dSub,
-        mpi::Comm wColComm, Real vl, Real vu );
+        mpi::Comm wColComm, Real vl, Real vu, bool xtd = false );
 // Z is assumed to be sufficiently large and properly aligned
 template<typename Real>
 void HermitianTridiagEigPostEstimate
 ( const ElementalMatrix<Real>& d, const ElementalMatrix<Real>& dSub,
         ElementalMatrix<Real>& w,       ElementalMatrix<Real>& Z, 
-  SortType sort, Real vl, Real vu );
+  SortType sort, Real vl, Real vu, bool xtd = false );
 
 namespace herm_eig {
 

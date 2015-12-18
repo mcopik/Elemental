@@ -31,32 +31,32 @@ struct Info {
 };
 
 // Compute all of the eigenvalues
-Info Eig( int n, double* d, double* e, double* w, mpi::Comm comm );
+Info Eig( int n, double* d, double* e, double* w, mpi::Comm comm, bool xtd = false );
 
 // Compute all of the eigenpairs
 Info Eig
-( int n, double* d, double* e, double* w, double* Z, int ldz, mpi::Comm comm );
+( int n, double* d, double* e, double* w, double* Z, int ldz, mpi::Comm comm, bool xtd = false );
 
 // Compute all of the eigenvalues in [lowerBound,upperBound)
 Info Eig
 ( int n, double* d, double* e, double* w, mpi::Comm comm, 
-  double lowerBound, double upperBound );
+  double lowerBound, double upperBound, bool xtd = false );
 
 // Compute all of the eigenpairs with eigenvalues in [lowerBound,upperBound)
 Info Eig
 ( int n, double* d, double* e, double* w, double* Z, int ldz, mpi::Comm comm, 
-  double lowerBound, double upperBound );
+  double lowerBound, double upperBound, bool xtd = false );
 
 // Compute all of the eigenvalues with indices in [lowerBound,upperBound)
 Info Eig
 ( int n, double* d, double* e, double* w, mpi::Comm comm, 
-  int lowerBound, int upperBound );
+  int lowerBound, int upperBound, bool xtd = false );
 
 // Compute all of the eigenpairs with ordered eigenvalue indices in 
 // [lowerBound,upperBound)
 Info Eig
 ( int n, double* d, double* e, double* w, double* Z, int ldz, mpi::Comm comm, 
-  int lowerBound, int upperBound );
+  int lowerBound, int upperBound, bool xtd = false );
 
 } // namespace herm_tridiag_eig
 } // namespace El
