@@ -59,7 +59,7 @@ namespace herm_tridiag_eig {
 // (lowerBound,upperBound]
 Estimate EigEstimate
 ( int n, double* d, double* e, double* w, mpi::Comm comm, 
-  double lowerBound, double upperBound, bool xtd )
+  double lowerBound, double upperBound )
 {
     DEBUG_ONLY(CSE cse("herm_tridiag_eig::EigEstimate"))
     Estimate estimate;
@@ -70,6 +70,7 @@ Estimate EigEstimate
     int nz, offset;
     int ldz=1;
     vector<int> ZSupport(2*n);
+    bool xtd = false;
     if(xtd)
     {
       int retval = pmrrr_extended
