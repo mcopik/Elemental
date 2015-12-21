@@ -202,13 +202,13 @@ void HermitianTridiagEig
 template<typename Real>
 Int HermitianTridiagEigEstimate
 ( const ElementalMatrix<Real>& d, const ElementalMatrix<Real>& dSub,
-        mpi::Comm wColComm, Real vl, Real vu );
+        mpi::Comm wColComm, Real vl, Real vu, bool xtd = false );
 // Z is assumed to be sufficiently large and properly aligned
 template<typename Real>
 void HermitianTridiagEigPostEstimate
 ( const ElementalMatrix<Real>& d, const ElementalMatrix<Real>& dSub,
         ElementalMatrix<Real>& w,       ElementalMatrix<Real>& Z, 
-  SortType sort, Real vl, Real vu );
+  SortType sort, Real vl, Real vu, bool xtd = false );
 
 namespace herm_eig {
 

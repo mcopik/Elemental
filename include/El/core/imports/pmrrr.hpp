@@ -21,7 +21,7 @@ struct Estimate {
 // Return an upper bound on the number of (local) eigenvalues in the given range
 Estimate EigEstimate
 ( int n,  double* d, double* e, double* w, mpi::Comm comm, 
-  double lowerBound, double upperBound );
+  double lowerBound, double upperBound, bool xtd = false );
 
 struct Info {
     int numLocalEigenvalues;

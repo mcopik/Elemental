@@ -366,7 +366,7 @@ inline void Helper
         auto estimate = herm_tridiag_eig::EigEstimate
           ( int(n), dVector.data(), dSubVector.data(),
             wVector.data(), w.ColComm(),
-            subset.lowerBound, subset.upperBound );
+            subset.lowerBound, subset.upperBound, xtd );
         SwapClear( dVector );
         SwapClear( dSubVector );
         k = estimate.numGlobalEigenvalues;
@@ -459,7 +459,7 @@ inline void Helper
         auto estimate = herm_tridiag_eig::EigEstimate
           ( int(n), dVector.data(), dSubVector.data(),
             wVector.data(), w.ColComm(),
-            subset.lowerBound, subset.upperBound );
+            subset.lowerBound, subset.upperBound, xtd );
         SwapClear( dVector );
         SwapClear( dSubVector );
         k = estimate.numGlobalEigenvalues;
@@ -523,7 +523,8 @@ Int HermitianTridiagEigEstimate
   const ElementalMatrix<Real>& dSub,
         mpi::Comm wColComm,
         Real vl,
-        Real vu )
+        Real vu,
+  bool xtd )
 {
     DEBUG_ONLY(CSE cse("HermitianTridiagEigEstimate"))
     const Int n = d.Height();
@@ -537,7 +538,7 @@ Int HermitianTridiagEigEstimate
     MemCopy( dSubVector.data(), dSub_STAR_STAR.Buffer(), n-1 );
     auto estimate = herm_tridiag_eig::EigEstimate
     ( int(n), dVector.data(), dSubVector.data(), wVector.data(), wColComm,
-      vl, vu );
+      vl, vu, xtd );
     return estimate.numGlobalEigenvalues;
 }
 
@@ -550,7 +551,8 @@ void HermitianTridiagEigPostEstimate
         ElementalMatrix<Real>& ZPre,
         SortType sort,
         Real vl,
-        Real vu )
+        Real vu,
+  bool  xtd )
 {
     DEBUG_ONLY(CSE cse("HermitianTridiagEigPostEstimate"))
 
@@ -575,7 +577,7 @@ void HermitianTridiagEigPostEstimate
     vector<double> wVector(n);
     auto info = herm_tridiag_eig::Eig
     ( int(n), d_STAR_STAR.Buffer(), dSub_STAR_STAR.Buffer(), wVector.data(),
-      Z.Buffer(), Z.LDim(), w.ColComm(), vl, vu );
+      Z.Buffer(), Z.LDim(), w.ColComm(), vl, vu, xtd );
     const Int k = info.numGlobalEigenvalues;
 
     w.Resize( k, 1 );
@@ -633,7 +635,8 @@ void HermitianTridiagEigPostEstimate
   template Int HermitianTridiagEigEstimate \
   ( const ElementalMatrix<Real>& d, \
     const ElementalMatrix<Real>& dSub, \
-          mpi::Comm wColComm, Real vl, Real vu ); \
+          mpi::Comm wColComm, Real vl, Real vu, \
+    bool xtd ); \
   template void HermitianTridiagEigPostEstimate \
   ( const ElementalMatrix<Real>& d, \
     const ElementalMatrix<Real>& dSub, \
@@ -641,7 +644,8 @@ void HermitianTridiagEigPostEstimate
           ElementalMatrix<Real>& Z, \
           SortType sort, \
           Real vl, \
-          Real vu );
+          Real vu, \
+    bool  xtd );
 
 #define PROTO_FLOAT \
   PROTO_REAL(float) \
