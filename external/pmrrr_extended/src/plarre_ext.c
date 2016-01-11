@@ -51,7 +51,7 @@
 #include <pthread.h>
 #include "mpi.h"
 #include "pmrrr_extended.h" 
-#include "plarre.h"
+#include "plarre_ext.h"
 #include "global.h"
 #include "structs.h" 
 
@@ -111,9 +111,10 @@ static int cmp(const void*, const void*);
 
 
 /* Routine to compute eigenvalues */
-int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
+int plarre_ext(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
 	       val_t *Wstruct, tol_t *tolstruct, int *nzp, int *offsetp)
 {
+  printf("hello from plarre extended\n");
   /* input variables */
   int              pid    = procinfo->pid;
   int              nproc  = procinfo->nproc;

@@ -10,6 +10,8 @@
 #  http://opensource.org/licenses/BSD-2-Clause
 #
 
+#SET( CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -Bsymbolic" )
+
 option(HAVE_SPINLOCKS "Enable if pthread lib supports spinlocks" OFF)
 MARK_AS_ADVANCED(HAVE_SPINLOCKS)
 if(NOT HAVE_SPINLOCKS)

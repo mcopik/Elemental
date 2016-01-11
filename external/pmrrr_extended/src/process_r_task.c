@@ -46,7 +46,7 @@
 #include "mpi.h"
 #include "pmrrr_extended.h"
 #include "global.h"
-#include "plarrv.h"
+#include "plarrv_ext.h"
 #include "queue.h"
 #include "counter.h"
 #include "structs.h"

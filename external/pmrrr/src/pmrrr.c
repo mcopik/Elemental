@@ -81,6 +81,31 @@ int pmrrr
  int *iu, int *tryracp, MPI_Comm comm, int *nzp,
  int *offsetp, double *W, double *Z, int *ldz, int *Zsupp)
 {
+  printf("hello from pmrrr\n");
+  printf("jobz = %s\n",jobz);
+  printf("range = %s\n",range);
+  printf("np = %d\n",*np);
+  int my_i;
+  for(my_i=0; my_i<*np-1; my_i++)
+    printf("%e %e\n",D[my_i],E[my_i]);
+  printf("%e\n",D[*np-1]);
+  printf("vl = %e\n",*vl);
+  printf("vu = %e\n",*vu);
+  printf("il = %d\n",*il);
+  printf("iu = %d\n",*iu);
+  printf("tryracp = %d\n",*tryracp);
+  char comm_name[MPI_MAX_OBJECT_NAME];
+  comm_name[0] = 0;
+  int resultlen;
+  MPI_Comm_get_name(comm, comm_name, &resultlen);
+  int rank; MPI_Comm_rank(comm,&rank);
+  printf("rank = %d\n", rank);
+  printf("comm = %s\n",comm_name);
+  printf("nzp = %d\n",*nzp);
+  printf("offsetp = %d\n",*offsetp);
+  printf("ldz = %d\n",*ldz);
+  printf("Zsupp = %d\n",*Zsupp);
+  
   /* Input parameter */
   int  n      = *np;
   bool onlyW = toupper(jobz[0]) == 'N';
@@ -89,6 +114,23 @@ int pmrrr
   bool alleig = toupper(range[0]) == 'A';
   bool valeig = toupper(range[0]) == 'V';
   bool indeig = toupper(range[0]) == 'I';
+  /*
+  printf("onlyW = %d\n",onlyW);
+  printf("wantZ = %d\n",wantZ);
+  printf("cntval = %d\n",cntval);
+  
+  printf("alleig = %d\n",alleig);
+  printf("valeig = %d\n",valeig);
+  printf("indeig = %d\n",indeig);
+  
+  printf("n = %d\n",n);
+  
+  printf("valeig = %d\n",valeig);
+  printf("*vu<=*vl = %d", (*vu<=*vl));
+  
+  printf("indeig = %d\n",indeig);
+  printf("*il<1 || *il>n || *iu<*il || *iu>n = %d", (*il<1 || *il>n || *iu<*il || *iu>n));
+  */
 
   /* Check input parameters */
   if(!(onlyW  || wantZ  || cntval)) return 1;
@@ -104,6 +146,7 @@ int pmrrr
   int is_init, is_final;
   MPI_Initialized(&is_init);
   MPI_Finalized(&is_final);
+  printf("is_init = %d\n",is_init);
   if (is_init!=1 || is_final==1) {
     fprintf(stderr, "ERROR: MPI is not active! (init=%d, final=%d) \n", 
       is_init, is_final);

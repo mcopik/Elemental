@@ -47,7 +47,7 @@
 #include <semaphore.h>
 #include "mpi.h"
 #include "pmrrr_extended.h"
-#include "plarrv.h"
+#include "plarrv_ext.h"
 #include "global.h"
 #include "queue.h"
 #include "counter.h"
