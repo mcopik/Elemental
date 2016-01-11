@@ -49,7 +49,7 @@
 #include <pthread.h>
 #include "mpi.h"
 #include "pmrrr_extended.h"
-#include "plarrv_ext.h"
+#include "plarrv.h"
 #include "process_task.h"
 #include "global.h"
 #include "rrr.h"
@@ -79,7 +79,7 @@ static void retrieve_auxarg3(auxarg3_t*, int*, proc_t**, val_t**,
 /*
  * Computation of eigenvectors of a symmetric tridiagonal
  */
-int plarrv_ext(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
+int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	   vec_t *Zstruct, tol_t *tolstruct, int *nzp,
 	   int *myfirstp)
 {

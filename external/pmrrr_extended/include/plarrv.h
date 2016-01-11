@@ -38,28 +38,22 @@
  *
  */
 
-#ifndef PPLARRE_H
-#define PPLARRE_H
+#ifndef PPLARRV_H
+#define PPLARRV_H
 
 #include "global.h"
 #include "structs.h"
 
 /*
- * Computing the eigenvalues and of a symmetric tridiagonal matrix 
- * by bisection implemented in LAPACK routines 'dlarrd' and 'dlarrb'.
- *
- * Note: this implementation is here is not really optimized in
- * terms of performance and memory usage.
+ * Computation of eigenvectors of a symmetric tridiagonal
  */
-int plarre_ext(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
-	       val_t *Wstruct, tol_t *tolstruct, int *nzp, int *offsetp);
+int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
+	   vec_t *Zstruct, tol_t *tolstruct, int *nzp,
+	   int *myfirstp);
 
-/* Perturb the initial root representation by "1 + eps*RAND_FACTOR*rand"; 
- * default: 8.0 */ 
-#define RAND_FACTOR         8.0 
-
-/* Fudge of shift, to get root rrr; default: 2.0 */
-#define FUDGE_FACTOR        2.0 
+#define COMM_COMPLETE        0
+#define COMM_INCOMPLETE      1
+#define C_TASK_PROCESSED     0
+#define C_TASK_NOT_PROCESSED 1
 
 #endif
-
