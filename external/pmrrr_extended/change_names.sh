@@ -78,3 +78,17 @@ find . -name \*.c -o -name \*.h -exec sed -i "s/queue/ext_queue/g" {} \;
 find . -name \*.c -o -name \*.h -exec sed -i "s/plarre/ext_plarre/g" {} \;
 find . -name \*.c -o -name \*.h -exec sed -i "s/global/ext_global/g" {} \;
 
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/pmext_rrr_extended/pmrrr_extended/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/pmext_rrr/pmrrr/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_global.h/global.h/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_plarre.h/plarre.h/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_plarrv.h/plarrv.h/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_counter.h/counter.h/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_rrr.h/rrr.h/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_tasks.h/tasks.h/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_queue.h/queue.h/g" {} \;
+
+
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/pmext_rrr_dscal/pmrrr_dscal/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/pmrrr_xscal/pmrrr_xscal/g" {} \;
+
