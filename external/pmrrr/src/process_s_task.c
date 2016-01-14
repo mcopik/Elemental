@@ -1,9 +1,6 @@
 /* Copyright (c) 2010, RWTH Aachen University
  * All rights reserved.
  *
- * Copyright (c) 2015, Jack Poulson
- * All rights reserved.
- *
  * Redistribution and use in source and binary forms, with or 
  * without modification, are permitted provided that the following
  * conditions are met:
@@ -40,17 +37,26 @@
  * code, kindly reference a paper related to this work.
  *
  */
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <float.h>
+#include <assert.h>
 #include "pmrrr.h"
-#include "pmrrr/rrr.h"
-#include "pmrrr/counter.h"
-#include "pmrrr/structs.h"
-#include "pmrrr/tasks.h"
-#include "pmrrr/process_task.h"
+#include "global.h"
+#include "rrr.h"
+#include "counter.h"
+#include "structs.h"
+#include "tasks.h"
+#include "process_task.h"
+
 
 int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct, 
 		       tol_t *tolstruct, counter_t *num_left, 
-		       double *work, int *iwork)
+		       long double *work, int *iwork)
 {
   /* Inputs */
   int    begin         = sng->begin; 
@@ -58,49 +64,52 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
   int    bl_begin      = sng->bl_begin;
   int    bl_end        = sng->bl_end;
   int    bl_size       = bl_end - bl_begin + 1;
-  double bl_spdiam     = sng->bl_spdiam; 
+  long double bl_spdiam     = sng->bl_spdiam; 
   rrr_t  *RRR          = sng->RRR;
-  double *restrict D   = RRR->D; 
-  double *restrict L   = RRR->L; 
-  double *restrict DL  = RRR->DL;
-  double *restrict DLL = RRR->DLL;
+  long double *restrict D   = RRR->D; 
+  long double *restrict L   = RRR->L; 
+  long double *restrict DL  = RRR->DL;
+  long double *restrict DLL = RRR->DLL;
 
   int              pid      = procinfo->pid;  
   int              n        = Wstruct->n;
-  double *restrict W        = Wstruct->W;
-  double *restrict Werr     = Wstruct->Werr;
-  double *restrict Wgap     = Wstruct->Wgap;
+  long double *restrict W        = Wstruct->W;
+  long double *restrict Werr     = Wstruct->Werr;
+  long double *restrict Wgap     = Wstruct->Wgap;
   int    *restrict Windex   = Wstruct->Windex;  
   int    *restrict iproc    = Wstruct->iproc;  
-  double *restrict Wshifted = Wstruct->Wshifted;
+  long double *restrict Wshifted = Wstruct->Wshifted;
   int              ldz      = Zstruct->ldz;
   double *restrict Z        = Zstruct->Z;
   int    *restrict isuppZ   = Zstruct->Zsupp;;
   int    *restrict Zindex   = Zstruct->Zindex;
-  double           pivmin   = tolstruct->pivmin;
+  long double           pivmin   = tolstruct->pivmin;
 
   /* others */
   int              info, i, k, itmp, num_decrement=0;
   int              IONE = 1;
-  double           DZERO = 0.0;
-  double           tol, lambda, left, right;
+  long double           DZERO = 0.0;
+  long double           tol, lambda, left, right;
   int              i_local, zind;
-  double           gap, lgap, rgap, gaptol, savedgap, tmp;
+  long double           gap, lgap, rgap, gaptol, savedgap, tmp;
   bool             usedBS, usedRQ, needBS, wantNC, step2II;
-  int              r, offset;
-  double           twoeps = 2*DBL_EPSILON, RQtol = 2*DBL_EPSILON;
-  double           residual, bstres, bstw; 
+  int              r, offset, j;
+  long double           twoeps = 2*LDBL_EPSILON, RQtol = 2*LDBL_EPSILON;
+  long double           residual, bstres, bstw; 
   int              i_supmn, i_supmx;
-  double           RQcorr;
+  long double           RQcorr;
   int              negcount;
   int              sgndef, suppsize;
-  double           sigma;
+  long double           sigma;
   int              i_Zfrom, i_Zto;
-  double           ztz, norminv, mingma;
+  long double           *z_tmp, ztz, norminv, mingma;
 
 
   /* set tolerance parameter */
-  tol  = 4.0 * log( (double) bl_size ) * DBL_EPSILON;
+  tol  = 4.0 * log( (long double) bl_size ) * DBL_EPSILON;
+
+  /* Use a temporary vector to save the eigenvector */
+  z_tmp = (long double *) malloc(bl_size*sizeof(long double));
 
   /* loop over all singletons in the task */
   for (i=begin; i<=end; i++) {
@@ -116,8 +125,9 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
       zind = Zindex[i];
       memset(&Z[zind*ldz], 0.0, n*sizeof(double) );
       Z[zind*ldz + bl_begin] = 1.0;
-      isuppZ[2*zind    ]     = bl_begin + 1;
-      isuppZ[2*zind + 1]     = bl_begin + 1;
+      /* support+1 for 1-based indexing */
+      isuppZ[2*zind    ]          = bl_begin + 1;  
+      isuppZ[2*zind + 1]       = bl_begin + 1;
       continue;
     }
 
@@ -129,19 +139,19 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
     
     /* compute left and right gap */
     if (i == bl_begin)
-      lgap = DBL_EPSILON * fmax( fabs(left), fabs(right) );
+      lgap = LDBL_EPSILON * fmaxl( fabsl(left), fabsl(right) );
     else if (i == begin)
       lgap = sng->lgap;
     else
       lgap = Wgap[i-1];
 
     if (i == bl_end) {
-      rgap = DBL_EPSILON * fmax( fabs(left), fabs(right) );
+      rgap = LDBL_EPSILON * fmaxl( fabsl(left), fabsl(right) );
     } else {
       rgap = Wgap[i];
     }
 
-    gap = fmin(lgap, rgap);
+    gap = fminl(lgap, rgap);
 
     if ( i == bl_begin || i == bl_end ) {
       gaptol = 0.0;
@@ -168,7 +178,7 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 
     /* IEEE floating point is assumed, so that all 0 bits are 0.0 */
     zind = Zindex[i];
-    memset(&Z[zind*ldz], 0.0, n*sizeof(double));
+    memset(z_tmp, 0.0, bl_size*sizeof(long double));
 
     /* inverse iteration with twisted factorization */
     for (k=1; k<=MAXITER; k++) {
@@ -181,10 +191,10 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 	tmp     = Wgap[i]; 
 	Wgap[i] = 0.0;
 	
-	odrrb(&bl_size, D, DLL, &i_local, &i_local, &DZERO, 
-	      &twoeps, &offset, &Wshifted[i], &Wgap[i],
-	      &Werr[i], work, iwork, &pivmin, &bl_spdiam,
-	      &itmp, &info);
+	xdrrb_(&bl_size, D, DLL, &i_local, &i_local, &DZERO, 
+		&twoeps, &offset, &Wshifted[i], &Wgap[i],
+		&Werr[i], work, iwork, &pivmin, &bl_spdiam,
+		&itmp, &info);
 	assert(info == 0);
 	
 	Wgap[i] = tmp;
@@ -194,10 +204,10 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
       wantNC = (usedBS == true) ? false : true;
 
       /* compute the eigenvector corresponding to lambda */
-      odr1v(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
-	    &pivmin, &gaptol, &Z[zind*ldz+bl_begin], &wantNC,
-	    &negcount, &ztz, &mingma, &r, &isuppZ[2*zind],
-	    &norminv, &residual, &RQcorr, work);
+      xdr1v_(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
+	      &pivmin, &gaptol, z_tmp, &wantNC,
+	      &negcount, &ztz, &mingma, &r, &isuppZ[2*zind],
+	      &norminv, &residual, &RQcorr, work);
 
       if (k == 1) {
 	bstres = residual;
@@ -214,7 +224,7 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
       /* Convergence test for Rayleigh Quotient Iteration
        * not done if bisection was used */
       if ( !usedBS && residual > tol*gap 
-	   && fabs(RQcorr) > RQtol*fabs(lambda) ) {
+	   && fabsl(RQcorr) > RQtol*fabsl(lambda) ) {
       
 	if (i_local <= negcount) {
 	  sgndef = -1;    /* wanted eigenvalue lies to the left  */
@@ -236,7 +246,7 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 	  needBS = true;
 	}
 	
-	if ( right-left < RQtol*fabs(lambda) ) {
+	if ( right-left < RQtol*fabsl(lambda) ) {
 	  /* eigenvalue computed to bisection accuracy
 	   * => compute eigenvector */
 	  usedBS = true;
@@ -251,52 +261,59 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 
     } /* end k */
 
-    /* if necessary call odr1v to improve error angle by 2nd step */
+    /* if necessary call xdr1v to improve error angle by 2nd step */
     step2II = false;
     if ( usedRQ && usedBS && (bstres <= residual) ) {
       lambda = bstw;
       step2II = true;
     }
     if ( step2II == true ) {
-      odr1v(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
-	    &pivmin, &gaptol, &Z[zind*ldz+bl_begin], &wantNC,
-	    &negcount, &ztz, &mingma, &r, &isuppZ[2*zind],
-	    &norminv, &residual, &RQcorr, work);
+      xdr1v_(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
+	      &pivmin, &gaptol, z_tmp, &wantNC,
+	      &negcount, &ztz, &mingma, &r, &isuppZ[2*zind],
+	      &norminv, &residual, &RQcorr, work);
     }
     Wshifted[i] = lambda;
-
-    /* compute support w.r.t. whole matrix
-     * block beginning is offset for each support */
-    isuppZ[2*zind    ] += bl_begin;
-    isuppZ[2*zind + 1] += bl_begin;
   
     /* ensure vector is okay if support changed in RQI 
      * minus ones because of indices starting from zero */
     i_Zfrom    = isuppZ[2*zind    ] - 1;
     i_Zto      = isuppZ[2*zind + 1] - 1;
-    i_supmn   += bl_begin - 1;
-    i_supmx   += bl_begin - 1;
+    i_supmn--;
+    i_supmx--;
     if ( i_supmn < i_Zfrom ) {
       for ( k=i_supmn; k < i_Zfrom; k++ ) {
-	Z[k + zind*ldz] = 0.0;
+	z_tmp[k] = 0.0;
       }
     }
     if ( i_supmx > i_Zto ) {
       for ( k=i_Zto+1; k <= i_supmx; k++ ) {
-	Z[k + zind*ldz] = 0.0;
+	z_tmp[k] = 0.0;
       }
     }
     
     /* normalize eigenvector */
     suppsize = i_Zto - i_Zfrom + 1;
-    odscal(&suppsize, &norminv, &Z[i_Zfrom + zind*ldz], &IONE);
+    pmrrr_xscal(&suppsize, &norminv, &z_tmp[i_Zfrom], &IONE);
 
     sigma = L[bl_size-1];
     W[i]  = lambda + sigma;
     
     if (i < end)
-      Wgap[i] = fmax(savedgap, W[i+1]-Werr[i+1] - W[i]-Werr[i]);
+      Wgap[i] = fmaxl(savedgap, W[i+1]-Werr[i+1] - W[i]-Werr[i]);
 
+    /* compute support w.r.t. whole matrix
+     * block beginning is offset for each support */
+    isuppZ[2*zind    ]    += bl_begin;
+    isuppZ[2*zind + 1] += bl_begin;
+
+    /* Copy temporary eigenvector into Z */
+    memset(&Z[zind*ldz], 0.0, n*sizeof(double));
+    j = 0;
+    for (k=bl_begin; k <= bl_end; k++ ) {
+      Z[zind*ldz+k] = z_tmp[j];
+      j++;
+    }
   } /* end i */
 
   /* decrement counter */
@@ -304,7 +321,8 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 
   /* clean up */
   free(sng);
+  free(z_tmp);
   PMR_try_destroy_rrr(RRR);
 
-  return 0;
+  return(0);
 }

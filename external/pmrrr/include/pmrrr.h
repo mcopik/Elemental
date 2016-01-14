@@ -1,9 +1,6 @@
 /* Copyright (c) 2010, RWTH Aachen University
  * All rights reserved.
  *
- * Copyright (c) 2015 Jack Poulson
- * All rights reserved.
- *
  * Redistribution and use in source and binary forms, with or 
  * without modification, are permitted provided that the following
  * conditions are met:
@@ -44,15 +41,8 @@
 #ifndef PPMRRR_H
 #define PPMRRR_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <float.h>
-#include <assert.h>
-#include <ctype.h>
 #include "mpi.h"
-#include "pmrrr/global.h"
+#include "global.h"
 
 /* Parallel computation of all or a subset of eigenvalues and 
  * optionally eigenvectors of a symmetric tridiagonal matrix based on 
@@ -158,7 +148,7 @@ int pmrrr(char *jobz, char *range, int *n, double  *D,
  * Zsupp             Support of eigenvectors, which is given by
  * (double[2*n])     i1=Zsupp[2*i] to i2=Zsupp[2*i+1] for the i-th local eigenvector
  *                   (returns 1-based indexing; e.g. in C Z[i1-1:i2-1] are non-zero and
- *                   in Fotran Z(i1:i2) are non-zero).
+ *                   in Fortran Z(i1:i2) are non-zero).
  *
  * RETURN VALUE: 
  * -------------
@@ -203,12 +193,12 @@ int pmrrr(char *jobz, char *range, int *n, double  *D,
  * eigenpairs redundantly (and discard the once that would usually 
  * not be computed by the process) if n < DSTEMR_IF_SMALLER; 
  * default: 4 */ 
-#define DSTEMR_IF_SMALLER   4
+#define DSTEMR_IF_SMALLER   5
 
 /* Make sure that eigenpairs are sorted globally; if set to false
  * they are in most cases sorted, but it is not double checked and 
  * can therefore not be guaranteed; default: true */
-#define ASSERT_SORTED_EIGENPAIRS false
+#define ASSERT_SORTED_EIGENPAIRS true
 
 /* Set flag if Rayleigh Quotient Correction should be used, 
  * which is usually faster; default: true */
@@ -239,7 +229,7 @@ int pmrrr(char *jobz, char *range, int *n, double  *D,
  * all computed eigenvalues (iu-il+1) in W; this routine is designed 
  * to be called right after 'pmrrr'.
  */
-int PMR_comm_eigvals(MPI_Comm comm, int *nz, int *ifirst, double *W);
+int PMR_comm_eigvals(MPI_Comm comm, int *nz, int *ifirst, long double *W);
 /* Arguments:
  * ----------
  *
@@ -272,42 +262,82 @@ int PMR_comm_eigvals(MPI_Comm comm, int *nz, int *ifirst, double *W);
 /* LAPACK and BLAS function prototypes
  * Note: type specifier 'extern' does not matter in declaration
  * so here used to mark routines from LAPACK and BLAS libraries */
-extern int    odscal(int*, double*, double*, int*);
-extern double odnst(char*, int*, double*, double*);
-extern void   odrrr(int*, double*, double*, int*);
-extern void   odrra(int*, double*, double*, double*, double*, 
-		    double*, int*, int*, int*);
-extern void   odrrc(char*, int*, double*, double*, double*, double*,
-		    double*, int*, int*, int*, int*);
-extern void   odrrd(char*, char*, int*, double*, double*, int*, 
-		    int*, double*, double*, double*, double*, 
-		    double*, double*, int*, int*, int*, double*, 
-		    double*, double*, double*, int*, int*, double*, 
-		    int*, int*);
-extern void   odrrb(int*, double*, double*, int*, int*, double*,
-		    double*, int*, double*, double*, double*, double*,
-		    int*, double*, double*, int*, int*);
-extern void   odrrk(int*, int*, double*, double*, double*, double*,
-		    double*, double*, double*, double*, int*);
-extern void   odebz(int*, int*, int*, int*, int*, int*, double*, 
-		    double*, double*, double*, double*, double*,
-		    int*, double*, double*, int*, int*, double*,
-		    int*, int*);
-extern void   odrnv(int*, int*, int*, double*);
-extern void   odrrf(int*, double*, double*, double*, int*, int*, 
-		    double*, double*, double*, double*, double*, 
-		    double*, double*, double*, double*, double*, 
-		    double*, int*);
-extern void   odr1v(int*, int*, int*, double*, double*, double*, 
-		    double*, double*, double*, double*, double*, 
-		    bool*, int*, double*, double*, int*, int*, 
-		    double*, double*, double*, double*);
-extern void   odrrj(int*, double*, double*, int*, int*, double*, 
-		    int*, double*, double*, double*, int*, double*, 
-		    double*, int*);
-extern void   odstmr(char*, char*, int*, double*, double*, double*, 
-		     double*, int*, int*, int*, double*, double*, 
-		     int*, int*, int*, int*, double*, int*, int*, 
-		     int*, int*);
+extern void pmrrr_dscal(int*, double*, double*, int*);
+extern void pmrrr_xscal(int*, long double*, long double*, int*);
+
+extern long double xdnst_(char*, int*, long double*, long double*);
+extern int   xdrrr_(int*, long double*, long double*, int*);
+extern int   xdrra_(int*, long double*, long double*, long double*, long double*, 
+		      long double*, int*, int*, int*);
+extern int   xdrrb_(int*, long double*, long double*, int*, int*, long double*,
+		      long double*, int*, long double*, long double*, long double*, long double*,
+		      int*, long double*, long double*, int*, int*);
+extern int   xdrrc_(char*, int*, long double*, long double*, long double*, long double*,
+		      long double*, int*, int*, int*, int*);
+extern int     xdrrd_(char*, char*, int*, long double*, long double*, int*, 
+		      int*, long double*, long double*, long double*, long double*, 
+		      long double*, long double*, int*, int*, int*, long double*, 
+		      long double*, long double*, long double*, int*, int*, long double*, 
+		      int*, int*);
+extern int   xdrrk_(int*, int*, long double*, long double*, long double*, long double*,
+		      long double*, long double*, long double*, long double*, int*);
+extern int   xdebz_(int*, int*, int*, int*, int*, int*, long double*, 
+		      long double*, long double*, long double*, long double*, long double*,
+		      int*, long double*, long double*, int*, int*, long double*,
+		      int*, int*);
+extern int   xdrnv_(int*, int*, int*, long double*);
+extern int   xdrrf_(int*, long double*, long double*, long double*, int*, int*, 
+		      long double*, long double*, long double*, long double*, long double*, 
+		      long double*, long double*, long double*, long double*, long double*, 
+		      long double*, int*);
+extern int   xdr1v_(int*, int*, int*, long double*, long double*, long double*, 
+		      long double*, long double*, long double*, long double*, long double*, 
+		      bool*, int*, long double*, long double*, int*, int*, 
+		      long double*, long double*, long double*, long double*);
+extern int   xdrrj_(int*, long double*, long double*, int*, int*, long double*, 
+		      int*, long double*, long double*, long double*, int*, long double*, 
+		      long double*, int*);
+extern int   xdstmr_(char*, char*, int*, long double*, long double*, long double*, 
+		      long double*, int*, int*, int*, long double*, long double*, 
+		      int*, int*, int*, int*, long double*, int*, int*, 
+		      int*, int*);
+
+
+extern double odnst_(char*, int*, double*, double*);
+extern void   odrrr_(int*, double*, double*, int*);
+extern void   odrra_(int*, double*, double*, double*, double*, 
+		      double*, int*, int*, int*);
+extern void   odrrb_(int*, double*, double*, int*, int*, double*,
+		      double*, int*, double*, double*, double*, double*,
+		      int*, double*, double*, int*, int*);
+extern void   odrrc_(char*, int*, double*, double*, double*, double*,
+		      double*, int*, int*, int*, int*);
+extern void   odrrd_(char*, char*, int*, double*, double*, int*, 
+		      int*, double*, double*, double*, double*, 
+		      double*, double*, int*, int*, int*, double*, 
+		      double*, double*, double*, int*, int*, double*, 
+		      int*, int*);
+extern void   odrrk_(int*, int*, double*, double*, double*, double*,
+		      double*, double*, double*, double*, int*);
+extern void   odebz_(int*, int*, int*, int*, int*, int*, double*, 
+		      double*, double*, double*, double*, double*,
+		      int*, double*, double*, int*, int*, double*,
+		      int*, int*);
+extern void   odrnv_(int*, int*, int*, double*);
+extern void   odrrf_(int*, double*, double*, double*, int*, int*, 
+		      double*, double*, double*, double*, double*, 
+		      double*, double*, double*, double*, double*, 
+		      double*, int*);
+extern void   odr1v_(int*, int*, int*, double*, double*, double*, 
+		      double*, double*, double*, double*, double*, 
+		      bool*, int*, double*, double*, int*, int*, 
+		      double*, double*, double*, double*);
+extern void   odrrj_(int*, double*, double*, int*, int*, double*, 
+		      int*, double*, double*, double*, int*, double*, 
+		      double*, int*);
+extern void   odstmr_(char*, char*, int*, double*, double*, double*, 
+		      double*, int*, int*, int*, double*, double*, 
+		      int*, int*, int*, int*, double*, int*, int*, 
+		      int*, int*);
 
 #endif /* End of header file */
