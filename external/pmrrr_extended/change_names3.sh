@@ -88,12 +88,14 @@ find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/PMR_increment_counter/ext_
 
 #plarre.c
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/plarre/ext_plarre/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_plarre.h/plarre.h/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_subset_thread_a/ext_eigval_subset_thread_a/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_subset_thread_r/ext_eigval_subset_thread_r/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/clean_up_plarre/ext_clean_up_plarre/g" {} \;
 
 #plarrv.c
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/plarrv/ext_plarrv/g" {} \;
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/ext_plarrv.h/plarrv.h/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_approx_proc/ext_eigval_approx_proc/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_root_proc/ext_eigval_root_proc/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_refine_proc/ext_eigval_refine_proc/g" {} \;
