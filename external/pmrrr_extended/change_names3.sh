@@ -87,11 +87,13 @@ find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/PMR_decrement_counter/ext_
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/PMR_increment_counter/ext_PMR_increment_counter/g" {} \;
 
 #plarre.c
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/plarre/ext_plarre/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_subset_thread_a/ext_eigval_subset_thread_a/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_subset_thread_r/ext_eigval_subset_thread_r/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/clean_up_plarre/ext_clean_up_plarre/g" {} \;
 
 #plarrv.c
+find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/plarrv/ext_plarrv/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_approx_proc/ext_eigval_approx_proc/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_root_proc/ext_eigval_root_proc/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/eigval_refine_proc/ext_eigval_refine_proc/g" {} \;
@@ -101,6 +103,7 @@ find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/create_auxarg2/ext_create_
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/retrieve_auxarg2/ext_retrieve_auxarg2/g" {} \;
 
 #process_c_task.c
+#find . \( -name \*.c -o -name \*.h \) -exec sed -i "s//ext_/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/assign_to_proc/ext_assign_to_proc/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/cmpa/ext_cmpa/g" {} \;
 find . \( -name \*.c -o -name \*.h \) -exec sed -i "s/init_workQ/ext_init_workQ/g" {} \;
