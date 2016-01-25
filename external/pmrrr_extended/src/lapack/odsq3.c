@@ -7,7 +7,7 @@
 #include <float.h>
 #include <assert.h>
 
-/* Subroutine */ int odsq3_(int *i0, int *n0, double *z__, 
+/* Subroutine */ int ext_odsq3_(int *i0, int *n0, double *z__, 
 	int *pp, double *dmin__, double *sigma, double *desig, 
 	 double *qmax, int *nfail, int *iter, int *ndiv, 
 	int *ieee, int *ttype, double *dmin1, double *dmin2, 
@@ -27,17 +27,17 @@
     double eps, tol;
     int n0in, ipn4;
     double tol2, temp;
-    extern /* Subroutine */ int odsq4_(int *, int *, double *, 
+    extern /* Subroutine */ int ext_odsq4_(int *, int *, double *, 
 	    int *, int *, double *, double *, double *, 
 	    double *, double *, double *, double *, int *, 
-	     double *), odsq5_(int *, int *, double *, 
+	     double *), ext_odsq5_(int *, int *, double *, 
 	    int *, double *, double *, double *, double *, 
-	     double *, double *, double *, int *), odsq6_(
+	     double *, double *, double *, int *), ext_odsq6_(
 	    int *, int *, double *, int *, double *, 
 	    double *, double *, double *, double *, 
 	    double *);
     // extern double odmch_(char *);
-    extern int odnan_(double *);
+    extern int ext_odnan_(double *);
 
 
 /*  -- LAPACK routine (version 3.2)                                    -- */
@@ -248,14 +248,14 @@ L50:
 
 /*     Choose a shift. */
 
-    odsq4_(i0, n0, &z__[1], pp, &n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, 
+    ext_odsq4_(i0, n0, &z__[1], pp, &n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, 
 	    tau, ttype, g);
 
 /*     Call dqds until DMIN > 0. */
 
 L70:
 
-    odsq5_(i0, n0, &z__[1], pp, tau, dmin__, dmin1, dmin2, dn, dn1, dn2, 
+    ext_odsq5_(i0, n0, &z__[1], pp, tau, dmin__, dmin1, dmin2, dn, dn1, dn2, 
 	    ieee);
 
     *ndiv += *n0 - *i0 + 2;
@@ -301,7 +301,7 @@ L70:
 	    *ttype += -12;
 	}
 	goto L70;
-    } else if (odnan_(dmin__)) {
+    } else if (ext_odnan_(dmin__)) {
 
 /*        NaN. */
 
@@ -321,7 +321,7 @@ L70:
 /*     Risk of underflow. */
 
 L80:
-    odsq6_(i0, n0, &z__[1], pp, dmin__, dmin1, dmin2, dn, dn1, dn2);
+    ext_odsq6_(i0, n0, &z__[1], pp, dmin__, dmin1, dmin2, dn, dn1, dn2);
     *ndiv += *n0 - *i0 + 2;
     ++(*iter);
     *tau = 0.;
@@ -341,4 +341,4 @@ L90:
 
 /*     End of ODSQ3 */
 
-} /* odsq3_ */
+} /* ext_odsq3_ */

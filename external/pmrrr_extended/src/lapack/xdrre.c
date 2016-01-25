@@ -14,7 +14,7 @@ static int c__2 = 2;
 #define FALSE_ (0)
 
 /* Subroutine */ 
-int xdrre_(char *range, int *n, long double *vl, 
+int ext_xdrre_(char *range, int *n, long double *vl, 
 	long double *vu, int *il, int *iu, long double *d__, long double *e, 
 	long double *e2, long double *rtol1, long double *rtol2, long double *spltol, 
 	int *nsplit, int *isplit, int *m, long double *w, 
@@ -48,39 +48,39 @@ int xdrre_(char *range, int *n, long double *vl,
     long double rtol;
     int iseed[4];
     long double avgap, sigma;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
     int iinfo;
-    extern /* Subroutine */ int xdcpy_(int *, long double *, int *, 
+    extern /* Subroutine */ int ext_xdcpy_(int *, long double *, int *, 
 	    long double *, int *);
     long double norep;
-    extern /* Subroutine */ int xdsq2_(int *, long double *, int *);
+    extern /* Subroutine */ int ext_xdsq2_(int *, long double *, int *);
     // extern long double odmch_(char *);
     int ibegin;
     long double forceb;
     int irange;
     long double sgndef;
-    extern /* Subroutine */ int xdrra_(int *, long double *, long double *, 
+    extern /* Subroutine */ int ext_xdrra_(int *, long double *, long double *, 
 	     long double *, long double *, long double *, int *, int *, 
-	    int *), xdrrb_(int *, long double *, long double *, 
+	    int *), ext_xdrrb_(int *, long double *, long double *, 
 	    int *, int *, long double *, long double *, int *, 
 	    long double *, long double *, long double *, long double *, int *, 
-	     long double *, long double *, int *, int *), xdrrc_(char *
+	     long double *, long double *, int *, int *), ext_xdrrc_(char *
 , int *, long double *, long double *, long double *, long double 
 	    *, long double *, int *, int *, int *, int *);
     int wbegin;
-    extern /* Subroutine */ int xdrrd_(char *, char *, int *, long double 
+    extern /* Subroutine */ int ext_xdrrd_(char *, char *, int *, long double 
 	    *, long double *, int *, int *, long double *, long double *, 
 	     long double *, long double *, long double *, long double *, int *
 , int *, int *, long double *, long double *, long double *, 
 	    long double *, int *, int *, long double *, int *, 
 	    int *);
     long double safmin, spdiam;
-    extern /* Subroutine */ int xdrrk_(int *, int *, long double *, 
+    extern /* Subroutine */ int ext_xdrrk_(int *, int *, long double *, 
 	    long double *, long double *, long double *, long double *, 
 	    long double *, long double *, long double *, int *);
     long double usedqd;
     long double clwdth, isleft;
-    extern /* Subroutine */ int xdrnv_(int *, int *, int *, 
+    extern /* Subroutine */ int ext_xdrnv_(int *, int *, int *, 
 	    long double *);
     long double isrght, bsrtol, dpivot;
 
@@ -285,11 +285,11 @@ int xdrre_(char *range, int *n, long double *vl,
 
 /*     Decode RANGE */
 
-    if (xlsame_(range, "A")) {
+    if (ext_xlsame_(range, "A")) {
 	irange = 1;
-    } else if (xlsame_(range, "V")) {
+    } else if (ext_xlsame_(range, "V")) {
 	irange = 3;
-    } else if (xlsame_(range, "I")) {
+    } else if (ext_xlsame_(range, "I")) {
 	irange = 2;
     }
     *m = 0;
@@ -356,7 +356,7 @@ int xdrre_(char *range, int *n, long double *vl,
 /*     estimate that is wrong by at most a factor of SQRT(2) */
     spdiam = gu - gl;
 /*     Compute splitting points */
-    xdrra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &
+    ext_xdrra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &
 	    iinfo);
 /*     Can force use of bisection instead of faster DQDS. */
 /*     Option left in the code for future multisection work. */
@@ -375,7 +375,7 @@ int xdrre_(char *range, int *n, long double *vl,
 /*        An interval [LEFT,RIGHT] has converged if */
 /*        RIGHT-LEFT.LT.RTOL*MAX(ABS(LEFT),ABS(RIGHT)) */
 /*        XDRRD needs a WORK of size 4*N, IWORK of size 3*N */
-	xdrrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[
+	ext_xdrrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[
 		1], &e2[1], pivmin, nsplit, &isplit[1], &mm, &w[1], &werr[1], 
 		vl, vu, &iblock[1], &indexw[1], &work[1], &iwork[1], &iinfo);
 	if (iinfo != 0) {
@@ -485,7 +485,7 @@ L21:
 	if (irange == 1 && ! forceb || usedqd) {
 /*           Case of DQDS */
 /*           Find approximations to the extremal eigenvalues of the block */
-	    xdrrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
+	    ext_xdrrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
 		    rtl, &tmp, &tmp1, &iinfo);
 	    if (iinfo != 0) {
 		*info = -1;
@@ -495,7 +495,7 @@ L21:
 	    d__2 = gl, d__3 = tmp - tmp1 - eps * 100. * (d__1 = tmp - tmp1, 
 		    fabsl(d__1));
 	    isleft = fmaxl(d__2,d__3);
-	    xdrrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
+	    ext_xdrrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
 		    rtl, &tmp, &tmp1, &iinfo);
 	    if (iinfo != 0) {
 		*info = -1;
@@ -554,7 +554,7 @@ L21:
 	}
 /*        Compute the negcount at the 1/4 and 3/4 points */
 	if (mb > 1) {
-	    xdrrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &
+	    ext_xdrrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &
 		    cnt, &cnt1, &cnt2, &iinfo);
 	}
 	if (mb == 1) {
@@ -692,9 +692,9 @@ L83:
 /*        Store the shift. */
 	e[iend] = sigma;
 /*        Store D and L. */
-	xdcpy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
+	ext_xdcpy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
 	i__2 = in - 1;
-	xdcpy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
+	ext_xdcpy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
 	if (mb > 1) {
 
 /*           Perturb each entry of the base representation by a small */
@@ -706,7 +706,7 @@ L83:
 /* L122: */
 	    }
 	    i__2 = (in << 1) - 1;
-	    xdrnv_(&c__2, iseed, &i__2, &work[1]);
+	    ext_xdrnv_(&c__2, iseed, &i__2, &work[1]);
 	    i__2 = in - 1;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		d__[ibegin + i__ - 1] *= eps * 8. * work[i__] + 1.;
@@ -745,7 +745,7 @@ L83:
 	    }
 /*           use bisection to find EV from INDL to INDU */
 	    i__2 = indl - 1;
-	    xdrrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, 
+	    ext_xdrrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, 
 		    rtol2, &i__2, &w[wbegin], &wgap[wbegin], &werr[wbegin], &
 		    work[(*n << 1) + 1], &iwork[1], pivmin, &spdiam, &in, &
 		    iinfo);
@@ -788,7 +788,7 @@ L83:
 	    }
 	    work[(in << 1) - 1] = (d__1 = d__[iend], fabsl(d__1));
 	    work[in * 2] = 0.;
-	    xdsq2_(&in, &work[1], &iinfo);
+	    ext_xdsq2_(&in, &work[1], &iinfo);
 	    if (iinfo != 0) {
 /*              If IINFO = -5 then an index is part of a tight cluster */
 /*              and should be changed. The index is in IWORK(1) and the */
@@ -855,4 +855,4 @@ L170:
 
 /*     end of XDRRE */
 
-} /* xdrre_ */
+} /* ext_xdrre_ */

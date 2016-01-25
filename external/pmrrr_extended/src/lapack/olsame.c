@@ -7,7 +7,7 @@
 #include <float.h>
 #include <assert.h>
 
-int olsame_(char *ca, char *cb)
+int ext_olsame_(char *ca, char *cb)
 {
 
 
@@ -108,5 +108,5 @@ e
        End of OLSAME */
 
     return ret_val;
-} /* olsame_ */
+} /* ext_olsame_ */
 

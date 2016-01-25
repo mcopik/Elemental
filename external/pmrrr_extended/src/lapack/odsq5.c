@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odsq5_(int *i0, int *n0, double *z__, 
+int ext_odsq5_(int *i0, int *n0, double *z__, 
 	int *pp, double *tau, double *dmin__, double *dmin1, 
 	double *dmin2, double *dn, double *dnm1, double *dnm2, 
 	 int *ieee)
@@ -232,4 +232,4 @@ int odsq5_(int *i0, int *n0, double *z__,
 
 /*     End of ODSQ5 */
 
-} /* odsq5_ */
+} /* ext_odsq5_ */

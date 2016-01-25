@@ -11,7 +11,7 @@
 static int c__1 = 1;
 
 /* Subroutine */ 
-int xrbla_(char *srname, int *info)
+int ext_xrbla_(char *srname, int *info)
 {
     
 
@@ -55,4 +55,4 @@ int xrbla_(char *srname, int *info)
 /*     End of XRBLA */
 
     return 0;
-} /* xrbla_ */
+} /* ext_xrbla_ */

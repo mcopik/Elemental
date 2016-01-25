@@ -7,7 +7,7 @@
 #include <float.h>
 #include <assert.h>
 
-int xlsame_(char *ca, char *cb)
+int ext_xlsame_(char *ca, char *cb)
 {
 
 
@@ -108,5 +108,5 @@ e
        End of XLSAME */
 
     return ret_val;
-} /* xlsame_ */
+} /* ext_xlsame_ */
 

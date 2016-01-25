@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdswap_(int *n, long double *dx, int *incx, 
+int ext_xdswap_(int *n, long double *dx, int *incx, 
 	long double *dy, int *incy)
 {
     /* System generated locals */

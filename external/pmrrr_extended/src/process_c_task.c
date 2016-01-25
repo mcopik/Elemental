@@ -61,12 +61,12 @@
 
 
 static inline 
-rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
+rrr_t* ext_compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct,
 		       tol_t *tolstruct, long double *work, int *iwork);
 
 static inline 
-int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
+int ext_refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
 		   int tid, proc_t *procinfo,
 		   rrr_t *RRR, val_t *Wstruct, vec_t *Zstruct,
 		   tol_t *tolstruct, counter_t *num_left, 
@@ -74,14 +74,14 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
 		   int *iwork);
 
 static inline 
-int communicate_refined_eigvals(cluster_t *cl, proc_t *procinfo,
+int ext_communicate_refined_eigvals(cluster_t *cl, proc_t *procinfo,
 				int tid, val_t *Wstruct, rrr_t *RRR);
 
 static inline 
-int test_comm_status(cluster_t *cl, val_t *Wstruct);
+int ext_test_comm_status(cluster_t *cl, val_t *Wstruct);
 
 static inline 
-int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
+int ext_create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
 		    rrr_t *RRR, val_t *Wstruct, vec_t *Zstruct,
 		    workQ_t *workQ,
 		    counter_t *num_left);
@@ -89,7 +89,7 @@ int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
 
 
 
-int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
+int ext_PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct, 
 		       tol_t *tolstruct, workQ_t *workQ, 
 		       counter_t *num_left, long double *work, int *iwork)
@@ -111,9 +111,9 @@ int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
 
   /* Check if task only need to be split into subtasks */
   if (cl->wait_until_refined == true) {
-    status = test_comm_status(cl, Wstruct);
+    status = ext_test_comm_status(cl, Wstruct);
     if (status == COMM_COMPLETE) {
-      create_subtasks(cl, tid, procinfo, cl->RRR, Wstruct, Zstruct,
+      ext_create_subtasks(cl, tid, procinfo, cl->RRR, Wstruct, Zstruct,
 		      workQ, num_left);
       return(C_TASK_PROCESSED);
     } else {
@@ -125,7 +125,7 @@ int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
    * communicate the refined eigenvalues if necessary,
    * and create subtasks if possible */
 
-  RRR = compute_new_rrr(cl, tid, procinfo, Wstruct, Zstruct,
+  RRR = ext_compute_new_rrr(cl, tid, procinfo, Wstruct, Zstruct,
 			tolstruct, work, iwork);
 
   /* Refine eigenvalues 'rf_begin' to 'rf_end' */
@@ -136,7 +136,7 @@ int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
   if (pid == left_pid ) rf_begin = cl->begin;
   if (pid == right_pid) rf_end   = cl->end;
 
-  refine_eigvals(cl, rf_begin, rf_end, tid, procinfo, RRR,
+  ext_refine_eigvals(cl, rf_begin, rf_end, tid, procinfo, RRR,
 		 Wstruct, Zstruct, tolstruct, num_left,
 		 workQ, work, iwork);
 
@@ -144,14 +144,14 @@ int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
   status = COMM_COMPLETE;
   if (left_pid != right_pid) {
 
-    status = communicate_refined_eigvals(cl, procinfo, tid,
+    status = ext_communicate_refined_eigvals(cl, procinfo, tid,
 					 Wstruct, RRR);
     /* status = COMM_INCOMPLETE if communication not finished */
   }
 
   if (status == COMM_COMPLETE) {
     
-    create_subtasks(cl, tid, procinfo, RRR, Wstruct, Zstruct,
+    ext_create_subtasks(cl, tid, procinfo, RRR, Wstruct, Zstruct,
 		    workQ, num_left);
 
     return(C_TASK_PROCESSED);
@@ -166,7 +166,7 @@ int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
 
 
 static inline 
-rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
+rrr_t* ext_compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct,
 		       tol_t *tolstruct, long double *work, int *iwork)
 {
@@ -241,7 +241,7 @@ rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
     
     offset  = Windex[cl_begin] - 1;
 
-    xdrrb_(&bl_size, D_parent, DLL_parent, &p, &p, &RQtol,
+    ext_xdrrb_(&bl_size, D_parent, DLL_parent, &p, &p, &RQtol,
 	    &RQtol, &offset, &Wshifted[cl_begin], &Wgap[cl_begin],
 	    &Werr[cl_begin], work, iwork, &pivmin, &bl_spdiam,
 	    &bl_size, &info);
@@ -259,7 +259,7 @@ rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
   right_gap = Wgap[cl_end];
 
   /* Compute new RRR and store it in D and L */
-  xdrrf_(&bl_size, D_parent, L_parent, DL_parent,
+  ext_xdrrf_(&bl_size, D_parent, L_parent, DL_parent,
 	  &IONE, &cl_size, &Wshifted[cl_begin], &Wgap[cl_begin],
 	  &Werr[cl_begin], &bl_spdiam, &left_gap, &right_gap,
 	  &pivmin, &tau, D, L, work, &info);
@@ -282,7 +282,7 @@ rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
     free(RRR_parent->D);
     free(RRR_parent->L);
   }
-  RRR = PMR_reset_rrr(RRR_parent, D, L, DL, DLL, bl_size, depth+1);
+  RRR = ext_PMR_reset_rrr(RRR_parent, D, L, DL, DLL, bl_size, depth+1);
   
   /* Update shifted eigenvalues */
   for (k=cl_begin; k<=cl_end; k++) {
@@ -293,10 +293,10 @@ rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
   }
 
   /* Assure that structure is not freed while it is processed */
-  PMR_increment_rrr_dependencies(RRR);
+  ext_PMR_increment_rrr_dependencies(RRR);
 
   return(RRR);
-} /* end compute_new_rrr */
+} /* end ext_compute_new_rrr */
 
 
 
@@ -306,7 +306,7 @@ rrr_t* compute_new_rrr(cluster_t *cl, int tid, proc_t *procinfo,
  * Refine eigenvalues with respect to new rrr 
  */
 static inline 
-int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
+int ext_refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
 		   int tid, proc_t *procinfo, rrr_t *RRR, 
 		   val_t *Wstruct, vec_t *Zstruct,
 		   tol_t *tolstruct, counter_t *num_left,
@@ -349,7 +349,7 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
   int              num_iter;
 
   /* Determine if refinement should be split into tasks */
-  left = PMR_get_counter_value(num_left);
+  left = ext_PMR_get_counter_value(num_left);
   own_part = (int) fmax( ceil( (double) left / nthreads ),
 			 MIN_REFINE_CHUNK);
 
@@ -366,11 +366,11 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
       ts_end = ts_begin + chunk - 1;
       q      = p        + chunk - 1;
 
-      task = PMR_create_r_task(ts_begin, ts_end, D, DLL, p, q, 
+      task = ext_PMR_create_r_task(ts_begin, ts_end, D, DLL, p, q, 
 			       bl_size, bl_spdiam, tid, &sem);
      
       if (ts_begin <= ts_end)
-	PMR_insert_task_at_back(workQ->r_queue, task);
+	ext_PMR_insert_task_at_back(workQ->r_queue, task);
       else
 	sem_post(&sem); /* case chunk=0 */
 
@@ -383,23 +383,23 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
 
     /* Call bisection routine to refine the values */
     if (ts_begin <= ts_end) {
-      xdrrb_(&bl_size, D, DLL, &p, &q, &rtol1, &rtol2, &offset, 
+      ext_xdrrb_(&bl_size, D, DLL, &p, &q, &rtol1, &rtol2, &offset, 
 	      &Wshifted[ts_begin], &Wgap[ts_begin], &Werr[ts_begin],
 	      work, iwork, &pivmin, &bl_spdiam, &bl_size, &info);
       assert( info == 0 );
     }
 
     /* Empty "all" r-queue refine tasks before waiting */
-    num_iter = PMR_get_num_tasks(workQ->r_queue);
+    num_iter = ext_PMR_get_num_tasks(workQ->r_queue);
     for (i=0; i<num_iter; i++) {
       task = PMR_remove_task_at_front(workQ->r_queue);
       if (task != NULL) {
 	if (task->flag == REFINE_TASK_FLAG) {
-	  PMR_process_r_task((refine_t *) task->data, procinfo, 
+	  ext_PMR_process_r_task((refine_t *) task->data, procinfo, 
 			     Wstruct, tolstruct, work, iwork);
 	  free(task);
 	} else {
-	  PMR_insert_task_at_back(workQ->r_queue, task);
+	  ext_PMR_insert_task_at_back(workQ->r_queue, task);
 	}
       } /* if task */
     } /* end for i */
@@ -439,7 +439,7 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
     }  
     
     /* Bisection routine to refine the values */
-    xdrrb_(&bl_size, D, DLL, &p, &q, &rtol1, &rtol2, &offset, 
+    ext_xdrrb_(&bl_size, D, DLL, &p, &q, &rtol1, &rtol2, &offset, 
 	    &Wshifted[rf_begin], &Wgap[rf_begin], &Werr[rf_begin],
 	    work, iwork, &pivmin, &bl_spdiam, &bl_size, &info);
     assert( info == 0 );
@@ -458,7 +458,7 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
   }
 
   return(0);
-} /* end refine_eigvals */
+} /* end ext_refine_eigvals */
 
 
 
@@ -468,7 +468,7 @@ int refine_eigvals(cluster_t *cl, int rf_begin, int rf_end,
 
 
 static inline 
-int communicate_refined_eigvals(cluster_t *cl, proc_t *procinfo,
+int ext_communicate_refined_eigvals(cluster_t *cl, proc_t *procinfo,
 				int tid, val_t *Wstruct, rrr_t *RRR)
 {
   /* From inputs */
@@ -619,7 +619,7 @@ int communicate_refined_eigvals(cluster_t *cl, proc_t *procinfo,
   }
   
   return(status);
-} /* end communicate_refined_eigvals */
+} /* end ext_communicate_refined_eigvals */
 
 
 
@@ -627,7 +627,7 @@ int communicate_refined_eigvals(cluster_t *cl, proc_t *procinfo,
 
 
 static inline 
-int test_comm_status(cluster_t *cl, val_t *Wstruct)
+int ext_test_comm_status(cluster_t *cl, val_t *Wstruct)
 {
   int         cl_begin            = cl->begin;
   int         cl_end              = cl->end;
@@ -672,14 +672,14 @@ int test_comm_status(cluster_t *cl, val_t *Wstruct)
   }
 
   return(status);
-} /* test_comm_status */
+} /* ext_test_comm_status */
 
 
 
 
 
 static inline 
-int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo, 
+int ext_create_subtasks(cluster_t *cl, int tid, proc_t *procinfo, 
 		    rrr_t *RRR, val_t *Wstruct, vec_t *Zstruct,
 		    workQ_t *workQ, counter_t *num_left)
 {
@@ -721,7 +721,7 @@ int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
   bool   copy_parent_rrr;
 
 
-  max_size = fmax(1, PMR_get_counter_value(num_left) /
+  max_size = fmax(1, ext_PMR_get_counter_value(num_left) /
 		     (fmin(depth+1,4)*nthreads) );
   task_inserted = true;
   new_first = cl_begin;
@@ -775,12 +775,12 @@ int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
 	  lgap = Wgap[sn_first-1];
 	}
 	
-	PMR_increment_rrr_dependencies(RRR);
+	ext_PMR_increment_rrr_dependencies(RRR);
 	
-	task = PMR_create_s_task(sn_first, sn_last, depth+1, bl_begin,
+	task = ext_PMR_create_s_task(sn_first, sn_last, depth+1, bl_begin,
 				 bl_end, bl_spdiam, lgap, RRR);
 	
-	PMR_insert_task_at_back(workQ->s_queue, task);
+	ext_PMR_insert_task_at_back(workQ->s_queue, task);
 	  
 	task_inserted = true;
       } else {
@@ -852,9 +852,9 @@ int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
 	memcpy(D_parent, RRR->D, bl_size*sizeof(long double));
 	memcpy(L_parent, RRR->L, bl_size*sizeof(long double));
 
-	RRR_parent = PMR_create_rrr(D_parent, L_parent, NULL, 
+	RRR_parent = ext_PMR_create_rrr(D_parent, L_parent, NULL, 
 				    NULL, bl_size, depth);
-	PMR_set_copied_parent_rrr_flag(RRR_parent, true);
+	ext_PMR_set_copied_parent_rrr_flag(RRR_parent, true);
 
       } else {
 	memcpy((long double*) &Z[new_ftt1*ldz], RRR->D, 
@@ -862,21 +862,21 @@ int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
 	memcpy((long double*) &Z[new_ftt2*ldz], RRR->L, 
 	       bl_size*sizeof(long double));
 
-	RRR_parent = PMR_create_rrr( (long double*) &Z[new_ftt1*ldz],
+	RRR_parent = ext_PMR_create_rrr( (long double*) &Z[new_ftt1*ldz],
 				    (long double*) &Z[new_ftt2*ldz],
 				    NULL, NULL, bl_size, depth);
       }
       
       /* Create the task for the cluster and put it in the queue */ 
-      task = PMR_create_c_task(new_first, new_last, depth+1, 
+      task = ext_PMR_create_c_task(new_first, new_last, depth+1, 
 			       bl_begin, bl_end, bl_spdiam, lgap, 
 			       cl->proc_W_begin, cl->proc_W_end, 
 			       new_lpid, new_rpid, RRR_parent);
 
       if (new_lpid != new_rpid)
-	PMR_insert_task_at_back(workQ->r_queue, task);
+	ext_PMR_insert_task_at_back(workQ->r_queue, task);
       else
-	PMR_insert_task_at_back(workQ->c_queue, task);
+	ext_PMR_insert_task_at_back(workQ->c_queue, task);
 
       task_inserted = true;
       
@@ -886,11 +886,11 @@ int create_subtasks(cluster_t *cl, int tid, proc_t *procinfo,
   } /* end i */
   
   /* set flag in RRR that last singleton is created */
-  PMR_set_parent_processed_flag(RRR);
+  ext_PMR_set_parent_processed_flag(RRR);
   
   /* clean up */
-  PMR_try_destroy_rrr(RRR);
+  ext_PMR_try_destroy_rrr(RRR);
   free(cl);
 
   return(0);
-} /* end create_subtasks */
+} /* end ext_create_subtasks */

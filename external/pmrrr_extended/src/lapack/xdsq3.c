@@ -7,7 +7,7 @@
 #include <float.h>
 #include <assert.h>
 
-/* Subroutine */ int xdsq3_(int *i0, int *n0, long double *z__, 
+/* Subroutine */ int ext_xdsq3_(int *i0, int *n0, long double *z__, 
 	int *pp, long double *dmin__, long double *sigma, long double *desig, 
 	 long double *qmax, int *nfail, int *iter, int *ndiv, 
 	int *ieee, int *ttype, long double *dmin1, long double *dmin2, 
@@ -27,17 +27,17 @@
     long double eps, tol;
     int n0in, ipn4;
     long double tol2, temp;
-    extern /* Subroutine */ int xdsq4_(int *, int *, long double *, 
+    extern /* Subroutine */ int ext_xdsq4_(int *, int *, long double *, 
 	    int *, int *, long double *, long double *, long double *, 
 	    long double *, long double *, long double *, long double *, int *, 
-	     long double *), xdsq5_(int *, int *, long double *, 
+	     long double *), ext_xdsq5_(int *, int *, long double *, 
 	    int *, long double *, long double *, long double *, long double *, 
-	     long double *, long double *, long double *, int *), xdsq6_(
+	     long double *, long double *, long double *, int *), ext_xdsq6_(
 	    int *, int *, long double *, int *, long double *, 
 	    long double *, long double *, long double *, long double *, 
 	    long double *);
     // extern long double odmch_(char *);
-    extern int xdnan_(long double *);
+    extern int ext_xdnan_(long double *);
 
 
 /*  -- LAPACK routine (version 3.2)                                    -- */
@@ -248,14 +248,14 @@ L50:
 
 /*     Choose a shift. */
 
-    xdsq4_(i0, n0, &z__[1], pp, &n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, 
+    ext_xdsq4_(i0, n0, &z__[1], pp, &n0in, dmin__, dmin1, dmin2, dn, dn1, dn2, 
 	    tau, ttype, g);
 
 /*     Call dqds until DMIN > 0. */
 
 L70:
 
-    xdsq5_(i0, n0, &z__[1], pp, tau, dmin__, dmin1, dmin2, dn, dn1, dn2, 
+    ext_xdsq5_(i0, n0, &z__[1], pp, tau, dmin__, dmin1, dmin2, dn, dn1, dn2, 
 	    ieee);
 
     *ndiv += *n0 - *i0 + 2;
@@ -301,7 +301,7 @@ L70:
 	    *ttype += -12;
 	}
 	goto L70;
-    } else if (xdnan_(dmin__)) {
+    } else if (ext_xdnan_(dmin__)) {
 
 /*        NaN. */
 
@@ -321,7 +321,7 @@ L70:
 /*     Risk of underflow. */
 
 L80:
-    xdsq6_(i0, n0, &z__[1], pp, dmin__, dmin1, dmin2, dn, dn1, dn2);
+    ext_xdsq6_(i0, n0, &z__[1], pp, dmin__, dmin1, dmin2, dn, dn1, dn2);
     *ndiv += *n0 - *i0 + 2;
     ++(*iter);
     *tau = 0.;
@@ -341,4 +341,4 @@ L90:
 
 /*     End of XDSQ3 */
 
-} /* xdsq3_ */
+} /* ext_xdsq3_ */

@@ -96,17 +96,17 @@ typedef struct {
 } refine_t;
 
 
-task_t *PMR_create_s_task(int first, int last, int depth,
+task_t *ext_PMR_create_s_task(int first, int last, int depth,
 			  int bl_begin, int bl_end, long double spdiam,
 			  long double lgap, rrr_t *RRR);
 
-task_t *PMR_create_c_task(int first, int last, int depth,
+task_t *ext_PMR_create_c_task(int first, int last, int depth,
 			  int bl_begin, int bl_end, long double spdiam,
 			  long double lgap, int proc_W_begin, 
 			  int proc_W_end, int left_pid, int right_pid, 
 			  rrr_t *RRR);
 
-task_t *PMR_create_r_task(int begin, int end, long double *D,
+task_t *ext_PMR_create_r_task(int begin, int end, long double *D,
 			  long double *DLL, int p, int q, int bl_size,
 			  long double bl_spdiam, int tid, sem_t *sem);
 

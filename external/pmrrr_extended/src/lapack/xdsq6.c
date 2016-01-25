@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdsq6_(int *i0, int *n0, long double *z__, 
+int ext_xdsq6_(int *i0, int *n0, long double *z__, 
 	int *pp, long double *dmin__, long double *dmin1, long double *dmin2, 
 	 long double *dn, long double *dnm1, long double *dnm2)
 {
@@ -204,4 +204,4 @@ int xdsq6_(int *i0, int *n0, long double *z__,
 
 /*     End of XDSQ6 */
 
-} /* xdsq6_ */
+} /* ext_xdsq6_ */

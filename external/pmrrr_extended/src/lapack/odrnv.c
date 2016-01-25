@@ -10,7 +10,7 @@
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
 /* Subroutine */ 
-int odrnv_(int *idist, int *iseed, int *n, 
+int ext_odrnv_(int *idist, int *iseed, int *n, 
 	double *x)
 {
     /* System generated locals */
@@ -23,7 +23,7 @@ int odrnv_(int *idist, int *iseed, int *n,
     int i__;
     double u[128];
     int il, iv, il2;
-    extern int odruv_(int *, int *, double *);
+    extern int ext_odruv_(int *, int *, double *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -103,7 +103,7 @@ int odrnv_(int *idist, int *iseed, int *n,
 /*        Call ODRUV to generate IL2 numbers from a uniform (0,1) */
 /*        distribution (IL2 <= LV) */
 
-	odruv_(&iseed[1], &il2, u);
+	ext_odruv_(&iseed[1], &il2, u);
 
 	if (*idist == 1) {
 
@@ -140,4 +140,4 @@ int odrnv_(int *idist, int *iseed, int *n,
 
 /*     End of ODRNV */
 
-} /* odrnv_ */
+} /* ext_odrnv_ */

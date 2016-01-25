@@ -47,7 +47,7 @@
 
 
 
-queue_t *PMR_create_empty_queue(void)
+queue_t *ext_PMR_create_empty_queue(void)
 {
   int     info;
   queue_t *queue;
@@ -71,7 +71,7 @@ queue_t *PMR_create_empty_queue(void)
 
 
 
-void PMR_destroy_queue(queue_t *queue)
+void ext_PMR_destroy_queue(queue_t *queue)
 {
 #ifdef NOSPINLOCKS
   pthread_mutex_destroy(&queue->lock);
@@ -83,7 +83,7 @@ void PMR_destroy_queue(queue_t *queue)
 
 
 
-int PMR_insert_task_at_front(queue_t *queue, task_t *task)
+int ext_PMR_insert_task_at_front(queue_t *queue, task_t *task)
 {
   int info;
   
@@ -115,7 +115,7 @@ int PMR_insert_task_at_front(queue_t *queue, task_t *task)
 
 
 
-int PMR_insert_task_at_back(queue_t *queue, task_t *task)
+int ext_PMR_insert_task_at_back(queue_t *queue, task_t *task)
 {
   int info;
 
@@ -189,7 +189,7 @@ task_t *PMR_remove_task_at_front(queue_t *queue)
 
 
 
-task_t *PMR_remove_task_at_back (queue_t *queue)
+task_t *ext_PMR_remove_task_at_back (queue_t *queue)
 {
   int    info;
   task_t *task;
@@ -230,7 +230,7 @@ task_t *PMR_remove_task_at_back (queue_t *queue)
 
 
 
-int PMR_get_num_tasks(queue_t *queue)
+int ext_PMR_get_num_tasks(queue_t *queue)
 {
   int info, num_tasks;
 

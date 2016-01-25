@@ -10,7 +10,7 @@
 /* Table of constant values */
 static int c__1 = 1;
 
-long double xdnst_(char *norm, int *n, long double *d__, long double *e)
+long double ext_xdnst_(char *norm, int *n, long double *d__, long double *e)
 {
     /* System generated locals */
     int i__1;
@@ -22,9 +22,9 @@ long double xdnst_(char *norm, int *n, long double *d__, long double *e)
     /* Local variables */
     int i__;
     long double sum, scale;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
     long double anorm;
-    extern /* Subroutine */ int xdssq_(int *, long double *, int *, 
+    extern /* Subroutine */ int ext_xdssq_(int *, long double *, int *, 
 	    long double *, long double *);
 
 
@@ -100,7 +100,7 @@ long double xdnst_(char *norm, int *n, long double *d__, long double *e)
     /* Function Body */
     if (*n <= 0) {
 	anorm = 0.;
-    } else if (xlsame_(norm, "M")) {
+    } else if (ext_xlsame_(norm, "M")) {
 
 /*        Find max(abs(A(i,j))). */
 
@@ -115,8 +115,8 @@ long double xdnst_(char *norm, int *n, long double *d__, long double *e)
 	    anorm = fmaxl(d__2,d__3);
 /* L10: */
 	}
-    } else if (xlsame_(norm, "O") || *(unsigned char *)
-	    norm == '1' || xlsame_(norm, "I")) {
+    } else if (ext_xlsame_(norm, "O") || *(unsigned char *)
+	    norm == '1' || ext_xlsame_(norm, "I")) {
 
 /*        Find norm1(A). */
 
@@ -136,7 +136,7 @@ long double xdnst_(char *norm, int *n, long double *d__, long double *e)
 /* L20: */
 	    }
 	}
-    } else if (xlsame_(norm, "F") || xlsame_(norm, "E")) {
+    } else if (ext_xlsame_(norm, "F") || ext_xlsame_(norm, "E")) {
 
 /*        Find normF(A). */
 
@@ -144,10 +144,10 @@ long double xdnst_(char *norm, int *n, long double *d__, long double *e)
 	sum = 1.;
 	if (*n > 1) {
 	    i__1 = *n - 1;
-	    xdssq_(&i__1, &e[1], &c__1, &scale, &sum);
+	    ext_xdssq_(&i__1, &e[1], &c__1, &scale, &sum);
 	    sum *= 2;
 	}
-	xdssq_(n, &d__[1], &c__1, &scale, &sum);
+	ext_xdssq_(n, &d__[1], &c__1, &scale, &sum);
 	anorm = scale * sqrt(sum);
     }
 
@@ -156,4 +156,4 @@ long double xdnst_(char *norm, int *n, long double *d__, long double *e)
 
 /*     End of XDNST */
 
-} /* xdnst_ */
+} /* ext_xdnst_ */

@@ -59,19 +59,19 @@
 #include "structs.h"
 
 
-static int handle_small_cases(char*, char*, int*, double*, double*,
+static int ext_handle_small_cases(char*, char*, int*, double*, double*,
 			      double*, double*, int*, int*, int*,
 			      MPI_Comm, int*, int*, double*, double*,
 			      int*, int*);
-static int cmp(const void*, const void*);
-static int cmpb(const void*, const void*);
-static long double scale_matrix(in_t*, val_t*, bool);
-static void invscale_eigenvalues(val_t*, long double, int);
-static int sort_eigenpairs(proc_t*, val_t*, vec_t*);
-static void clean_up(MPI_Comm, long double*, long double*, long double*, 
+static int ext_cmp(const void*, const void*);
+static int ext_ext_cmpb(const void*, const void*);
+static long double ext_scale_matrix(in_t*, val_t*, bool);
+static void ext_invscale_eigenvalues(val_t*, long double, int);
+static int ext_sort_eigenpairs(proc_t*, val_t*, vec_t*);
+static void ext_clean_up(MPI_Comm, long double*, long double*, long double*, 
 		     int*, int*, int*, int*, int*, proc_t*, 
 		     in_t*, val_t*, vec_t*, tol_t*);
-static int refine_to_highrac(proc_t*, char*, long double*, long double*,
+static int ext_refine_to_highrac(proc_t*, char*, long double*, long double*,
 			     in_t*, int*, val_t*, tol_t*);
 
 
@@ -224,7 +224,7 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
 
   /* Check if computation should be done by multiple processes */
   if (n < DSTEMR_IF_SMALLER) {
-    info = handle_small_cases(jobz, range, np, D_dbl, E_dbl, vl_dbl, vu_dbl, il,
+    info = ext_handle_small_cases(jobz, range, np, D_dbl, E_dbl, vl_dbl, vu_dbl, il,
 			      iu, tryracp, comm, nzp, offsetp, W_dbl,
 			      Z, ldz, Zsupp);
     MPI_Comm_free(&comm_dup);
@@ -307,12 +307,12 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
   Zstruct->Zindex          = Zindex;
 
   /* Scale matrix to allowable range, returns 1.0 if not scaled */
-  scale = scale_matrix(Dstruct, Wstruct, valeig);
+  scale = ext_scale_matrix(Dstruct, Wstruct, valeig);
 
   /*  Test if matrix warrants more expensive computations which
    *  guarantees high relative accuracy */
   if (*tryracp) {
-    xdrrr_(&n, D, E, &info); /* 0 - rel acc */
+    ext_xdrrr_(&n, D, E, &info); /* 0 - rel acc */
   }
   else info = -1;
 
@@ -346,12 +346,12 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
   }
 
   /*  Compute all eigenvalues: sorted by block */
-  info = plarre(procinfo, jobz, range, Dstruct, Wstruct, tolstruct, nzp, offsetp);
+  info = ext_plarre(procinfo, jobz, range, Dstruct, Wstruct, tolstruct, nzp, offsetp);
   assert(info == 0);
 
   /* If just number of local eigenvectors are queried */
   if (cntval & valeig) {    
-    clean_up(comm_dup, Werr, Wgap, gersch, iblock, iproc, Windex,
+    ext_clean_up(comm_dup, Werr, Wgap, gersch, iblock, iproc, Windex,
 	     isplit, Zindex, procinfo, Dstruct, Wstruct, Zstruct,
 	     tolstruct);
     return(0);
@@ -362,13 +362,13 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
 
     /* Refine to high relative with respect to input T */
     if (*tryracp) {
-      info = refine_to_highrac(procinfo, jobz, Dcopy, E2copy, 
+      info = ext_refine_to_highrac(procinfo, jobz, Dcopy, E2copy, 
 			                        Dstruct, nzp, Wstruct, tolstruct);
       assert(info == 0);
     }
 
     /* Sort eigenvalues */
-    qsort(W, n, sizeof(long double), cmp);
+    qsort(W, n, sizeof(long double), ext_cmp);
 
     /* Only keep subset ifirst:ilast */
     iil = *il;
@@ -397,9 +397,9 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
     }
 
     /* If matrix was scaled, rescale eigenvalues */
-    invscale_eigenvalues(Wstruct, scale, *nzp);
+    ext_invscale_eigenvalues(Wstruct, scale, *nzp);
 
-    clean_up(comm_dup, Werr, Wgap, gersch, iblock, iproc, Windex,
+    ext_clean_up(comm_dup, Werr, Wgap, gersch, iblock, iproc, Windex,
 	     isplit, Zindex, procinfo, Dstruct, Wstruct, Zstruct,
 	     tolstruct);
 
@@ -407,22 +407,22 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
   } /* end of only eigenvalues to compute */
 
   /* Compute eigenvectors */
-  info = plarrv(procinfo, Dstruct, Wstruct, Zstruct, tolstruct, 
+  info = ext_plarrv(procinfo, Dstruct, Wstruct, Zstruct, tolstruct, 
 		nzp, offsetp);
   assert(info == 0);
 
   /* Refine to high relative with respect to input matrix */
   if (*tryracp) {
-    info = refine_to_highrac(procinfo, jobz, Dcopy, E2copy, 
+    info = ext_refine_to_highrac(procinfo, jobz, Dcopy, E2copy, 
 			     Dstruct, nzp, Wstruct, tolstruct);
     assert(info == 0);
   }
 
   /* If matrix was scaled, rescale eigenvalues */
-  invscale_eigenvalues(Wstruct, scale, n);
+  ext_invscale_eigenvalues(Wstruct, scale, n);
 
   /* Sort eigenvalues and eigenvectors of process */
-  sort_eigenpairs(procinfo, Wstruct, Zstruct);
+  ext_sort_eigenpairs(procinfo, Wstruct, Zstruct);
 
   /* Set some ouput parameter for mixed precison */
   *vl_dbl = (double) *vlp;
@@ -432,7 +432,7 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
     W_dbl[i] = W[i];           
   }
 
-  clean_up(comm_dup, Werr, Wgap, gersch, iblock, iproc, Windex,
+  ext_clean_up(comm_dup, Werr, Wgap, gersch, iblock, iproc, Windex,
 	   isplit, Zindex, procinfo, Dstruct, Wstruct, Zstruct,
 	   tolstruct);
   if (*tryracp) {
@@ -450,7 +450,7 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
  * Free's on allocated memory of pmrrr routine
  */
 static  
-void clean_up(MPI_Comm comm, long double *Werr, long double *Wgap,
+void ext_clean_up(MPI_Comm comm, long double *Werr, long double *Wgap,
 	      long double *gersch, int *iblock, int *iproc,
 	      int *Windex, int *isplit, int *Zindex,
 	      proc_t *procinfo, in_t *Dstruct,
@@ -483,7 +483,7 @@ void clean_up(MPI_Comm comm, long double *Werr, long double *Wgap,
  * Wrapper to call LAPACKs DSTEMR for small matrices
  */
 static
-int handle_small_cases(char *jobz, char *range, int *np, double  *D,
+int ext_handle_small_cases(char *jobz, char *range, int *np, double  *D,
 		       double *E, double *vlp, double *vup, int *ilp,
 		       int *iup, int *tryracp, MPI_Comm comm, int *nzp,
 		       int *myfirstp, double *W, double *Z, int *ldzp,
@@ -531,7 +531,7 @@ int handle_small_cases(char *jobz, char *range, int *np, double  *D,
   if (cntval) {
     /* Note: at the moment, jobz="C" should never get here, since
      * it is blocked before. */
-    odstmr_("V", "V", np, D, E, vlp, vup, ilp, iup, &m, W, &cnt,
+    ext_odstmr_("V", "V", np, D, E, vlp, vup, ilp, iup, &m, W, &cnt,
 	    &ldz_tmp, &MINUSONE, Zsupp, tryracp, work, &lwork, iwork,
 	    &liwork, &info);
     assert(info == 0);
@@ -541,7 +541,7 @@ int handle_small_cases(char *jobz, char *range, int *np, double  *D,
     return(0);
   }
 
-  odstmr_(jobz, range, np, D, E, vlp, vup, ilp, iup, &m, W, Z_tmp,
+  ext_odstmr_(jobz, range, np, D, E, vlp, vup, ilp, iup, &m, W, Z_tmp,
 	  &ldz_tmp, np, Zsupp, tryracp, work, &lwork, iwork,
 	  &liwork, &info);
   assert(info == 0);
@@ -583,7 +583,7 @@ int handle_small_cases(char *jobz, char *range, int *np, double  *D,
  * Scale matrix to allowable range, returns 1.0 if not scaled
  */
 static 
-long double scale_matrix(in_t *Dstruct, val_t *Wstruct, bool valeig)
+long double ext_scale_matrix(in_t *Dstruct, val_t *Wstruct, bool valeig)
 {
   int              n  = Dstruct->n;
   long double *restrict D  = Dstruct->D;
@@ -603,18 +603,18 @@ long double scale_matrix(in_t *Dstruct, val_t *Wstruct, bool valeig)
   rmax   = fminl(sqrt(bignum), 1.0 / sqrt(sqrt(DBL_MIN)));
 
   /*  Scale matrix to allowable range */
-  T_norm = xdnst_("M", &n, D, E);  /* returns max(|T(i,j)|) */
+  T_norm = ext_xdnst_("M", &n, D, E);  /* returns max(|T(i,j)|) */
   if (T_norm > 0 && T_norm < rmin) {
     scale = rmin / T_norm;
   } else if (T_norm > rmax) {
     scale = rmax / T_norm;
   }
 
-  if (scale != 1.0) {  /* FP cmp okay */
+  if (scale != 1.0) {  /* FP ext_cmp okay */
     /* Scale matrix and matrix norm */
     itmp = n-1;
-    xdscl_(&n,    &scale, D, &IONE);
-    xdscl_(&itmp, &scale, E, &IONE);
+    ext_xdscl_(&n,    &scale, D, &IONE);
+    ext_xdscl_(&itmp, &scale, E, &IONE);
     if (valeig == true) {
       /* Scale eigenvalue bounds */
       *vl *= scale;
@@ -632,7 +632,7 @@ long double scale_matrix(in_t *Dstruct, val_t *Wstruct, bool valeig)
  * If matrix scaled, rescale eigenvalues
  */
 static 
-void invscale_eigenvalues(val_t *Wstruct, long double scale,
+void ext_invscale_eigenvalues(val_t *Wstruct, long double scale,
 			  int size)
 {
   long double *vl = Wstruct->vl;
@@ -641,10 +641,10 @@ void invscale_eigenvalues(val_t *Wstruct, long double scale,
   long double invscale = 1.0 / scale;
   int    IONE = 1;
 
-  if (scale != 1.0) {  /* FP cmp okay */
+  if (scale != 1.0) {  /* FP ext_cmp okay */
     *vl *= invscale;
     *vu *= invscale;
-    xdscl_(&size, &invscale, W, &IONE);
+    ext_xdscl_(&size, &invscale, W, &IONE);
   }
 }
 
@@ -652,7 +652,7 @@ void invscale_eigenvalues(val_t *Wstruct, long double scale,
 
 
 static 
-int sort_eigenpairs_local(proc_t *procinfo, int m, val_t *Wstruct, vec_t *Zstruct)
+int ext_sort_eigenpairs_local(proc_t *procinfo, int m, val_t *Wstruct, vec_t *Zstruct)
 {
   int              pid        = procinfo->pid;
   int              n        = Wstruct->n;
@@ -701,7 +701,7 @@ int sort_eigenpairs_local(proc_t *procinfo, int m, val_t *Wstruct, vec_t *Zstruc
 
 
 static 
-int sort_eigenpairs_global(proc_t *procinfo, int m, val_t *Wstruct, 
+int ext_sort_eigenpairs_global(proc_t *procinfo, int m, val_t *Wstruct, 
 			   vec_t *Zstruct)
 {
   int              pid   = procinfo->pid;
@@ -797,7 +797,7 @@ int sort_eigenpairs_global(proc_t *procinfo, int m, val_t *Wstruct,
     }
 
     /* sort local again */
-    sort_eigenpairs_local(procinfo, m, Wstruct, Zstruct);
+    ext_sort_eigenpairs_local(procinfo, m, Wstruct, Zstruct);
     
     /* check again if globally sorted */
     if (m == 0) {
@@ -835,7 +835,7 @@ int sort_eigenpairs_global(proc_t *procinfo, int m, val_t *Wstruct,
 
 /* Routine to sort the eigenpairs */
 static 
-int sort_eigenpairs(proc_t *procinfo, val_t *Wstruct, vec_t *Zstruct)
+int ext_sort_eigenpairs(proc_t *procinfo, val_t *Wstruct, vec_t *Zstruct)
 {
   /* From inputs */
   int              pid      = procinfo->pid;
@@ -871,7 +871,7 @@ int sort_eigenpairs(proc_t *procinfo, val_t *Wstruct, vec_t *Zstruct)
   }
 
   /* Sort according to Zindex */
-  qsort(sort_array, im, sizeof(sort_struct_t), cmpb);
+  qsort(sort_array, im, sizeof(sort_struct_t), ext_ext_cmpb);
 
   for (j=0; j<im; j++) {
     W[j]      = sort_array[j].lambda; 
@@ -881,13 +881,13 @@ int sort_eigenpairs(proc_t *procinfo, val_t *Wstruct, vec_t *Zstruct)
   /* Make sure eigenpairs are sorted locally; this is a very 
    * inefficient way sorting, but in general no or very little 
    * swapping of eigenpairs is expected here */
-  sort_eigenpairs_local(procinfo, im, Wstruct, Zstruct);
+  ext_sort_eigenpairs_local(procinfo, im, Wstruct, Zstruct);
 
   /* Make sure eigenpairs are sorted globally; this is a very 
    * inefficient way sorting, but in general no or very little 
    * swapping of eigenpairs is expected here */
   if (ASSERT_SORTED_EIGENPAIRS == true)
-    sort_eigenpairs_global(procinfo, im, Wstruct, Zstruct);
+    ext_sort_eigenpairs_global(procinfo, im, Wstruct, Zstruct);
 
   free(sort_array);
 
@@ -907,7 +907,7 @@ int sort_eigenpairs(proc_t *procinfo, val_t *Wstruct, vec_t *Zstruct)
  * even no work at all is not uncommon. 
  */
 static 
-int refine_to_highrac(proc_t *procinfo, char *jobz, long double *D,
+int ext_refine_to_highrac(proc_t *procinfo, char *jobz, long double *D,
 		      long double *E2, in_t *Dstruct, int *nzp,
 		      val_t *Wstruct, tol_t *tolstruct)
 {
@@ -953,7 +953,7 @@ int refine_to_highrac(proc_t *procinfo, char *jobz, long double *D,
     ilast   = nbl;
     offset  = 0;
 
-    xdrrj_(&isize, &D[ibegin], &E2[ibegin], &ifirst, &ilast, &tol,
+    ext_xdrrj_(&isize, &D[ibegin], &E2[ibegin], &ifirst, &ilast, &tol,
 	    &offset, &W[ibegin], &Werr[ibegin], work, iwork, &pivmin,
 	    &spdiam, &info);
     assert(info == 0);
@@ -974,7 +974,7 @@ int refine_to_highrac(proc_t *procinfo, char *jobz, long double *D,
  * sort_structs
  */
 static 
-int cmpb(const void *a1, const void *a2)
+int ext_ext_cmpb(const void *a1, const void *a2)
 {
   sort_struct_t *arg1, *arg2;
 
@@ -996,7 +996,7 @@ int cmpb(const void *a1, const void *a2)
  * of doubles
  */
 static 
-int cmp(const void *a1, const void *a2)
+int ext_cmp(const void *a1, const void *a2)
 {
   long double arg1 = *(long double *)a1;
   long double arg2 = *(long double *)a2;

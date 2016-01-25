@@ -62,59 +62,59 @@
 #define FOURTH             0.25
 
 
-static void *eigval_subset_thread_a(void *argin);
-static void *eigval_subset_thread_r(void *argin);
-static void clean_up_plarre(long double*, long double*, int*, int*, int*);
+static void *ext_eigval_subset_thread_a(void *argin);
+static void *ext_eigval_subset_thread_r(void *argin);
+static void ext_clean_up_ext_plarre(long double*, long double*, int*, int*, int*);
 
 
 static
-int eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast, 
+int ext_eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast, 
 			   int n, long double *D, long double *E, long double *E2,  
 			   int *Windex, int *iblock, long double *gersch, tol_t *tolstruct, 
 			   long double *W, long double *Werr, long double *Wgap, long double *work,
 			   int *iwork);
 
 static
-int eigval_root_proc(proc_t *procinfo, int ifirst, int ilast, 
+int ext_eigval_root_proc(proc_t *procinfo, int ifirst, int ilast, 
 			   int n, long double *D, long double *E, long double *E2,  
 			   int *Windex, int *iblock, long double *gersch, tol_t *tolstruct, 
 			   long double *W, long double *Werr, long double *Wgap, long double *work,
 			 int *iwork);
 
 static
-int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast, 
+int ext_eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast, 
 			   int n, long double *D, long double *E, long double *E2,  
 			   int *Windex, int *iblock, long double *gersch, tol_t *tolstruct, 
 			   long double *W, long double *Werr, long double *Wgap, long double *work,
 			   int *iwork);
 
 static 
-auxarg1_t *create_auxarg1(int, long double*, long double*, long double*, int, int, 
+auxarg1_t *ext_create_auxarg1(int, long double*, long double*, long double*, int, int, 
 			  int, int, int, int*, long double,  long double,
 			  long double*, long double*, long double*, int*, int*);
 static 
-void retrieve_auxarg1(auxarg1_t*, int*, long double**, long double**, long double**,
+void ext_retrieve_auxarg1(auxarg1_t*, int*, long double**, long double**, long double**,
 		      int*, int*, int*, int*, int*, int**, long double*, 
 		      long double*, long double**, long double**, long double**, int**, 
 		      int**);
 static
-auxarg2_t *create_auxarg2(int, long double*, long double*, int, int, long double*,
+auxarg2_t *ext_create_auxarg2(int, long double*, long double*, int, int, long double*,
 			      long double*,long double*,int*,long double, long double, long double, long double);
 static
-void retrieve_auxarg2(auxarg2_t*, int*, long double**, long double**, int*,
+void ext_retrieve_auxarg2(auxarg2_t*, int*, long double**, long double**, int*,
 			  int*, long double**, long double**, long double**, int**, long double*, long double*, long double*,
 		      long double*);
 
-static int cmp(const void*, const void*);
+static int ext_cmp(const void*, const void*);
 
 
 
 
 /* Routine to compute eigenvalues */
-int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
+int ext_plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
 	       val_t *Wstruct, tol_t *tolstruct, int *nzp, int *offsetp)
 {
-  printf("hello from plarre extended\n");
+  printf("hello from ext_plarre extended\n");
   /* input variables */
   int              pid    = procinfo->pid;
   int              nproc  = procinfo->nproc;
@@ -216,7 +216,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
   Dstruct->spdiam = gu - gl;
 
   /* compute splitting points with threshold "split" */
-  xdrra_(&n, D, E, E2, &tolstruct->split, &Dstruct->spdiam,
+  ext_xdrra_(&n, D, E, E2, &tolstruct->split, &Dstruct->spdiam,
   	  &Dstruct->nsplit, isplit, &info);
   assert(info == 0);
 
@@ -236,7 +236,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
     
     /* find negcount at boundaries 'vl' and 'vu';
      * needs work of dim(n) and iwork of dim(n) */
-    xdebz_(&IONE, &IZERO, &n, &IONE, &IONE, &IZERO,
+    ext_xdebz_(&IONE, &IZERO, &n, &IONE, &IONE, &IZERO,
   	    &DZERO, &DZERO, &tolstruct->pivmin, D, E, E2, &idummy,
   	    intervals, &dummy, &idummy, negcounts, work,
   	    iwork, &info);
@@ -250,7 +250,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
   if (cntval && irange == valrng) {
     /* clean up and return */
     *nzp = iceil(*iu-*il+1, nproc);
-    clean_up_plarre(E2, work, iwork, rcount, rdispl);
+    ext_clean_up_ext_plarre(E2, work, iwork, rcount, rdispl);
     return(0);
   }
 
@@ -304,7 +304,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
     
     /* approximate eigenvalues of input assigned to process */
     if (isize != 0) {      
-      info = eigval_approx_proc(procinfo, ifirst, ilast,
+      info = ext_eigval_approx_proc(procinfo, ifirst, ilast,
 				    bl_size, &D[bl_begin], &E[bl_begin], &E2[bl_begin], 
 				    &Windex[bl_begin], &iblock[bl_begin], &gersch[2*bl_begin],
 				    tolstruct, &W[bl_begin], &Werr[bl_begin], &Wgap[bl_begin], 
@@ -313,7 +313,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
     }
 
     /* compute root representation of block */
-    info = eigval_root_proc(procinfo, ifirst, ilast,
+    info = ext_eigval_root_proc(procinfo, ifirst, ilast,
 				  bl_size, &D[bl_begin], &E[bl_begin], &E2[bl_begin], 
 				  &Windex[bl_begin], &iblock[bl_begin], &gersch[2*bl_begin],
 				  tolstruct, &W[bl_begin], &Werr[bl_begin], &Wgap[bl_begin], 
@@ -322,7 +322,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
 
     /* refine eigenvalues assigned to process w.r.t root */
     if (isize != 0) {
-      info = eigval_refine_proc(procinfo, ifirst, ilast,
+      info = ext_eigval_refine_proc(procinfo, ifirst, ilast,
 				    bl_size, &D[bl_begin], &E[bl_begin], &E2[bl_begin], 
 				    &Windex[bl_begin], &iblock[bl_begin], &gersch[2*bl_begin],
 				    tolstruct, &W[bl_begin], &Werr[bl_begin], &Wgap[bl_begin], 
@@ -384,7 +384,7 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
   /* end of loop over unreduced blocks */    
   
   /* free memory */
-  clean_up_plarre(E2, work, iwork, rcount, rdispl);
+  ext_clean_up_ext_plarre(E2, work, iwork, rcount, rdispl);
   
   return(0);
 }
@@ -393,10 +393,10 @@ int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct,
 
 
 /*
- * Free's on allocated memory of plarre routine
+ * Free's on allocated memory of ext_plarre routine
  */
 static  
-void clean_up_plarre(long double *E2, long double *work, int *iwork, 
+void ext_clean_up_ext_plarre(long double *E2, long double *work, int *iwork, 
 		     int *rcount, int *rdispl)
 {
   free(E2);
@@ -410,7 +410,7 @@ void clean_up_plarre(long double *E2, long double *work, int *iwork,
 
 
 static 
-int eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast, 
+int ext_eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast, 
 			   int n, long double *D, long double *E, long double *E2,  
 			   int *Windex, int *iblock, long double *gersch, tol_t *tolstruct, 
 			   long double *W, long double *Werr, long double *Wgap, long double *work,
@@ -488,12 +488,12 @@ int eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast,
       
       iilast = iifirst + chunk - 1;
 
-      auxarg1 = create_auxarg1(n, D, E, E2, ifirst, ilast, iifirst, iilast,
+      auxarg1 = ext_create_auxarg1(n, D, E, E2, ifirst, ilast, iifirst, iilast,
 			       nsplit, isplit, bsrtol, pivmin, gersch,
 			       &work[0], &work[n], &iwork[n], &iwork[0]);
       
       info = pthread_create(&threads[i], &attr,
-			    eigval_subset_thread_a,
+			    ext_eigval_subset_thread_a,
 			    (void *) auxarg1);
       assert(info == 0);
       
@@ -501,11 +501,11 @@ int eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast,
     }
     iilast = ilast;
 
-    auxarg1 = create_auxarg1(n, D, E, E2, ifirst, ilast, iifirst, iilast,
+    auxarg1 = ext_create_auxarg1(n, D, E, E2, ifirst, ilast, iifirst, iilast,
 			     nsplit, isplit, bsrtol, pivmin, gersch,
 			     &work[0], &work[n], &iwork[n], &iwork[0]);
     
-    status = eigval_subset_thread_a( (void *) auxarg1 );
+    status = ext_eigval_subset_thread_a( (void *) auxarg1 );
     assert(status == NULL);
     
     /* join threads */
@@ -526,7 +526,7 @@ int eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast,
   } else {
     /* no multithreaded computation */
     
-    xdrrd_("I", "B", &n, &dummy, &dummy, &ifirst, &ilast, gersch,
+    ext_xdrrd_("I", "B", &n, &dummy, &dummy, &ifirst, &ilast, gersch,
   	    &bsrtol, D, E, E2, &pivmin, &nsplit, isplit, &m, W, Werr,
   	    &wl, &wu, iblock, Windex, work, iwork, &info);
     assert(info == 0);
@@ -547,7 +547,7 @@ int eigval_approx_proc(proc_t *procinfo, int ifirst, int ilast,
 
 
 static 
-int eigval_root_proc(proc_t *procinfo, int ifirst, int ilast, 
+int ext_eigval_root_proc(proc_t *procinfo, int ifirst, int ilast, 
 			   int n, long double *D, long double *E, long double *E2,  
 			   int *Windex, int *iblock, long double *gersch, tol_t *tolstruct, 
 			   long double *W, long double *Werr, long double *Wgap, long double *work,
@@ -588,7 +588,7 @@ int eigval_root_proc(proc_t *procinfo, int ifirst, int ilast,
   assert(randvec != NULL);
 
   /* create random vector to perturb rrr and broadcast it */
-  xdrnv_(&ITWO, iseed, &two_n, randvec);
+  ext_xdrnv_(&ITWO, iseed, &two_n, randvec);
   
   /* store shift of initial RRR, here set to zero */
   E[n-1] = 0.0;
@@ -603,15 +603,15 @@ int eigval_root_proc(proc_t *procinfo, int ifirst, int ilast,
   spdiam = gu - gl;
   
   /* find approximation of extremal eigenvalues of the block
-   * xdrrk computes one eigenvalue of tridiagonal matrix T
+   * ext_xdrrk computes one eigenvalue of tridiagonal matrix T
    * tmp1 and tmp2 one hold the eigenvalue and error, respectively */
-  xdrrk_(&n, &IONE, &gl, &gu, D, E2,
+  ext_xdrrk_(&n, &IONE, &gl, &gu, D, E2,
 	  &pivmin, &rtl, &tmp1, &tmp2, &info);
   assert(info == 0);  /* if info=-1 => eigenvalue did not converge */
     
   isleft = fmaxl(gl, tmp1-tmp2 - HUNDRED*LDBL_EPSILON*fabsl(tmp1-tmp2) );
     
-  xdrrk_(&n, &n, &gl, &gu, D, E2,
+  ext_xdrrk_(&n, &n, &gl, &gu, D, E2,
   	    &pivmin, &rtl, &tmp1, &tmp2, &info);
   assert(info == 0);  /* if info=-1 => eigenvalue did not converge */
     
@@ -627,7 +627,7 @@ int eigval_root_proc(proc_t *procinfo, int ifirst, int ilast,
   /* cnt = number of eigenvalues in (s1,s2] = count_right - count_left
    * negcnt_lft = number of eigenvalues smaller equals than s1
    * negcnt_rgt = number of eigenvalues smaller equals than s2 */
-  xdrrc_("T", &n, &s1, &s2, D, E, &pivmin,
+  ext_xdrrc_("T", &n, &s1, &s2, D, E, &pivmin,
 	  &cnt, &negcnt_lft, &negcnt_rgt, &info);
   assert(info == 0);
   
@@ -737,7 +737,7 @@ int eigval_root_proc(proc_t *procinfo, int ifirst, int ilast,
 
 
 static 
-int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast, 
+int ext_eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast, 
 			   int n, long double *D, long double *E, long double *E2,  
 			   int *Windex, int *iblock, long double *gersch, tol_t *tolstruct, 
 			   long double *W, long double *Werr, long double *Wgap, long double *work,
@@ -816,8 +816,8 @@ int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast,
     Werr[i] += fabsl(W[i])*LDBL_EPSILON;
   }
 
-  /* work  for sequential xdrrb = work[0:2*n-1]
-   * iwork for sequential xdrrb = iwork[0:2*n-1]
+  /* work  for sequential ext_xdrrb = work[0:2*n-1]
+   * iwork for sequential ext_xdrrb = iwork[0:2*n-1]
    * DE2 = work[2*n:3*n-1] strting at bl_begin */
   off_DE2 = 2*n;
     
@@ -839,14 +839,14 @@ int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast,
       
       rf_end = rf_begin + chunk - 1;
             
-      auxarg2 = create_auxarg2(n, D,
+      auxarg2 = ext_create_auxarg2(n, D,
 			       &work[off_DE2],
 			       rf_begin, rf_end, W, Werr, Wgap, Windex,
 			       tolstruct->rtol1, tolstruct->rtol2,
 			       pivmin, spdiam);
       
       info = pthread_create(&threads[i], &attr,
-  			      eigval_subset_thread_r,
+  			      ext_eigval_subset_thread_r,
 			    (void *) auxarg2);
       assert(info == 0);
       
@@ -854,13 +854,13 @@ int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast,
     }
     rf_end = isize-1;
 
-    auxarg2 = create_auxarg2(n, D,
+    auxarg2 = ext_create_auxarg2(n, D,
 			     &work[off_DE2],
 			     rf_begin, rf_end, W, Werr, Wgap, Windex,
 			     tolstruct->rtol1, tolstruct->rtol2,
 			     pivmin, spdiam);
       
-    status = eigval_subset_thread_r( (void *) auxarg2 );
+    status = ext_eigval_subset_thread_r( (void *) auxarg2 );
     assert(status == NULL);
     
     /* join threads */
@@ -875,14 +875,14 @@ int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast,
     
     offset = i_low-1;
     
-    /* refine eigenvalues found by xdrrb for i_low:i_upp */
-    xdrrb_(&n, D, &work[off_DE2], &i_low,
+    /* refine eigenvalues found by ext_xdrrb for i_low:i_upp */
+    ext_xdrrb_(&n, D, &work[off_DE2], &i_low,
 	    &i_upp, &tolstruct->rtol1, &tolstruct->rtol2, &offset, W, Wgap, 
 	    Werr, work, iwork, &pivmin, &spdiam, &n, &info);
     assert(info == 0);
     /* needs work of dim(2*n) and iwork of dim(2*n) */
   }
-  /* xdrrb computes gaps correctly, but not last one;
+  /* ext_xdrrb computes gaps correctly, but not last one;
    * this is ignored since the gaps are recomputed anyway */
   
   /* clean up */
@@ -900,7 +900,7 @@ int eigval_refine_proc(proc_t *procinfo, int ifirst, int ilast,
 
 
 static 
-void *eigval_subset_thread_a(void *argin)
+void *ext_eigval_subset_thread_a(void *argin)
 {
   /* from input argument */
   int    n, il, iu, my_il, my_iu;
@@ -917,7 +917,7 @@ void *eigval_subset_thread_a(void *argin)
   long double *work;
   int    *iwork;
   
-  retrieve_auxarg1((auxarg1_t *) argin, &n, &D, &E, &E2,
+  ext_retrieve_auxarg1((auxarg1_t *) argin, &n, &D, &E, &E2,
 		   &il, &iu, &my_il, &my_iu, &nsplit,
 		   &isplit, &bsrtol, &pivmin, &gersch,
 		   &W, &Werr, &Windex, &iblock);
@@ -942,7 +942,7 @@ void *eigval_subset_thread_a(void *argin)
   assert (iwork != NULL);
 
   /* compute eigenvalues 'my_il' to 'my_iu', put into temporary arrays */
-  xdrrd_("I", "B", &n, &dummy1, &dummy2, &my_il, &my_iu, gersch,
+  ext_xdrrd_("I", "B", &n, &dummy1, &dummy2, &my_il, &my_iu, gersch,
   	  &bsrtol, D, E, E2, &pivmin, &nsplit, isplit, &num_vals,
   	  W_tmp, Werr_tmp, &dummy1, &dummy2, iblock_tmp, Windex_tmp,
   	  work, iwork, &info);
@@ -969,7 +969,7 @@ void *eigval_subset_thread_a(void *argin)
 
 
 static 
-auxarg1_t *create_auxarg1(int n, long double *D, long double *E, long double *E2,
+auxarg1_t *ext_create_auxarg1(int n, long double *D, long double *E, long double *E2,
 			  int il, int iu, int my_il, int my_iu, 
 			  int nsplit, int *isplit, long double bsrtol, 
 			  long double pivmin, long double *gersch, long double *W, 
@@ -1005,7 +1005,7 @@ auxarg1_t *create_auxarg1(int n, long double *D, long double *E, long double *E2
 
 
 static 
-void retrieve_auxarg1(auxarg1_t *arg, int *n, long double **D, long double **E,
+void ext_retrieve_auxarg1(auxarg1_t *arg, int *n, long double **D, long double **E,
 		      long double **E2, int *il, int *iu, int *my_il, 
 		      int *my_iu, int *nsplit, int **isplit, 
 		      long double *bsrtol, long double *pivmin, long double **gersch, 
@@ -1037,7 +1037,7 @@ void retrieve_auxarg1(auxarg1_t *arg, int *n, long double **D, long double **E,
 
 
 static 
-void *eigval_subset_thread_r(void *argin)
+void *ext_eigval_subset_thread_r(void *argin)
 {
   /* from input argument */
   int          bl_size, rf_begin, rf_end;
@@ -1053,7 +1053,7 @@ void *eigval_subset_thread_r(void *argin)
   long double       *work;
   int          *iwork;
 
-  retrieve_auxarg2((auxarg2_t *) argin, &bl_size, &D, &DE2,
+  ext_retrieve_auxarg2((auxarg2_t *) argin, &bl_size, &D, &DE2,
 		   &rf_begin, &rf_end, &W, &Werr, &Wgap, &Windex, &rtol1, &rtol2,
 		   &pivmin, &bl_spdiam);
 
@@ -1071,7 +1071,7 @@ void *eigval_subset_thread_r(void *argin)
   offset = Windex[rf_begin] - 1;
   
   /* call bisection routine to refine the eigenvalues */
-  xdrrb_(&bl_size, D, DE2, &Windex[rf_begin], &Windex[rf_end],
+  ext_xdrrb_(&bl_size, D, DE2, &Windex[rf_begin], &Windex[rf_end],
 	  &rtol1, &rtol2, &offset, &W[rf_begin], &Wgap[rf_begin],
 	  &Werr[rf_begin], work, iwork, &pivmin, &bl_spdiam,
 	  &bl_size, &info);
@@ -1088,7 +1088,7 @@ void *eigval_subset_thread_r(void *argin)
 
 
 static 
-auxarg2_t *create_auxarg2(int bl_size, long double *D, long double *DE2,
+auxarg2_t *ext_create_auxarg2(int bl_size, long double *D, long double *DE2,
 			  int rf_begin, int rf_end, long double *W, long double *Werr,
 			  long double *Wgap, int *Windex,    
 			  long double rtol1, long double rtol2, long double pivmin, 
@@ -1120,7 +1120,7 @@ auxarg2_t *create_auxarg2(int bl_size, long double *D, long double *DE2,
 
 
 static 
-void retrieve_auxarg2(auxarg2_t *arg, int *bl_size, long double **D,
+void ext_retrieve_auxarg2(auxarg2_t *arg, int *bl_size, long double **D,
 		      long double **DE2, int *rf_begin, int *rf_end,
 		      long double **W, long double **Werr, long double **Wgap, int **Windex, 
 		      long double *rtol1, long double *rtol2,
@@ -1150,7 +1150,7 @@ void retrieve_auxarg2(auxarg2_t *arg, int *bl_size, long double **D,
  * of doubles
  */
 static 
-int cmp(const void *a1, const void *a2)
+int ext_cmp(const void *a1, const void *a2)
 {
   long double arg1 = *(long double *)a1;
   long double arg2 = *(long double *)a2;

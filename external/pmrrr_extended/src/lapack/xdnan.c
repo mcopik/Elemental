@@ -7,13 +7,13 @@
 #include <float.h>
 #include <assert.h>
 
-int xdnan_(long double *din)
+int ext_xdnan_(long double *din)
 {
     /* System generated locals */
     int ret_val;
 
     /* Local variables */
-    extern int xdsnan_(long double *, long double *);
+    extern int ext_xdsnan_(long double *, long double *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -41,6 +41,6 @@ int xdnan_(long double *din)
 /*  .. External Functions .. */
 /*  .. */
 /*  .. Executable Statements .. */
-    ret_val = xdsnan_(din, din);
+    ret_val = ext_xdsnan_(din, din);
     return ret_val;
-} /* xdnan_ */
+} /* ext_xdnan_ */

@@ -20,7 +20,7 @@ static int c__2 = 2;
 static int c__0 = 0;
 
 /* Subroutine */ 
-int xdrrd_(char *range, char *order, int *n, long double *vl,  
+int ext_xdrrd_(char *range, char *order, int *n, long double *vl,  
 	long double *vu, int *il, int *iu, long double *gers, 
 	long double *reltol, long double *d__, long double *e, long double *e2, 
 	long double *pivmin, int *nsplit, int *isplit, int *m, 
@@ -47,14 +47,14 @@ int xdrrd_(char *range, char *order, int *n, long double *vl,
     int nwu;
     long double tmp1, tmp2;
     int iend, jblk, ioff, iout, itmp1, itmp2, jdisc;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
     int iinfo;
     long double atoli;
     int iwoff, itmax;
     long double wkill, rtoli, uflow, tnorm;
     // extern long double dlamch_(char *);
     int ibegin;
-    extern /* Subroutine */ int xdebz_(int *, int *, int *, 
+    extern /* Subroutine */ int ext_xdebz_(int *, int *, int *, 
 	    int *, int *, int *, long double *, long double *, 
 	    long double *, long double *, long double *, long double *, int *, 
 	     long double *, long double *, int *, int *, long double *, 
@@ -293,11 +293,11 @@ int xdrrd_(char *range, char *order, int *n, long double *vl,
 
 /*     Decode RANGE */
 
-    if (xlsame_(range, "A")) {
+    if (ext_xlsame_(range, "A")) {
 	irange = 1;
-    } else if (xlsame_(range, "V")) {
+    } else if (ext_xlsame_(range, "V")) {
 	irange = 2;
-    } else if (xlsame_(range, "I")) {
+    } else if (ext_xlsame_(range, "I")) {
 	irange = 3;
     } else {
 	irange = 0;
@@ -308,7 +308,7 @@ int xdrrd_(char *range, char *order, int *n, long double *vl,
 
     if (irange <= 0) {
 	*info = -1;
-    } else if (! (xlsame_(order, "B") || xlsame_(order, 
+    } else if (! (ext_xlsame_(order, "B") || ext_xlsame_(order, 
 	    "E"))) {
 	*info = -2;
     } else if (*n < 0) {
@@ -413,7 +413,7 @@ int xdrrd_(char *range, char *order, int *n, long double *vl,
 	iwork[5] = *il - 1;
 	iwork[6] = *iu;
 
-	xdebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &
+	ext_xdebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &
 		d__[1], &e[1], &e2[1], &iwork[5], &work[*n + 1], &work[*n + 5]
 , &iout, &iwork[1], &w[1], &iblock[1], &iinfo);
 	if (iinfo != 0) {
@@ -572,7 +572,7 @@ int xdrrd_(char *range, char *order, int *n, long double *vl,
 /*           Find negcount of initial interval boundaries GL and GU */
 	    work[*n + 1] = gl;
 	    work[*n + in + 1] = gu;
-	    xdebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, 
+	    ext_xdebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, 
 		    pivmin, &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, &
 		    work[*n + 1], &work[*n + (in << 1) + 1], &im, &iwork[1], &
 		    w[*m + 1], &iblock[*m + 1], &iinfo);
@@ -587,7 +587,7 @@ int xdrrd_(char *range, char *order, int *n, long double *vl,
 /*           Compute Eigenvalues */
 	    itmax = (int) ((log(gu - gl + *pivmin) - log(*pivmin)) / log(
 		    2.)) + 2;
-	    xdebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, 
+	    ext_xdebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, 
 		    pivmin, &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, &
 		    work[*n + 1], &work[*n + (in << 1) + 1], &iout, &iwork[1], 
 		     &w[*m + 1], &iblock[*m + 1], &iinfo);
@@ -749,7 +749,7 @@ L70:
 /*     If ORDER='B', do nothing the eigenvalues are already sorted by */
 /*        block. */
 /*     If ORDER='E', sort the eigenvalues from smallest to largest */
-    if (xlsame_(order, "E") && *nsplit > 1) {
+    if (ext_xlsame_(order, "E") && *nsplit > 1) {
 	i__1 = *m - 1;
 	for (je = 1; je <= i__1; ++je) {
 	    ie = 0;
@@ -790,4 +790,4 @@ L70:
 
 /*     End of XDRRD */
 
-} /* xdrrd_ */
+} /* ext_xdrrd_ */

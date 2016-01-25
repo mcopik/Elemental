@@ -9,7 +9,7 @@
 
 
 /* Subroutine */ 
-int xdrrc_(char *jobt, int *n, long double *vl, 
+int ext_xdrrc_(char *jobt, int *n, long double *vl, 
 	long double *vu, long double *d__, long double *e, long double *pivmin, 
 	int *eigcnt, int *lcnt, int *rcnt, int *info)
 {
@@ -21,7 +21,7 @@ int xdrrc_(char *jobt, int *n, long double *vl,
     int i__;
     long double sl, su, tmp, tmp2;
     int matt;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
     long double lpivot, rpivot;
 
 
@@ -105,7 +105,7 @@ int xdrrc_(char *jobt, int *n, long double *vl,
     *lcnt = 0;
     *rcnt = 0;
     *eigcnt = 0;
-    matt = xlsame_(jobt, "T");
+    matt = ext_xlsame_(jobt, "T");
     if (matt) {
 /*        Sturm sequence count on T */
 	lpivot = d__[1] - *vl;
@@ -176,4 +176,4 @@ int xdrrc_(char *jobt, int *n, long double *vl,
 
 /*     end of XDRRC */
 
-} /* xdrrc_ */
+} /* ext_xdrrc_ */

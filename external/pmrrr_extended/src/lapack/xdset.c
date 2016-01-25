@@ -10,7 +10,7 @@
 
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
-/* Subroutine */ int xdset_(char *uplo, int *m, int *n, long double *alpha, 
+/* Subroutine */ int ext_xdset_(char *uplo, int *m, int *n, long double *alpha, 
 long double *beta, long double *a, int *lda)
 {
     /* System generated locals */
@@ -18,7 +18,7 @@ long double *beta, long double *a, int *lda)
 
     /* Local variables */
     int i__, j;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -87,7 +87,7 @@ long double *beta, long double *a, int *lda)
     a -= a_offset;
 
     /* Function Body */
-    if (xlsame_(uplo, "U")) {
+    if (ext_xlsame_(uplo, "U")) {
 
 /*        Set the strictly upper triangular or trapezoidal part of the */
 /*        array to ALPHA. */
@@ -104,7 +104,7 @@ long double *beta, long double *a, int *lda)
 /* L20: */
 	}
 
-    } else if (xlsame_(uplo, "L")) {
+    } else if (ext_xlsame_(uplo, "L")) {
 
 /*        Set the strictly lower triangular or trapezoidal part of the */
 /*        array to ALPHA. */
@@ -146,4 +146,4 @@ long double *beta, long double *a, int *lda)
 
 /*     End of XDSET */
 
-} /* xdset_ */
+} /* ext_xdset_ */

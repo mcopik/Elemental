@@ -1,5 +1,5 @@
 /* Parallel computation of eigenvectors and symmetric tridiagonal 
- * matrix T, which is preprocessed by the routine 'plarre'.
+ * matrix T, which is preprocessed by the routine 'ext_plarre'.
  *
  * Copyright (c) 2010, RWTH Aachen University
  * All rights reserved.
@@ -58,19 +58,19 @@
 #include "counter.h"
 
 
-static int assign_to_proc(proc_t *procinfo, in_t *Dstruct,
+static int ext_assign_to_proc(proc_t *procinfo, in_t *Dstruct,
 			  val_t *Wstruct, vec_t *Zstruct, int *nzp,
 			  int *myfirstp);
-static int cmpa(const void*, const void*);
-static int init_workQ(proc_t *procinfo, in_t *Dstruct,
+static int ext_ext_cmpa(const void*, const void*);
+static int ext_init_workQ(proc_t *procinfo, in_t *Dstruct,
 			   val_t *Wstruct, int *nzp,
 			   workQ_t *workQ);
-static void *empty_workQ(void*);
-static workQ_t *create_workQ();
-static void destroy_workQ(workQ_t*);
-static auxarg3_t *create_auxarg3(int, proc_t*, val_t*, vec_t*,
+static void *ext_empty_workQ(void*);
+static workQ_t *ext_create_workQ();
+static void ext_destroy_workQ(workQ_t*);
+static auxarg3_t *ext_create_auxarg3(int, proc_t*, val_t*, vec_t*,
 				 tol_t*, workQ_t*, counter_t*);
-static void retrieve_auxarg3(auxarg3_t*, int*, proc_t**, val_t**,
+static void ext_retrieve_auxarg3(auxarg3_t*, int*, proc_t**, val_t**,
 			     vec_t**, tol_t**, workQ_t**, 
 			     counter_t**);
 
@@ -79,7 +79,7 @@ static void retrieve_auxarg3(auxarg3_t*, int*, proc_t**, val_t**,
 /*
  * Computation of eigenvectors of a symmetric tridiagonal
  */
-int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
+int ext_plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	   vec_t *Zstruct, tol_t *tolstruct, int *nzp,
 	   int *myfirstp)
 {
@@ -115,12 +115,12 @@ int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
   assert(threads != NULL);
 
   /* Assign eigenvectors to processes */
-  assign_to_proc(procinfo, Dstruct, Wstruct, Zstruct, nzp,
+  ext_assign_to_proc(procinfo, Dstruct, Wstruct, Zstruct, nzp,
 		            myfirstp);
 
   /* Create work queue Q, counter, threads to empty Q */
-  workQ    = create_workQ( );
-  num_left = PMR_create_counter(*nzp);
+  workQ    = ext_create_workQ( );
+  num_left = ext_PMR_create_counter(*nzp);
 
   threads[0] = pthread_self();
   pthread_attr_init(&attr);
@@ -128,21 +128,21 @@ int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
   pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM); 
 
   for (i=1; i<nthreads; i++) {
-    auxarg = create_auxarg3(i, procinfo, Wstruct, Zstruct, tolstruct,
+    auxarg = ext_create_auxarg3(i, procinfo, Wstruct, Zstruct, tolstruct,
 			    workQ, num_left);
-    info = pthread_create(&threads[i], &attr, empty_workQ, 
+    info = pthread_create(&threads[i], &attr, ext_empty_workQ, 
 			  (void *) auxarg);
     assert(info == 0);
   }
 
   /* Initialize work queue of process */
-  info = init_workQ(procinfo, Dstruct, Wstruct, nzp, workQ);
+  info = ext_init_workQ(procinfo, Dstruct, Wstruct, nzp, workQ);
   assert(info == 0);
 
   /* Empty the work queue */
-  auxarg = create_auxarg3(0, procinfo, Wstruct, Zstruct, tolstruct,
+  auxarg = ext_create_auxarg3(0, procinfo, Wstruct, Zstruct, tolstruct,
 			  workQ, num_left);
-  status = empty_workQ((void *) auxarg);
+  status = ext_empty_workQ((void *) auxarg);
   assert(status == NULL);
 
   /* Join all the worker thread */
@@ -155,8 +155,8 @@ int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
   free(Wshifted);
   free(threads);
   pthread_attr_destroy(&attr);
-  destroy_workQ(workQ);
-  PMR_destroy_counter(num_left);
+  ext_destroy_workQ(workQ);
+  ext_PMR_destroy_counter(num_left);
 
   return(0);
 }
@@ -168,7 +168,7 @@ int plarrv(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
  * Assign the computation of eigenvectors to the processes
  */
 static  
-int assign_to_proc(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
+int ext_assign_to_proc(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 		   vec_t *Zstruct, int *nzp, int *myfirstp)
 {
   /* From inputs */
@@ -207,7 +207,7 @@ int assign_to_proc(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
   /* Alternatively could sort list of pointers, which
      requires less data copying */
 
-  qsort(array, n, sizeof(sort_struct_t), cmpa);
+  qsort(array, n, sizeof(sort_struct_t), ext_ext_cmpa);
 
   /* Mark eigenvectors that do not need to be computed */
   for (j = 0; j < il-1; j++ ) {
@@ -266,7 +266,7 @@ int assign_to_proc(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
  * sort_structs
  */
 static 
-int cmpa(const void *a1, const void *a2)
+int ext_ext_cmpa(const void *a1, const void *a2)
 {
   sort_struct_t *arg1, *arg2;
 
@@ -298,7 +298,7 @@ int cmpa(const void *a1, const void *a2)
  * into the work queue.
  */
 static 
-int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
+int ext_init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	       int *nzp, workQ_t *workQ)
 {
   /* Input arguments */
@@ -394,8 +394,8 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
       DLL[i] = tmp*L[i+ibegin];
     }
 
-    RRR = PMR_create_rrr(&D[ibegin], &L[ibegin], DL, DLL, isize, 0);
-    PMR_increment_rrr_dependencies(RRR);
+    RRR = ext_PMR_create_rrr(&D[ibegin], &L[ibegin], DL, DLL, isize, 0);
+    ext_PMR_increment_rrr_dependencies(RRR);
     
     /* In W apply shift of current block to eigenvalues
      * to get unshifted values w.r.t. T */
@@ -454,12 +454,12 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	    lgap = Wgap[sn_first-1];
 	  }
 
-	  PMR_increment_rrr_dependencies(RRR);
+	  ext_PMR_increment_rrr_dependencies(RRR);
 
-	  task = PMR_create_s_task(sn_first, sn_last, 1, ibegin, 
+	  task = ext_PMR_create_s_task(sn_first, sn_last, 1, ibegin, 
 				   iend, spdiam, lgap, RRR);
 	  
- 	  PMR_insert_task_at_back(workQ->s_queue, task);
+ 	  ext_PMR_insert_task_at_back(workQ->s_queue, task);
 	  
 	  task_inserted = true;
 	} else {
@@ -509,10 +509,10 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	      }
 	    }
 
-	    RRR_parent = PMR_create_rrr(&D[ibegin], &L[ibegin], 
+	    RRR_parent = ext_PMR_create_rrr(&D[ibegin], &L[ibegin], 
 					NULL, NULL, isize, 0);
 
-	    task = PMR_create_c_task(cl_first, cl_last, 1, ibegin, 
+	    task = ext_PMR_create_c_task(cl_first, cl_last, 1, ibegin, 
 				     iend, spdiam, lgap, iWbegin, 
 				     iWend, left_pid, right_pid, 
 				     RRR_parent);
@@ -520,9 +520,9 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	    /* Insert task into queue, depending if cluster need
 	     * communication with other processes */
 	    if (left_pid != right_pid)
-	      PMR_insert_task_at_back(workQ->r_queue, task);
+	      ext_PMR_insert_task_at_back(workQ->r_queue, task);
 	    else
-	      PMR_insert_task_at_back(workQ->c_queue, task);
+	      ext_PMR_insert_task_at_back(workQ->c_queue, task);
 	    
 	    cl_first = k + 1;
 	  } /* end k */
@@ -547,19 +547,19 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
 	    }
 	  }
 
-	  RRR_parent = PMR_create_rrr(&D[ibegin], &L[ibegin], 
+	  RRR_parent = ext_PMR_create_rrr(&D[ibegin], &L[ibegin], 
 				      NULL, NULL, isize, 0);
 
-	  task = PMR_create_c_task(cl_first, cl_last, 1, ibegin, 
+	  task = ext_PMR_create_c_task(cl_first, cl_last, 1, ibegin, 
 				   iend, spdiam, lgap, iWbegin, iWend,
 				   left_pid, right_pid, RRR_parent);
 
 	  /* Insert task into queue, depending if cluster need
 	   * communication with other processes */
 	  if (left_pid != right_pid)
-	    PMR_insert_task_at_back(workQ->r_queue, task);
+	    ext_PMR_insert_task_at_back(workQ->r_queue, task);
 	  else
-	    PMR_insert_task_at_back(workQ->c_queue, task);
+	    ext_PMR_insert_task_at_back(workQ->c_queue, task);
 	  
 	}
 	task_inserted = true;
@@ -570,8 +570,8 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
     } /* end of splitting eigenvalues into tasks */
 
     /* Set flag in RRR that last singleton is created */
-    PMR_set_parent_processed_flag(RRR);
-    PMR_try_destroy_rrr(RRR);
+    ext_PMR_set_parent_processed_flag(RRR);
+    ext_PMR_try_destroy_rrr(RRR);
 
     ibegin = iend + 1;
   } /* end loop over blocks */ 
@@ -586,7 +586,7 @@ int init_workQ(proc_t *procinfo, in_t *Dstruct, val_t *Wstruct,
  * Processes all the tasks put in the work queue.
  */
 static 
-void *empty_workQ(void *argin)
+void *ext_empty_workQ(void *argin)
 {
   /* input arguments */
   int          tid;
@@ -604,32 +604,32 @@ void *empty_workQ(void *argin)
   int          *iwork;
 
   /* retrieve necessary arguments from structures */
-  retrieve_auxarg3((auxarg3_t *) argin, &tid, &procinfo, &Wstruct,
+  ext_retrieve_auxarg3((auxarg3_t *) argin, &tid, &procinfo, &Wstruct,
 		   &Zstruct, &tolstruct, &workQ, &num_left);
 
   n        = Wstruct->n;
 
-  /* max. needed long double precision work space: xdr1v */
+  /* max. needed long double precision work space: ext_xdr1v */
   work      = (long double *) malloc(4*n * sizeof(long double));
   assert(work != NULL);
 
-  /* max. needed int work space: xdrrb */
+  /* max. needed int work space: ext_xdrrb */
   iwork     = (int *)    malloc(2*n * sizeof(int)   );
   assert(iwork != NULL);
 
 
   /* while loop to empty the work queue */
-  while (PMR_get_counter_value(num_left) > 0) {
+  while (ext_PMR_get_counter_value(num_left) > 0) {
 
     /* empty r-queue before processing other tasks */
-    PMR_process_r_queue(tid, procinfo, Wstruct, Zstruct, tolstruct,
+    ext_PMR_process_r_queue(tid, procinfo, Wstruct, Zstruct, tolstruct,
 			workQ, num_left, work, iwork);
 
     task = PMR_remove_task_at_front(workQ->s_queue);
     if ( task != NULL ) {
       assert(task->flag == SINGLETON_TASK_FLAG);
 
-      PMR_process_s_task((singleton_t *) task->data, tid, procinfo,
+      ext_PMR_process_s_task((singleton_t *) task->data, tid, procinfo,
 			 Wstruct, Zstruct, tolstruct, num_left, 
 			 work, iwork);
       free(task);
@@ -640,7 +640,7 @@ void *empty_workQ(void *argin)
     if ( task != NULL ) {
       assert(task->flag == CLUSTER_TASK_FLAG);
 
-      PMR_process_c_task((cluster_t *) task->data, tid, procinfo,
+      ext_PMR_process_c_task((cluster_t *) task->data, tid, procinfo,
 			 Wstruct, Zstruct, tolstruct, workQ,
 			 num_left, work, iwork);
       free(task);
@@ -658,15 +658,15 @@ void *empty_workQ(void *argin)
 
 
 
-static workQ_t *create_workQ()
+static workQ_t *ext_create_workQ()
 {
   workQ_t *wq;
 
   wq = (workQ_t *) malloc(sizeof(workQ_t));
 
-  wq->r_queue = PMR_create_empty_queue();
-  wq->s_queue = PMR_create_empty_queue();
-  wq->c_queue = PMR_create_empty_queue();
+  wq->r_queue = ext_PMR_create_empty_queue();
+  wq->s_queue = ext_PMR_create_empty_queue();
+  wq->c_queue = ext_PMR_create_empty_queue();
 
   return(wq);
 }
@@ -674,11 +674,11 @@ static workQ_t *create_workQ()
 
 
 
-static void destroy_workQ(workQ_t *wq)
+static void ext_destroy_workQ(workQ_t *wq)
 {
-  PMR_destroy_queue(wq->r_queue);
-  PMR_destroy_queue(wq->s_queue);
-  PMR_destroy_queue(wq->c_queue);
+  ext_PMR_destroy_queue(wq->r_queue);
+  ext_PMR_destroy_queue(wq->s_queue);
+  ext_PMR_destroy_queue(wq->c_queue);
   free(wq);
 }
 
@@ -686,7 +686,7 @@ static void destroy_workQ(workQ_t *wq)
 
 
 static auxarg3_t*
-create_auxarg3(int tid, proc_t *procinfo, val_t *Wstruct,
+ext_create_auxarg3(int tid, proc_t *procinfo, val_t *Wstruct,
 	       vec_t *Zstruct, tol_t *tolstruct,
 	       workQ_t *workQ, counter_t *num_left)
 {
@@ -710,7 +710,7 @@ create_auxarg3(int tid, proc_t *procinfo, val_t *Wstruct,
 
 
 static void 
-retrieve_auxarg3(auxarg3_t *arg, int *tid, proc_t **procinfo,
+ext_retrieve_auxarg3(auxarg3_t *arg, int *tid, proc_t **procinfo,
 		 val_t **Wstruct, vec_t **Zstruct,
 		 tol_t **tolstruct, workQ_t **workQ,
 		 counter_t **num_left)

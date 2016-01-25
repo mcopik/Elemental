@@ -9,7 +9,7 @@
 
 
 /* Subroutine */ 
-int odrrc_(char *jobt, int *n, double *vl, 
+int ext_odrrc_(char *jobt, int *n, double *vl, 
 	double *vu, double *d__, double *e, double *pivmin, 
 	int *eigcnt, int *lcnt, int *rcnt, int *info)
 {
@@ -21,7 +21,7 @@ int odrrc_(char *jobt, int *n, double *vl,
     int i__;
     double sl, su, tmp, tmp2;
     int matt;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
     double lpivot, rpivot;
 
 
@@ -105,7 +105,7 @@ int odrrc_(char *jobt, int *n, double *vl,
     *lcnt = 0;
     *rcnt = 0;
     *eigcnt = 0;
-    matt = olsame_(jobt, "T");
+    matt = ext_olsame_(jobt, "T");
     if (matt) {
 /*        Sturm sequence count on T */
 	lpivot = d__[1] - *vl;
@@ -176,4 +176,4 @@ int odrrc_(char *jobt, int *n, double *vl,
 
 /*     end of ODRRC */
 
-} /* odrrc_ */
+} /* ext_odrrc_ */

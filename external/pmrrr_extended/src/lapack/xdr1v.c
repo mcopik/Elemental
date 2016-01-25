@@ -1,4 +1,4 @@
-/* xdr1v.f -- translated by f2c (version 20061008) */
+/* ext_xdr1v.f -- translated by f2c (version 20061008) */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +11,7 @@
 #define FALSE_ (0)
 
 /* Subroutine */ 
-int xdr1v_(int *n, int *b1, int *bn, long double 
+int ext_xdr1v_(int *n, int *b1, int *bn, long double 
 	*lambda, long double *d__, long double *l, long double *ld, long double *
 	lld, long double *pivmin, long double *gaptol, long double *z__, int 
 	*wantnc, int *negcnt, long double *ztz, long double *mingma, 
@@ -33,7 +33,7 @@ int xdr1v_(int *n, int *b1, int *bn, long double
     int neg1, neg2, indp, inds;
     long double dplus;
     // extern long double odmch_(char *);
-    extern int xdnan_(long double *);
+    extern int ext_xdnan_(long double *);
     int indlpl, indumn;
     long double dminus;
     int sawnan1, sawnan2;
@@ -219,7 +219,7 @@ int xdr1v_(int *n, int *b1, int *bn, long double
 	s = work[inds + i__] - *lambda;
 /* L50: */
     }
-    sawnan1 = xdnan_(&s);
+    sawnan1 = ext_xdnan_(&s);
     // OR: sawnan1 = isnan(s);
     if (sawnan1) {
 	goto L60;
@@ -232,7 +232,7 @@ int xdr1v_(int *n, int *b1, int *bn, long double
 	s = work[inds + i__] - *lambda;
 /* L51: */
     }
-    sawnan1 = xdnan_(&s);
+    sawnan1 = ext_xdnan_(&s);
     // OR: sawnan1 = isnan(s);
 
 L60:
@@ -291,7 +291,7 @@ L60:
 /* L80: */
     }
     tmp = work[indp + r1 - 1];
-    sawnan2 = xdnan_(&tmp);
+    sawnan2 = ext_xdnan_(&tmp);
     // OR: sawnan2 = isnan(tmp);
 
     if (sawnan2) {
@@ -440,4 +440,4 @@ L280:
 
 /*     End of XDR1V */
 
-} /* xdr1v_ */
+} /* ext_xdr1v_ */

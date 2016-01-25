@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdrrb_(int *n, long double *d__, long double *lld, 
+int ext_xdrrb_(int *n, long double *d__, long double *lld, 
 	int *ifirst, int *ilast, long double *rtol1, long double *rtol2, 
 	 int *offset, long double *w, long double *wgap, long double *werr, 
 	long double *work, int *iwork, long double *pivmin, long double *
@@ -26,7 +26,7 @@ int xdrrb_(int *n, long double *d__, long double *lld,
     long double gap, mid, tmp, back, lgap, rgap, left;
     int iter, nint, prev, next;
     long double cvrgd, right, width;
-    extern int xdneg_(int *, long double *, long double *, long double *
+    extern int ext_xdneg_(int *, long double *, long double *, long double *
 , long double *, int *);
     int negcnt;
     long double mnwdth;
@@ -196,7 +196,7 @@ int xdrrb_(int *n, long double *d__, long double *lld,
 
 	back = werr[ii];
 L20:
-	negcnt = xdneg_(n, &d__[1], &lld[1], &left, pivmin, &r__);
+	negcnt = ext_xdneg_(n, &d__[1], &lld[1], &left, pivmin, &r__);
 	if (negcnt > i__ - 1) {
 	    left -= back;
 	    back *= 2.;
@@ -208,7 +208,7 @@ L20:
 
 	back = werr[ii];
 L50:
-	negcnt = xdneg_(n, &d__[1], &lld[1], &right, pivmin, &r__);
+	negcnt = ext_xdneg_(n, &d__[1], &lld[1], &right, pivmin, &r__);
 	if (negcnt < i__) {
 	    right += back;
 	    back *= 2.;
@@ -296,7 +296,7 @@ L80:
 
 /*        Perform one bisection step */
 
-	negcnt = xdneg_(n, &d__[1], &lld[1], &mid, pivmin, &r__);
+	negcnt = ext_xdneg_(n, &d__[1], &lld[1], &mid, pivmin, &r__);
 	if (negcnt <= i__ - 1) {
 	    work[k - 1] = mid;
 	} else {
@@ -341,4 +341,4 @@ L100:
 
 /*     End of XDRRB */
 
-} /* xdrrb_ */
+} /* ext_xdrrb_ */

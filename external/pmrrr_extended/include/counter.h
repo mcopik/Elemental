@@ -53,11 +53,11 @@ typedef struct {
 #endif
 } counter_t;
 
-counter_t *PMR_create_counter(int init_value);
-int PMR_get_counter_value(counter_t *counter);
+counter_t *ext_PMR_create_counter(int init_value);
+int ext_PMR_get_counter_value(counter_t *counter);
 int PMR_set_counter_value(counter_t *counter, int value);
-int PMR_decrement_counter(counter_t *counter, int amount);
-int PMR_increment_counter(counter_t *counter, int amount);
-void PMR_destroy_counter(counter_t *counter);
+int ext_PMR_decrement_counter(counter_t *counter, int amount);
+int ext_PMR_increment_counter(counter_t *counter, int amount);
+void ext_PMR_destroy_counter(counter_t *counter);
 
 #endif

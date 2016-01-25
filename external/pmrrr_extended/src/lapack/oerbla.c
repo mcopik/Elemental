@@ -11,7 +11,7 @@
 static int c__1 = 1;
 
 /* Subroutine */ 
-int oerbla_(char *srname, int *info)
+int ext_oerbla_(char *srname, int *info)
 {
     
 
@@ -55,4 +55,4 @@ int oerbla_(char *srname, int *info)
 /*     End of OERBLA */
 
     return 0;
-} /* oerbla_ */
+} /* ext_oerbla_ */

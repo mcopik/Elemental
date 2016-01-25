@@ -1,4 +1,4 @@
-/* xdcpy.f -- translated by f2c (version 20061008) */
+/* ext_xdcpy.f -- translated by f2c (version 20061008) */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdcpy_(int *n, long double *dx, int *incx, 
+int ext_xdcpy_(int *n, long double *dx, int *incx, 
 	long double *dy, int *incy)
 {
     /* System generated locals */
@@ -99,4 +99,4 @@ L40:
 /* L50: */
     }
     return 0;
-} /* xdcpy_ */
+} /* ext_xdcpy_ */

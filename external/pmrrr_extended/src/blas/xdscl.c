@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdscl_(int *n, long double *da, long double *dx, 
+int ext_xdscl_(int *n, long double *da, long double *dx, 
 	int *incx)
 {
     /* System generated locals */
@@ -88,4 +88,4 @@ L40:
 /* L50: */
     }
     return 0;
-} /* xdscl_ */
+} /* ext_xdscl_ */

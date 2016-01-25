@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odev2_(double *a, double *b, double *c__, 
+int ext_odev2_(double *a, double *b, double *c__, 
 	double *rt1, double *rt2, double *cs1, double *sn1)
 {
     /* System generated locals */
@@ -180,4 +180,4 @@ int odev2_(double *a, double *b, double *c__,
 
 /*     End of ODEV2 */
 
-} /* odev2_ */
+} /* ext_odev2_ */

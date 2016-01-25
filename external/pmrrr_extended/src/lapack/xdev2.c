@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdev2_(long double *a, long double *b, long double *c__, 
+int ext_xdev2_(long double *a, long double *b, long double *c__, 
 	long double *rt1, long double *rt2, long double *cs1, long double *sn1)
 {
     /* System generated locals */
@@ -180,4 +180,4 @@ int xdev2_(long double *a, long double *b, long double *c__,
 
 /*     End of XDEV2 */
 
-} /* xdev2_ */
+} /* ext_xdev2_ */

@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odssq_(int *n, double *x, int *incx, 
+int ext_odssq_(int *n, double *x, int *incx, 
 	double *scale, double *sumsq)
 {
     /* System generated locals */
@@ -107,4 +107,4 @@ int odssq_(int *n, double *x, int *incx,
 
 /*     End of ODSSQ */
 
-} /* odssq_ */
+} /* ext_odssq_ */

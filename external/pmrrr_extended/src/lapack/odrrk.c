@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odrrk_(int *n, int *iw, double *gl, 
+int ext_odrrk_(int *n, int *iw, double *gl, 
 	double *gu, double *d__, double *e2, double *pivmin, 
 	double *reltol, double *w, double *werr, int *info)
 {
@@ -185,4 +185,4 @@ L30:
 
 /*     End of ODRRK */
 
-} /* odrrk_ */
+} /* ext_odrrk_ */

@@ -1,4 +1,4 @@
-/* odr1v.f -- translated by f2c (version 20061008) */
+/* ext_odr1v.f -- translated by f2c (version 20061008) */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +11,7 @@
 #define FALSE_ (0)
 
 /* Subroutine */ 
-int odr1v_(int *n, int *b1, int *bn, double 
+int ext_odr1v_(int *n, int *b1, int *bn, double 
 	*lambda, double *d__, double *l, double *ld, double *
 	lld, double *pivmin, double *gaptol, double *z__, int 
 	*wantnc, int *negcnt, double *ztz, double *mingma, 
@@ -33,7 +33,7 @@ int odr1v_(int *n, int *b1, int *bn, double
     int neg1, neg2, indp, inds;
     double dplus;
     // extern double odmch_(char *);
-    extern int odnan_(double *);
+    extern int ext_odnan_(double *);
     int indlpl, indumn;
     double dminus;
     int sawnan1, sawnan2;
@@ -219,7 +219,7 @@ int odr1v_(int *n, int *b1, int *bn, double
 	s = work[inds + i__] - *lambda;
 /* L50: */
     }
-    sawnan1 = odnan_(&s);
+    sawnan1 = ext_odnan_(&s);
     if (sawnan1) {
 	goto L60;
     }
@@ -231,7 +231,7 @@ int odr1v_(int *n, int *b1, int *bn, double
 	s = work[inds + i__] - *lambda;
 /* L51: */
     }
-    sawnan1 = odnan_(&s);
+    sawnan1 = ext_odnan_(&s);
 
 L60:
     if (sawnan1) {
@@ -289,7 +289,7 @@ L60:
 /* L80: */
     }
     tmp = work[indp + r1 - 1];
-    sawnan2 = odnan_(&tmp);
+    sawnan2 = ext_odnan_(&tmp);
     if (sawnan2) {
 /*        Runs a slower version of the above loop if a NaN is detected */
 	neg2 = 0;
@@ -436,4 +436,4 @@ L280:
 
 /*     End of ODR1V */
 
-} /* odr1v_ */
+} /* ext_odr1v_ */

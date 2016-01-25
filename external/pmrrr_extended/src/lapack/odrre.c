@@ -14,7 +14,7 @@ static int c__2 = 2;
 #define FALSE_ (0)
 
 /* Subroutine */ 
-int odrre_(char *range, int *n, double *vl, 
+int ext_odrre_(char *range, int *n, double *vl, 
 	double *vu, int *il, int *iu, double *d__, double *e, 
 	double *e2, double *rtol1, double *rtol2, double *spltol, 
 	int *nsplit, int *isplit, int *m, double *w, 
@@ -48,39 +48,39 @@ int odrre_(char *range, int *n, double *vl,
     double rtol;
     int iseed[4];
     double avgap, sigma;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
     int iinfo;
-    extern /* Subroutine */ int odcpy_(int *, double *, int *, 
+    extern /* Subroutine */ int ext_odcpy_(int *, double *, int *, 
 	    double *, int *);
     long double norep;
-    extern /* Subroutine */ int odsq2_(int *, double *, int *);
+    extern /* Subroutine */ int ext_odsq2_(int *, double *, int *);
     // extern double odmch_(char *);
     int ibegin;
     long double forceb;
     int irange;
     double sgndef;
-    extern /* Subroutine */ int odrra_(int *, double *, double *, 
+    extern /* Subroutine */ int ext_odrra_(int *, double *, double *, 
 	     double *, double *, double *, int *, int *, 
-	    int *), odrrb_(int *, double *, double *, 
+	    int *), ext_odrrb_(int *, double *, double *, 
 	    int *, int *, double *, double *, int *, 
 	    double *, double *, double *, double *, int *, 
-	     double *, double *, int *, int *), odrrc_(char *
+	     double *, double *, int *, int *), ext_odrrc_(char *
 , int *, double *, double *, double *, double 
 	    *, double *, int *, int *, int *, int *);
     int wbegin;
-    extern /* Subroutine */ int odrrd_(char *, char *, int *, double 
+    extern /* Subroutine */ int ext_odrrd_(char *, char *, int *, double 
 	    *, double *, int *, int *, double *, double *, 
 	     double *, double *, double *, double *, int *
 , int *, int *, double *, double *, double *, 
 	    double *, int *, int *, double *, int *, 
 	    int *);
     double safmin, spdiam;
-    extern /* Subroutine */ int odrrk_(int *, int *, double *, 
+    extern /* Subroutine */ int ext_odrrk_(int *, int *, double *, 
 	    double *, double *, double *, double *, 
 	    double *, double *, double *, int *);
     long double usedqd;
     double clwdth, isleft;
-    extern /* Subroutine */ int odrnv_(int *, int *, int *, 
+    extern /* Subroutine */ int ext_odrnv_(int *, int *, int *, 
 	    double *);
     double isrght, bsrtol, dpivot;
 
@@ -285,11 +285,11 @@ int odrre_(char *range, int *n, double *vl,
 
 /*     Decode RANGE */
 
-    if (olsame_(range, "A")) {
+    if (ext_olsame_(range, "A")) {
 	irange = 1;
-    } else if (olsame_(range, "V")) {
+    } else if (ext_olsame_(range, "V")) {
 	irange = 3;
-    } else if (olsame_(range, "I")) {
+    } else if (ext_olsame_(range, "I")) {
 	irange = 2;
     }
     *m = 0;
@@ -356,7 +356,7 @@ int odrre_(char *range, int *n, double *vl,
 /*     estimate that is wrong by at most a factor of SQRT(2) */
     spdiam = gu - gl;
 /*     Compute splitting points */
-    odrra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &
+    ext_odrra_(n, &d__[1], &e[1], &e2[1], spltol, &spdiam, nsplit, &isplit[1], &
 	    iinfo);
 /*     Can force use of bisection instead of faster DQDS. */
 /*     Option left in the code for future multisection work. */
@@ -375,7 +375,7 @@ int odrre_(char *range, int *n, double *vl,
 /*        An interval [LEFT,RIGHT] has converged if */
 /*        RIGHT-LEFT.LT.RTOL*MAX(ABS(LEFT),ABS(RIGHT)) */
 /*        ODRRD needs a WORK of size 4*N, IWORK of size 3*N */
-	odrrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[
+	ext_odrrd_(range, "B", n, vl, vu, il, iu, &gers[1], &bsrtol, &d__[1], &e[
 		1], &e2[1], pivmin, nsplit, &isplit[1], &mm, &w[1], &werr[1], 
 		vl, vu, &iblock[1], &indexw[1], &work[1], &iwork[1], &iinfo);
 	if (iinfo != 0) {
@@ -485,7 +485,7 @@ L21:
 	if (irange == 1 && ! forceb || usedqd) {
 /*           Case of DQDS */
 /*           Find approximations to the extremal eigenvalues of the block */
-	    odrrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
+	    ext_odrrk_(&in, &c__1, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
 		    rtl, &tmp, &tmp1, &iinfo);
 	    if (iinfo != 0) {
 		*info = -1;
@@ -495,7 +495,7 @@ L21:
 	    d__2 = gl, d__3 = tmp - tmp1 - eps * 100. * (d__1 = tmp - tmp1, 
 		    fabs(d__1));
 	    isleft = fmax(d__2,d__3);
-	    odrrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
+	    ext_odrrk_(&in, &in, &gl, &gu, &d__[ibegin], &e2[ibegin], pivmin, &
 		    rtl, &tmp, &tmp1, &iinfo);
 	    if (iinfo != 0) {
 		*info = -1;
@@ -554,7 +554,7 @@ L21:
 	}
 /*        Compute the negcount at the 1/4 and 3/4 points */
 	if (mb > 1) {
-	    odrrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &
+	    ext_odrrc_("T", &in, &s1, &s2, &d__[ibegin], &e[ibegin], pivmin, &
 		    cnt, &cnt1, &cnt2, &iinfo);
 	}
 	if (mb == 1) {
@@ -692,9 +692,9 @@ L83:
 /*        Store the shift. */
 	e[iend] = sigma;
 /*        Store D and L. */
-	odcpy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
+	ext_odcpy_(&in, &work[1], &c__1, &d__[ibegin], &c__1);
 	i__2 = in - 1;
-	odcpy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
+	ext_odcpy_(&i__2, &work[in + 1], &c__1, &e[ibegin], &c__1);
 	if (mb > 1) {
 
 /*           Perturb each entry of the base representation by a small */
@@ -706,7 +706,7 @@ L83:
 /* L122: */
 	    }
 	    i__2 = (in << 1) - 1;
-	    odrnv_(&c__2, iseed, &i__2, &work[1]);
+	    ext_odrnv_(&c__2, iseed, &i__2, &work[1]);
 	    i__2 = in - 1;
 	    for (i__ = 1; i__ <= i__2; ++i__) {
 		d__[ibegin + i__ - 1] *= eps * 8. * work[i__] + 1.;
@@ -745,7 +745,7 @@ L83:
 	    }
 /*           use bisection to find EV from INDL to INDU */
 	    i__2 = indl - 1;
-	    odrrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, 
+	    ext_odrrb_(&in, &d__[ibegin], &work[ibegin], &indl, &indu, rtol1, 
 		    rtol2, &i__2, &w[wbegin], &wgap[wbegin], &werr[wbegin], &
 		    work[(*n << 1) + 1], &iwork[1], pivmin, &spdiam, &in, &
 		    iinfo);
@@ -788,7 +788,7 @@ L83:
 	    }
 	    work[(in << 1) - 1] = (d__1 = d__[iend], fabs(d__1));
 	    work[in * 2] = 0.;
-	    odsq2_(&in, &work[1], &iinfo);
+	    ext_odsq2_(&in, &work[1], &iinfo);
 	    if (iinfo != 0) {
 /*              If IINFO = -5 then an index is part of a tight cluster */
 /*              and should be changed. The index is in IWORK(1) and the */
@@ -855,4 +855,4 @@ L170:
 
 /*     end of ODRRE */
 
-} /* odrre_ */
+} /* ext_odrre_ */

@@ -11,7 +11,7 @@
 #define FALSE_ (0)
 
 /* Subroutine */ 
-int xdrrr_(int *n, long double *d__, long double *e, 
+int ext_xdrrr_(int *n, long double *d__, long double *e, 
 	int *info)
 {
     /* System generated locals */
@@ -171,4 +171,4 @@ L11:
 
 /*     END OF XDRRR */
 
-} /* xdrrr_ */
+} /* ext_xdrrr_ */

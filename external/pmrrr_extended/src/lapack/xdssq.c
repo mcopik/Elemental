@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdssq_(int *n, long double *x, int *incx, 
+int ext_xdssq_(int *n, long double *x, int *incx, 
 	long double *scale, long double *sumsq)
 {
     /* System generated locals */
@@ -107,4 +107,4 @@ int xdssq_(int *n, long double *x, int *incx,
 
 /*     End of XDSSQ */
 
-} /* xdssq_ */
+} /* ext_xdssq_ */

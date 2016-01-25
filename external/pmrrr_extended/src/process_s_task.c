@@ -53,7 +53,7 @@
 #include "process_task.h"
 
 
-int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
+int ext_PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct, 
 		       tol_t *tolstruct, counter_t *num_left, 
 		       long double *work, int *iwork)
@@ -191,7 +191,7 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 	tmp     = Wgap[i]; 
 	Wgap[i] = 0.0;
 	
-	xdrrb_(&bl_size, D, DLL, &i_local, &i_local, &DZERO, 
+	ext_xdrrb_(&bl_size, D, DLL, &i_local, &i_local, &DZERO, 
 		&twoeps, &offset, &Wshifted[i], &Wgap[i],
 		&Werr[i], work, iwork, &pivmin, &bl_spdiam,
 		&itmp, &info);
@@ -204,7 +204,7 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
       wantNC = (usedBS == true) ? false : true;
 
       /* compute the eigenvector corresponding to lambda */
-      xdr1v_(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
+      ext_xdr1v_(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
 	      &pivmin, &gaptol, z_tmp, &wantNC,
 	      &negcount, &ztz, &mingma, &r, &isuppZ[2*zind],
 	      &norminv, &residual, &RQcorr, work);
@@ -261,14 +261,14 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 
     } /* end k */
 
-    /* if necessary call xdr1v to improve error angle by 2nd step */
+    /* if necessary call ext_xdr1v to improve error angle by 2nd step */
     step2II = false;
     if ( usedRQ && usedBS && (bstres <= residual) ) {
       lambda = bstw;
       step2II = true;
     }
     if ( step2II == true ) {
-      xdr1v_(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
+      ext_xdr1v_(&bl_size, &IONE, &bl_size, &lambda, D, L, DL, DLL,
 	      &pivmin, &gaptol, z_tmp, &wantNC,
 	      &negcount, &ztz, &mingma, &r, &isuppZ[2*zind],
 	      &norminv, &residual, &RQcorr, work);
@@ -317,12 +317,12 @@ int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
   } /* end i */
 
   /* decrement counter */
-  PMR_decrement_counter(num_left, num_decrement);
+  ext_PMR_decrement_counter(num_left, num_decrement);
 
   /* clean up */
   free(sng);
   free(z_tmp);
-  PMR_try_destroy_rrr(RRR);
+  ext_PMR_try_destroy_rrr(RRR);
 
   return(0);
 }

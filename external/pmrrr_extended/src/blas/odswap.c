@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odswap_(int *n, double *dx, int *incx, 
+int ext_odswap_(int *n, double *dx, int *incx, 
 	double *dy, int *incy)
 {
     /* System generated locals */

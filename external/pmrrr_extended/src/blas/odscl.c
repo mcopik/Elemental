@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odscl_(int *n, double *da, double *dx, 
+int ext_odscl_(int *n, double *da, double *dx, 
 	int *incx)
 {
     /* System generated locals */
@@ -88,4 +88,4 @@ L40:
 /* L50: */
     }
     return 0;
-} /* odscl_ */
+} /* ext_odscl_ */

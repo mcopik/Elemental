@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odsrt_(char *id, int *n, double *d__, int *
+int ext_odsrt_(char *id, int *n, double *d__, int *
 	info)
 {
     /* System generated locals */
@@ -20,11 +20,11 @@ int odsrt_(char *id, int *n, double *d__, int *
     int dir;
     double tmp;
     int endd;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
     int stack[64]	/* was [2][32] */;
     double dmnmx;
     int start;
-    extern /* Subroutine */ int oerbla_(char *, int *);
+    extern /* Subroutine */ int ext_oerbla_(char *, int *);
     int stkpnt;
 
 
@@ -88,9 +88,9 @@ int odsrt_(char *id, int *n, double *d__, int *
     /* Function Body */
     *info = 0;
     dir = -1;
-    if (olsame_(id, "D")) {
+    if (ext_olsame_(id, "D")) {
 	dir = 0;
-    } else if (olsame_(id, "I")) {
+    } else if (ext_olsame_(id, "I")) {
 	dir = 1;
     }
     if (dir == -1) {
@@ -100,7 +100,7 @@ int odsrt_(char *id, int *n, double *d__, int *
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	oerbla_("ODSRT", &i__1);
+	ext_oerbla_("ODSRT", &i__1);
 	return 0;
     }
 
@@ -278,4 +278,4 @@ L110:
 
 /*     End of ODSRT */
 
-} /* odsrt_ */
+} /* ext_odsrt_ */

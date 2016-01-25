@@ -10,7 +10,7 @@
 
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
-/* Subroutine */ int odset_(char *uplo, int *m, int *n, double *alpha, 
+/* Subroutine */ int ext_odset_(char *uplo, int *m, int *n, double *alpha, 
 double *beta, double *a, int *lda)
 {
     /* System generated locals */
@@ -18,7 +18,7 @@ double *beta, double *a, int *lda)
 
     /* Local variables */
     int i__, j;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -87,7 +87,7 @@ double *beta, double *a, int *lda)
     a -= a_offset;
 
     /* Function Body */
-    if (olsame_(uplo, "U")) {
+    if (ext_olsame_(uplo, "U")) {
 
 /*        Set the strictly upper triangular or trapezoidal part of the */
 /*        array to ALPHA. */
@@ -104,7 +104,7 @@ double *beta, double *a, int *lda)
 /* L20: */
 	}
 
-    } else if (olsame_(uplo, "L")) {
+    } else if (ext_olsame_(uplo, "L")) {
 
 /*        Set the strictly lower triangular or trapezoidal part of the */
 /*        array to ALPHA. */
@@ -146,4 +146,4 @@ double *beta, double *a, int *lda)
 
 /*     End of ODSET */
 
-} /* odset_ */
+} /* ext_odset_ */

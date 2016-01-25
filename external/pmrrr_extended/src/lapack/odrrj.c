@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odrrj_(int *n, double *d__, double *e2, 
+int ext_odrrj_(int *n, double *d__, double *e2, 
 	int *ifirst, int *ilast, double *rtol, int *offset, 
 	double *w, double *werr, double *work, int *iwork, 
 	double *pivmin, double *spdiam, int *info)
@@ -330,4 +330,4 @@ L100:
 
 /*     End of ODRRJ */
 
-} /* odrrj_ */
+} /* ext_odrrj_ */

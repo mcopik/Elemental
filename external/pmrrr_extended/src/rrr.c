@@ -46,7 +46,7 @@
 
 
 
-rrr_t *PMR_create_rrr(long double *restrict D, long double *restrict L,
+rrr_t *ext_PMR_create_rrr(long double *restrict D, long double *restrict L,
 		      long double *restrict DL, long double *restrict DLL,
 		      int size, int depth)
 {
@@ -74,7 +74,7 @@ rrr_t *PMR_create_rrr(long double *restrict D, long double *restrict L,
 
 
  
-rrr_t *PMR_reset_rrr(rrr_t *RRR, long double *restrict D, 
+rrr_t *ext_PMR_reset_rrr(rrr_t *RRR, long double *restrict D, 
 		     long double *restrict L, long double *restrict DL, 
 		     long double *restrict DLL, int size, int depth)
 {
@@ -91,7 +91,7 @@ rrr_t *PMR_reset_rrr(rrr_t *RRR, long double *restrict D,
 
 
 
-int PMR_increment_rrr_dependencies(rrr_t *RRR)
+int ext_PMR_increment_rrr_dependencies(rrr_t *RRR)
 {
   /* returns number of dependencies */
   int i, info;
@@ -110,7 +110,7 @@ int PMR_increment_rrr_dependencies(rrr_t *RRR)
 
 
 
-int PMR_set_parent_processed_flag(rrr_t *RRR)
+int ext_PMR_set_parent_processed_flag(rrr_t *RRR)
 {
   int info;
   
@@ -127,7 +127,7 @@ int PMR_set_parent_processed_flag(rrr_t *RRR)
 
 
 
-int PMR_set_copied_parent_rrr_flag(rrr_t *RRR, bool val)
+int ext_PMR_set_copied_parent_rrr_flag(rrr_t *RRR, bool val)
 {
   int info;
   
@@ -144,7 +144,7 @@ int PMR_set_copied_parent_rrr_flag(rrr_t *RRR, bool val)
 
 
 
-int PMR_try_destroy_rrr(rrr_t *RRR)
+int ext_PMR_try_destroy_rrr(rrr_t *RRR)
 {
   /* return 0 on success, otherwise 1 */
   

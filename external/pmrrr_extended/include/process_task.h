@@ -48,20 +48,20 @@
 #include "queue.h"
 
 /* Function prototypes */
-int PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
+int ext_PMR_process_c_task(cluster_t *cl, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct, 
 		       tol_t *tolstruct, workQ_t *workQ, 
 		       counter_t *num_left, long double *work, int *iwork);
 
-int PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
+int ext_PMR_process_s_task(singleton_t *sng, int tid, proc_t *procinfo,
 		       val_t *Wstruct, vec_t *Zstruct, 
 		       tol_t *tolstruct, counter_t *num_left, 
 		       long double *work, int *iwork);
 
-int PMR_process_r_task(refine_t *rf, proc_t *procinfo, val_t *Wstruct,
+int ext_PMR_process_r_task(refine_t *rf, proc_t *procinfo, val_t *Wstruct,
 		       tol_t *tolstruct, long double *work, int *iwork);
 
-void PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct,
+void ext_PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct,
 			 vec_t *Zstruct, tol_t *tolstruct,
 			 workQ_t *workQ, 
 			 counter_t *num_left, long double *work, 

@@ -10,7 +10,7 @@
 /* Table of constant values */
 static int c__1 = 1;
 
-double odnst_(char *norm, int *n, double *d__, double *e)
+double ext_odnst_(char *norm, int *n, double *d__, double *e)
 {
     /* System generated locals */
     int i__1;
@@ -22,9 +22,9 @@ double odnst_(char *norm, int *n, double *d__, double *e)
     /* Local variables */
     int i__;
     double sum, scale;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
     double anorm;
-    extern /* Subroutine */ int odssq_(int *, double *, int *, 
+    extern /* Subroutine */ int ext_odssq_(int *, double *, int *, 
 	    double *, double *);
 
 
@@ -100,7 +100,7 @@ double odnst_(char *norm, int *n, double *d__, double *e)
     /* Function Body */
     if (*n <= 0) {
 	anorm = 0.;
-    } else if (olsame_(norm, "M")) {
+    } else if (ext_olsame_(norm, "M")) {
 
 /*        Find max(abs(A(i,j))). */
 
@@ -115,8 +115,8 @@ double odnst_(char *norm, int *n, double *d__, double *e)
 	    anorm = fmax(d__2,d__3);
 /* L10: */
 	}
-    } else if (olsame_(norm, "O") || *(unsigned char *)
-	    norm == '1' || olsame_(norm, "I")) {
+    } else if (ext_olsame_(norm, "O") || *(unsigned char *)
+	    norm == '1' || ext_olsame_(norm, "I")) {
 
 /*        Find norm1(A). */
 
@@ -136,7 +136,7 @@ double odnst_(char *norm, int *n, double *d__, double *e)
 /* L20: */
 	    }
 	}
-    } else if (olsame_(norm, "F") || olsame_(norm, "E")) {
+    } else if (ext_olsame_(norm, "F") || ext_olsame_(norm, "E")) {
 
 /*        Find normF(A). */
 
@@ -144,10 +144,10 @@ double odnst_(char *norm, int *n, double *d__, double *e)
 	sum = 1.;
 	if (*n > 1) {
 	    i__1 = *n - 1;
-	    odssq_(&i__1, &e[1], &c__1, &scale, &sum);
+	    ext_odssq_(&i__1, &e[1], &c__1, &scale, &sum);
 	    sum *= 2;
 	}
-	odssq_(n, &d__[1], &c__1, &scale, &sum);
+	ext_odssq_(n, &d__[1], &c__1, &scale, &sum);
 	anorm = scale * sqrt(sum);
     }
 
@@ -156,4 +156,4 @@ double odnst_(char *norm, int *n, double *d__, double *e)
 
 /*     End of ODNST */
 
-} /* odnst_ */
+} /* ext_odnst_ */

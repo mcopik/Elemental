@@ -51,7 +51,7 @@
  * Note: this implementation is here is not really optimized in
  * terms of performance and memory usage.
  */
-int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
+int ext_plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
 	       val_t *Wstruct, tol_t *tolstruct, int *nzp, int *offsetp);
 
 /* Perturb the initial root representation by "1 + eps*RAND_FACTOR*rand"; 

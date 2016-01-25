@@ -10,7 +10,7 @@
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
 /* Subroutine */ 
-int xdrnv_(int *idist, int *iseed, int *n, 
+int ext_xdrnv_(int *idist, int *iseed, int *n, 
 	long double *x)
 {
     /* System generated locals */
@@ -23,7 +23,7 @@ int xdrnv_(int *idist, int *iseed, int *n,
     int i__;
     long double u[128];
     int il, iv, il2;
-    extern int xdruv_(int *, int *, long double *);
+    extern int ext_xdruv_(int *, int *, long double *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -103,7 +103,7 @@ int xdrnv_(int *idist, int *iseed, int *n,
 /*        Call XDRUV to generate IL2 numbers from a uniform (0,1) */
 /*        distribution (IL2 <= LV) */
 
-	xdruv_(&iseed[1], &il2, u);
+	ext_xdruv_(&iseed[1], &il2, u);
 
 	if (*idist == 1) {
 
@@ -140,4 +140,4 @@ int xdrnv_(int *idist, int *iseed, int *n,
 
 /*     End of XDRNV */
 
-} /* xdrnv_ */
+} /* ext_xdrnv_ */

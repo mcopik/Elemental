@@ -7,13 +7,13 @@
 #include <float.h>
 #include <assert.h>
 
-int odnan_(double *din)
+int ext_odnan_(double *din)
 {
     /* System generated locals */
     int ret_val;
 
     /* Local variables */
-    extern int odsnan_(double *, double *);
+    extern int ext_odsnan_(double *, double *);
 
 
 /*  -- LAPACK auxiliary routine (version 3.2) -- */
@@ -41,6 +41,6 @@ int odnan_(double *din)
 /*  .. External Functions .. */
 /*  .. */
 /*  .. Executable Statements .. */
-    ret_val = odsnan_(din, din);
+    ret_val = ext_odsnan_(din, din);
     return ret_val;
-} /* odnan_ */
+} /* ext_odnan_ */

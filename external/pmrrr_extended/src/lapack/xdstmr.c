@@ -16,7 +16,7 @@ static long double c_b18 = .001;
 
 
 /* Subroutine */ 
-int xdstmr_(char *jobz, char *range, int *n, long double *d__, 
+int ext_xdstmr_(char *jobz, char *range, int *n, long double *d__, 
 	long double *e, long double *vl, long double *vu, int *il, 
 	int *iu, int *m, long double *w, long double *z__, int *ldz, 
 	 int *nzc, int *isuppz, int *tryrac, long double *work, 
@@ -42,22 +42,22 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
     long double rmin, rmax;
     int itmp;
     long double tnrm;
-    extern /* Subroutine */ int xde2_(long double *, long double *, long double 
+    extern /* Subroutine */ int ext_xde2_(long double *, long double *, long double 
 	    *, long double *, long double *);
     int inde2, itmp2;
     long double rtol1, rtol2;
-    extern /* Subroutine */ int xdscl_(int *, long double *, long double *, 
+    extern /* Subroutine */ int ext_xdscl_(int *, long double *, long double *, 
 	    int *);
     long double scale;
     int indgp;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
     int iinfo, iindw, ilast;
-    extern /* Subroutine */ int xdcpy_(int *, long double *, int *, 
-	    long double *, int *), xdswap_(int *, long double *, int 
+    extern /* Subroutine */ int ext_xdcpy_(int *, long double *, int *, 
+	    long double *, int *), ext_xdswap_(int *, long double *, int 
 	    *, long double *, int *);
     int lwmin;
     int wantz;
-    extern /* Subroutine */ int xdev2_(long double *, long double *, 
+    extern /* Subroutine */ int ext_xdev2_(long double *, long double *, 
 	    long double *, long double *, long double *, long double *, 
 	    long double *);
     // extern long double odmch_(char *);
@@ -66,9 +66,9 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
     int indeig;
     int iindbl;
     int valeig;
-    extern /* Subroutine */ int xdrrc_(char *, int *, long double *, 
+    extern /* Subroutine */ int ext_xdrrc_(char *, int *, long double *, 
 	    long double *, long double *, long double *, long double *, int *, 
-	     int *, int *, int *), xdrre_(char *, 
+	     int *, int *, int *), ext_xdrre_(char *, 
 	    int *, long double *, long double *, int *, int *, 
 	    long double *, long double *, long double *, long double *, 
 	    long double *, long double *, int *, int *, int *, 
@@ -76,20 +76,20 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 	    long double *, long double *, long double *, int *, int *);
     int wbegin;
     long double safmin;
-    extern /* Subroutine */ int xdrrj_(int *, long double *, long double *, 
+    extern /* Subroutine */ int ext_xdrrj_(int *, long double *, long double *, 
 	     int *, int *, long double *, int *, long double *, 
 	    long double *, long double *, int *, long double *, long double *, 
-	     int *), xrbla_(char *, int *);
+	     int *), ext_xrbla_(char *, int *);
     long double bignum;
     int inderr, iindwk, indgrs, offset;
-    extern long double xdnst_(char *, int *, long double *, long double *);
-    extern /* Subroutine */ int xdrrr_(int *, long double *, long double *, 
-	     int *), xdrrv_(int *, long double *, long double *, 
+    extern long double ext_xdnst_(char *, int *, long double *, long double *);
+    extern /* Subroutine */ int ext_xdrrr_(int *, long double *, long double *, 
+	     int *), ext_xdrrv_(int *, long double *, long double *, 
 	    long double *, long double *, long double *, int *, int *, 
 	    int *, int *, long double *, long double *, long double *, 
 	    long double *, long double *, long double *, int *, int *, 
 	    long double *, long double *, int *, int *, long double *, 
-	    int *, int *), xdsrt_(char *, int *, long double *, 
+	    int *, int *), ext_xdsrt_(char *, int *, long double *, 
 	    int *);
     long double thresh;
     int iinspl, ifirst, indwrk, liwmin, nzcmin;
@@ -329,10 +329,10 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
     --iwork;
 
     /* Function Body */
-    wantz = xlsame_(jobz, "V");
-    alleig = xlsame_(range, "A");
-    valeig = xlsame_(range, "V");
-    indeig = xlsame_(range, "I");
+    wantz = ext_xlsame_(jobz, "V");
+    alleig = ext_xlsame_(range, "A");
+    valeig = ext_xlsame_(range, "V");
+    indeig = ext_xlsame_(range, "I");
 
     lquery = *lwork == -1 || *liwork == -1;
     zquery = *nzc == -1;
@@ -364,7 +364,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
     }
 
     *info = 0;
-    if (! (wantz || xlsame_(jobz, "N"))) {
+    if (! (wantz || ext_xlsame_(jobz, "N"))) {
 	*info = -1;
     } else if (! (alleig || valeig || indeig)) {
 	*info = -2;
@@ -402,7 +402,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 	if (wantz && alleig) {
 	    nzcmin = *n;
 	} else if (wantz && valeig) {
-	    xdrrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &
+	    ext_xdrrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &
 		    itmp2, info);
 	} else if (wantz && indeig) {
 	    nzcmin = iiu - iil + 1;
@@ -419,7 +419,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
     if (*info != 0) {
 
 	i__1 = -(*info);
-	xrbla_("XDSTMR", &i__1);
+	ext_xrbla_("XDSTMR", &i__1);
 
 	return 0;
     } else if (lquery || zquery) {
@@ -453,9 +453,9 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 
     if (*n == 2) {
 	if (! wantz) {
-	    xde2_(&d__[1], &e[1], &d__[2], &r1, &r2);
+	    ext_xde2_(&d__[1], &e[1], &d__[2], &r1, &r2);
 	} else if (wantz && ! zquery) {
-	    xdev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
+	    ext_xdev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
 	}
 	if (alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1) {
 	    ++(*m);
@@ -521,16 +521,16 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 /*     RMAX threshold. */
 
     scale = 1.;
-    tnrm = xdnst_("M", n, &d__[1], &e[1]);
+    tnrm = ext_xdnst_("M", n, &d__[1], &e[1]);
     if (tnrm > 0. && tnrm < rmin) {
 	scale = rmin / tnrm;
     } else if (tnrm > rmax) {
 	scale = rmax / tnrm;
     }
     if (scale != 1.) {
-	xdscl_(n, &scale, &d__[1], &c__1);
+	ext_xdscl_(n, &scale, &d__[1], &c__1);
 	i__1 = *n - 1;
-	xdscl_(&i__1, &scale, &e[1], &c__1);
+	ext_xdscl_(&i__1, &scale, &e[1], &c__1);
 	tnrm *= scale;
 	if (valeig) {
 /*           If eigenvalues in interval have to be found, */
@@ -550,7 +550,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 
     if (*tryrac) {
 /*        Test whether the matrix warrants the more expensive relative approach. */
-	xdrrr_(n, &d__[1], &e[1], &iinfo);
+	ext_xdrrr_(n, &d__[1], &e[1], &iinfo);
     } else {
 /*        The user does not care about relative accurately eigenvalues */
 	iinfo = -1;
@@ -566,7 +566,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 
     if (*tryrac) {
 /*        Copy original diagonal, needed to guarantee relative accuracy */
-	xdcpy_(n, &d__[1], &c__1, &work[indd], &c__1);
+	ext_xdcpy_(n, &d__[1], &c__1, &work[indd], &c__1);
     }
 /*     Store the squares of the offdiagonal values of T */
     i__1 = *n - 1;
@@ -591,7 +591,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 	d__1 = sqrt(eps) * .005, d__2 = eps * 4.;
 	rtol2 = fmaxl(d__1,d__2);
     }
-    xdrre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &
+    ext_xdrre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &
 	    rtol1, &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[
 	    inderr], &work[indgp], &iwork[iindbl], &iwork[iindw], &work[
 	    indgrs], &pivmin, &work[indwrk], &iwork[iindwk], &iinfo);
@@ -607,7 +607,7 @@ int xdstmr_(char *jobz, char *range, int *n, long double *d__,
 /*        Compute the desired eigenvectors corresponding to the computed */
 /*        eigenvalues */
 
-	xdrrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &
+	ext_xdrrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &
 		c__1, m, &c_b18, &rtol1, &rtol2, &w[1], &work[inderr], &work[
 		indgp], &iwork[iindbl], &iwork[iindw], &work[indgrs], &z__[
 		z_offset], ldz, &isuppz[1], &work[indwrk], &iwork[iindwk], &
@@ -656,7 +656,7 @@ L36:
 	    ifirst = iwork[iindw + wbegin - 1];
 	    ilast = iwork[iindw + wend - 1];
 	    rtol2 = eps * 4.;
-	    xdrrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], 
+	    ext_xdrrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], 
 		    &ifirst, &ilast, &rtol2, &offset, &w[wbegin], &work[
 		    inderr + wbegin - 1], &work[indwrk], &iwork[iindwk], &
 		    pivmin, &tnrm, &iinfo);
@@ -671,7 +671,7 @@ L39:
 
     if (scale != 1.) {
 	d__1 = 1. / scale;
-	xdscl_(m, &d__1, &w[1], &c__1);
+	ext_xdscl_(m, &d__1, &w[1], &c__1);
     }
 
 /*     If eigenvalues are not in increasing order, then sort them, */
@@ -679,7 +679,7 @@ L39:
 
     if (nsplit > 1) {
 	if (! wantz) {
-	    xdsrt_("I", m, &w[1], &iinfo);
+	    ext_xdsrt_("I", m, &w[1], &iinfo);
 	    if (iinfo != 0) {
 		*info = 3;
 		return 0;
@@ -701,7 +701,7 @@ L39:
 		    w[i__] = w[j];
 		    w[j] = tmp;
 		    if (wantz) {
-			xdswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * 
+			ext_xdswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * 
 				z_dim1 + 1], &c__1);
 			itmp = isuppz[(i__ << 1) - 1];
 			isuppz[(i__ << 1) - 1] = isuppz[(j << 1) - 1];
@@ -723,4 +723,4 @@ L39:
 
 /*     End of XDSTMR */
 
-} /* xdstmr_ */
+} /* ext_xdstmr_ */

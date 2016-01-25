@@ -10,7 +10,7 @@
 #define imax(a,b) ( (a) > (b) ? (a) : (b) )
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
-int odneg_(int *n, double *d__, double *lld, double *
+int ext_odneg_(int *n, double *d__, double *lld, double *
 	sigma, double *pivmin, int *r__)
 {
     /* System generated locals */
@@ -23,7 +23,7 @@ int odneg_(int *n, double *d__, double *lld, double *
     double tmp;
     int neg1, neg2;
     double bsav, gamma, dplus;
-    extern int odnan_(double *);
+    extern int ext_odnan_(double *);
     int negcnt;
     int sawnan;
     double dminus;
@@ -132,7 +132,7 @@ int odneg_(int *n, double *d__, double *lld, double *
 	    t = tmp * lld[j] - *sigma;
 /* L21: */
 	}
-	sawnan = odnan_(&t);
+	sawnan = ext_odnan_(&t);
 /*     Run a slower version of the above loop if a NaN is detected. */
 /*     A NaN should occur only with a zero pivot after an infinite */
 /*     pivot.  In that case, substituting 1 for T/DPLUS is the */
@@ -149,7 +149,7 @@ int odneg_(int *n, double *d__, double *lld, double *
 		    ++neg1;
 		}
 		tmp = t / dplus;
-		if (odnan_(&tmp)) {
+		if (ext_odnan_(&tmp)) {
 		    tmp = 1.;
 		}
 		t = tmp * lld[j] - *sigma;
@@ -178,7 +178,7 @@ int odneg_(int *n, double *d__, double *lld, double *
 	    p = tmp * d__[j] - *sigma;
 /* L23: */
 	}
-	sawnan = odnan_(&p);
+	sawnan = ext_odnan_(&p);
 /*     As above, run a slower version that substitutes 1 for Inf/Inf. */
 
 	if (sawnan) {
@@ -193,7 +193,7 @@ int odneg_(int *n, double *d__, double *lld, double *
 		    ++neg2;
 		}
 		tmp = p / dminus;
-		if (odnan_(&tmp)) {
+		if (ext_odnan_(&tmp)) {
 		    tmp = 1.;
 		}
 		p = tmp * d__[j] - *sigma;
@@ -212,4 +212,4 @@ int odneg_(int *n, double *d__, double *lld, double *
     }
     ret_val = negcnt;
     return ret_val;
-} /* odneg_ */
+} /* ext_odneg_ */

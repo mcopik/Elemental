@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdrra_(int *n, long double *d__, long double *e, 
+int ext_xdrra_(int *n, long double *d__, long double *e, 
 	long double *e2, long double *spltol, long double *tnrm, int *nsplit, 
 	 int *isplit, int *info)
 {
@@ -148,4 +148,4 @@ int xdrra_(int *n, long double *d__, long double *e,
 
 /*     End of XDRRA */
 
-} /* xdrra_ */
+} /* ext_xdrra_ */

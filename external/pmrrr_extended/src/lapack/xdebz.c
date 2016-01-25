@@ -11,7 +11,7 @@
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
 /* Subroutine */ 
-int xdebz_(int *ijob, int *nitmax, int *n, 
+int ext_xdebz_(int *ijob, int *nitmax, int *n, 
 	int *mmax, int *minp, int *nbmin, long double *abstol, 
 	long double *reltol, long double *pivmin, long double *d__, long double *
 	e, long double *e2, int *nval, long double *ab, long double *c__, 
@@ -619,4 +619,4 @@ L140:
 
 /*     End of XDEBZ */
 
-} /* xdebz_ */
+} /* ext_xdebz_ */

@@ -20,7 +20,7 @@ static int c__2 = 2;
 static int c__0 = 0;
 
 /* Subroutine */ 
-int odrrd_(char *range, char *order, int *n, double *vl,  
+int ext_odrrd_(char *range, char *order, int *n, double *vl,  
 	double *vu, int *il, int *iu, double *gers, 
 	double *reltol, double *d__, double *e, double *e2, 
 	double *pivmin, int *nsplit, int *isplit, int *m, 
@@ -47,14 +47,14 @@ int odrrd_(char *range, char *order, int *n, double *vl,
     int nwu;
     double tmp1, tmp2;
     int iend, jblk, ioff, iout, itmp1, itmp2, jdisc;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
     int iinfo;
     double atoli;
     int iwoff, itmax;
     double wkill, rtoli, uflow, tnorm;
     // extern double dlamch_(char *);
     int ibegin;
-    extern /* Subroutine */ int odebz_(int *, int *, int *, 
+    extern /* Subroutine */ int ext_odebz2_(int *, int *, int *, 
 	    int *, int *, int *, double *, double *, 
 	    double *, double *, double *, double *, int *, 
 	     double *, double *, int *, int *, double *, 
@@ -293,11 +293,11 @@ int odrrd_(char *range, char *order, int *n, double *vl,
 
 /*     Decode RANGE */
 
-    if (olsame_(range, "A")) {
+    if (ext_olsame_(range, "A")) {
 	irange = 1;
-    } else if (olsame_(range, "V")) {
+    } else if (ext_olsame_(range, "V")) {
 	irange = 2;
-    } else if (olsame_(range, "I")) {
+    } else if (ext_olsame_(range, "I")) {
 	irange = 3;
     } else {
 	irange = 0;
@@ -307,7 +307,7 @@ int odrrd_(char *range, char *order, int *n, double *vl,
 
     if (irange <= 0) {
 	*info = -1;
-    } else if (! (olsame_(order, "B") || olsame_(order, 
+    } else if (! (ext_olsame_(order, "B") || ext_olsame_(order, 
 	    "E"))) {
 	*info = -2;
     } else if (*n < 0) {
@@ -412,7 +412,7 @@ int odrrd_(char *range, char *order, int *n, double *vl,
 	iwork[5] = *il - 1;
 	iwork[6] = *iu;
 
-	odebz_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &
+	ext_odebz2_(&c__3, &itmax, n, &c__2, &c__2, &nb, &atoli, &rtoli, pivmin, &
 		d__[1], &e[1], &e2[1], &iwork[5], &work[*n + 1], &work[*n + 5]
 , &iout, &iwork[1], &w[1], &iblock[1], &iinfo);
 	if (iinfo != 0) {
@@ -571,7 +571,7 @@ int odrrd_(char *range, char *order, int *n, double *vl,
 /*           Find negcount of initial interval boundaries GL and GU */
 	    work[*n + 1] = gl;
 	    work[*n + in + 1] = gu;
-	    odebz_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, 
+	    ext_odebz2_(&c__1, &c__0, &in, &in, &c__1, &nb, &atoli, &rtoli, 
 		    pivmin, &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, &
 		    work[*n + 1], &work[*n + (in << 1) + 1], &im, &iwork[1], &
 		    w[*m + 1], &iblock[*m + 1], &iinfo);
@@ -586,7 +586,7 @@ int odrrd_(char *range, char *order, int *n, double *vl,
 /*           Compute Eigenvalues */
 	    itmax = (int) ((log(gu - gl + *pivmin) - log(*pivmin)) / log(
 		    2.)) + 2;
-	    odebz_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, 
+	    ext_odebz2_(&c__2, &itmax, &in, &in, &c__1, &nb, &atoli, &rtoli, 
 		    pivmin, &d__[ibegin], &e[ibegin], &e2[ibegin], idumma, &
 		    work[*n + 1], &work[*n + (in << 1) + 1], &iout, &iwork[1], 
 		     &w[*m + 1], &iblock[*m + 1], &iinfo);
@@ -748,7 +748,7 @@ L70:
 /*     If ORDER='B', do nothing the eigenvalues are already sorted by */
 /*        block. */
 /*     If ORDER='E', sort the eigenvalues from smallest to largest */
-    if (olsame_(order, "E") && *nsplit > 1) {
+    if (ext_olsame_(order, "E") && *nsplit > 1) {
 	i__1 = *m - 1;
 	for (je = 1; je <= i__1; ++je) {
 	    ie = 0;
@@ -789,4 +789,4 @@ L70:
 
 /*     End of ODRRD */
 
-} /* odrrd_ */
+} /* ext_odrrd_ */

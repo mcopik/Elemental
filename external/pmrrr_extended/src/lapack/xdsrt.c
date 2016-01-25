@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdsrt_(char *id, int *n, long double *d__, int *
+int ext_xdsrt_(char *id, int *n, long double *d__, int *
 	info)
 {
     /* System generated locals */
@@ -20,11 +20,11 @@ int xdsrt_(char *id, int *n, long double *d__, int *
     int dir;
     long double tmp;
     int endd;
-    extern int xlsame_(char *, char *);
+    extern int ext_xlsame_(char *, char *);
     int stack[64]	/* was [2][32] */;
     long double dmnmx;
     int start;
-    extern /* Subroutine */ int xrbla_(char *, int *);
+    extern /* Subroutine */ int ext_xrbla_(char *, int *);
     int stkpnt;
 
 
@@ -88,9 +88,9 @@ int xdsrt_(char *id, int *n, long double *d__, int *
     /* Function Body */
     *info = 0;
     dir = -1;
-    if (xlsame_(id, "D")) {
+    if (ext_xlsame_(id, "D")) {
 	dir = 0;
-    } else if (xlsame_(id, "I")) {
+    } else if (ext_xlsame_(id, "I")) {
 	dir = 1;
     }
     if (dir == -1) {
@@ -100,7 +100,7 @@ int xdsrt_(char *id, int *n, long double *d__, int *
     }
     if (*info != 0) {
 	i__1 = -(*info);
-	xrbla_("XDSRT", &i__1);
+	ext_xrbla_("XDSRT", &i__1);
 	return 0;
     }
 
@@ -278,4 +278,4 @@ L110:
 
 /*     End of XDSRT */
 
-} /* xdsrt_ */
+} /* ext_xdsrt_ */

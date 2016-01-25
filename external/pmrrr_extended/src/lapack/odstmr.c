@@ -16,7 +16,7 @@ static double c_b18 = .001;
 
 
 /* Subroutine */ 
-int odstmr_(char *jobz, char *range, int *n, double *d__, 
+int ext_odstmr_(char *jobz, char *range, int *n, double *d__, 
 	double *e, double *vl, double *vu, int *il, 
 	int *iu, int *m, double *w, double *z__, int *ldz, 
 	 int *nzc, int *isuppz, int *tryrac, double *work, 
@@ -42,22 +42,22 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
     double rmin, rmax;
     int itmp;
     double tnrm;
-    extern /* Subroutine */ int ode2_(double *, double *, double 
+    extern /* Subroutine */ int ext_ode2_(double *, double *, double 
 	    *, double *, double *);
     int inde2, itmp2;
     double rtol1, rtol2;
-    extern /* Subroutine */ int odscl_(int *, double *, double *, 
+    extern /* Subroutine */ int ext_odscl_(int *, double *, double *, 
 	    int *);
     double scale;
     int indgp;
-    extern int olsame_(char *, char *);
+    extern int ext_olsame_(char *, char *);
     int iinfo, iindw, ilast;
-    extern /* Subroutine */ int odcpy_(int *, double *, int *, 
-	    double *, int *), odswap_(int *, double *, int 
+    extern /* Subroutine */ int ext_odcpy_(int *, double *, int *, 
+	    double *, int *), ext_odswap_(int *, double *, int 
 	    *, double *, int *);
     int lwmin;
     int wantz;
-    extern /* Subroutine */ int odev2_(double *, double *, 
+    extern /* Subroutine */ int ext_odev2_(double *, double *, 
 	    double *, double *, double *, double *, 
 	    double *);
     // extern double odmch_(char *);
@@ -66,9 +66,9 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
     int indeig;
     int iindbl;
     int valeig;
-    extern /* Subroutine */ int odrrc_(char *, int *, double *, 
+    extern /* Subroutine */ int ext_odrrc_(char *, int *, double *, 
 	    double *, double *, double *, double *, int *, 
-	     int *, int *, int *), odrre_(char *, 
+	     int *, int *, int *), ext_odrre_(char *, 
 	    int *, double *, double *, int *, int *, 
 	    double *, double *, double *, double *, 
 	    double *, double *, int *, int *, int *, 
@@ -76,20 +76,20 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 	    double *, double *, double *, int *, int *);
     int wbegin;
     double safmin;
-    extern /* Subroutine */ int odrrj_(int *, double *, double *, 
+    extern /* Subroutine */ int ext_odrrj_(int *, double *, double *, 
 	     int *, int *, double *, int *, double *, 
 	    double *, double *, int *, double *, double *, 
-	     int *), oerbla_(char *, int *);
+	     int *), ext_oerbla_(char *, int *);
     double bignum;
     int inderr, iindwk, indgrs, offset;
-    extern double odnst_(char *, int *, double *, double *);
-    extern /* Subroutine */ int odrrr_(int *, double *, double *, 
-	     int *), odrrv_(int *, double *, double *, 
+    extern double ext_odnst_(char *, int *, double *, double *);
+    extern /* Subroutine */ int ext_odrrr_(int *, double *, double *, 
+	     int *), ext_odrrv_(int *, double *, double *, 
 	    double *, double *, double *, int *, int *, 
 	    int *, int *, double *, double *, double *, 
 	    double *, double *, double *, int *, int *, 
 	    double *, double *, int *, int *, double *, 
-	    int *, int *), odsrt_(char *, int *, double *, 
+	    int *, int *), ext_odsrt_(char *, int *, double *, 
 	    int *);
     double thresh;
     int iinspl, ifirst, indwrk, liwmin, nzcmin;
@@ -329,10 +329,10 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
     --iwork;
 
     /* Function Body */
-    wantz = olsame_(jobz, "V");
-    alleig = olsame_(range, "A");
-    valeig = olsame_(range, "V");
-    indeig = olsame_(range, "I");
+    wantz = ext_olsame_(jobz, "V");
+    alleig = ext_olsame_(range, "A");
+    valeig = ext_olsame_(range, "V");
+    indeig = ext_olsame_(range, "I");
 
     lquery = *lwork == -1 || *liwork == -1;
     zquery = *nzc == -1;
@@ -364,7 +364,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
     }
 
     *info = 0;
-    if (! (wantz || olsame_(jobz, "N"))) {
+    if (! (wantz || ext_olsame_(jobz, "N"))) {
 	*info = -1;
     } else if (! (alleig || valeig || indeig)) {
 	*info = -2;
@@ -402,7 +402,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 	if (wantz && alleig) {
 	    nzcmin = *n;
 	} else if (wantz && valeig) {
-	    odrrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &
+	    ext_odrrc_("T", n, vl, vu, &d__[1], &e[1], &safmin, &nzcmin, &itmp, &
 		    itmp2, info);
 	} else if (wantz && indeig) {
 	    nzcmin = iiu - iil + 1;
@@ -419,7 +419,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
     if (*info != 0) {
 
 	i__1 = -(*info);
-	oerbla_("ODSTMR", &i__1);
+	ext_oerbla_("ODSTMR", &i__1);
 
 	return 0;
     } else if (lquery || zquery) {
@@ -453,9 +453,9 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 
     if (*n == 2) {
 	if (! wantz) {
-	    ode2_(&d__[1], &e[1], &d__[2], &r1, &r2);
+	    ext_ode2_(&d__[1], &e[1], &d__[2], &r1, &r2);
 	} else if (wantz && ! zquery) {
-	    odev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
+	    ext_odev2_(&d__[1], &e[1], &d__[2], &r1, &r2, &cs, &sn);
 	}
 	if (alleig || valeig && r2 > wl && r2 <= wu || indeig && iil == 1) {
 	    ++(*m);
@@ -521,16 +521,16 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 /*     RMAX threshold. */
 
     scale = 1.;
-    tnrm = odnst_("M", n, &d__[1], &e[1]);
+    tnrm = ext_odnst_("M", n, &d__[1], &e[1]);
     if (tnrm > 0. && tnrm < rmin) {
 	scale = rmin / tnrm;
     } else if (tnrm > rmax) {
 	scale = rmax / tnrm;
     }
     if (scale != 1.) {
-	odscl_(n, &scale, &d__[1], &c__1);
+	ext_odscl_(n, &scale, &d__[1], &c__1);
 	i__1 = *n - 1;
-	odscl_(&i__1, &scale, &e[1], &c__1);
+	ext_odscl_(&i__1, &scale, &e[1], &c__1);
 	tnrm *= scale;
 	if (valeig) {
 /*           If eigenvalues in interval have to be found, */
@@ -550,7 +550,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 
     if (*tryrac) {
 /*        Test whether the matrix warrants the more expensive relative approach. */
-	odrrr_(n, &d__[1], &e[1], &iinfo);
+	ext_odrrr_(n, &d__[1], &e[1], &iinfo);
     } else {
 /*        The user does not care about relative accurately eigenvalues */
 	iinfo = -1;
@@ -566,7 +566,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 
     if (*tryrac) {
 /*        Copy original diagonal, needed to guarantee relative accuracy */
-	odcpy_(n, &d__[1], &c__1, &work[indd], &c__1);
+	ext_odcpy_(n, &d__[1], &c__1, &work[indd], &c__1);
     }
 /*     Store the squares of the offdiagonal values of T */
     i__1 = *n - 1;
@@ -591,7 +591,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 	d__1 = sqrt(eps) * .005, d__2 = eps * 4.;
 	rtol2 = fmax(d__1,d__2);
     }
-    odrre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &
+    ext_odrre_(range, n, &wl, &wu, &iil, &iiu, &d__[1], &e[1], &work[inde2], &
 	    rtol1, &rtol2, &thresh, &nsplit, &iwork[iinspl], m, &w[1], &work[
 	    inderr], &work[indgp], &iwork[iindbl], &iwork[iindw], &work[
 	    indgrs], &pivmin, &work[indwrk], &iwork[iindwk], &iinfo);
@@ -607,7 +607,7 @@ int odstmr_(char *jobz, char *range, int *n, double *d__,
 /*        Compute the desired eigenvectors corresponding to the computed */
 /*        eigenvalues */
 
-	odrrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &
+	ext_odrrv_(n, &wl, &wu, &d__[1], &e[1], &pivmin, &iwork[iinspl], m, &
 		c__1, m, &c_b18, &rtol1, &rtol2, &w[1], &work[inderr], &work[
 		indgp], &iwork[iindbl], &iwork[iindw], &work[indgrs], &z__[
 		z_offset], ldz, &isuppz[1], &work[indwrk], &iwork[iindwk], &
@@ -656,7 +656,7 @@ L36:
 	    ifirst = iwork[iindw + wbegin - 1];
 	    ilast = iwork[iindw + wend - 1];
 	    rtol2 = eps * 4.;
-	    odrrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], 
+	    ext_odrrj_(&in, &work[indd + ibegin - 1], &work[inde2 + ibegin - 1], 
 		    &ifirst, &ilast, &rtol2, &offset, &w[wbegin], &work[
 		    inderr + wbegin - 1], &work[indwrk], &iwork[iindwk], &
 		    pivmin, &tnrm, &iinfo);
@@ -671,7 +671,7 @@ L39:
 
     if (scale != 1.) {
 	d__1 = 1. / scale;
-	odscl_(m, &d__1, &w[1], &c__1);
+	ext_odscl_(m, &d__1, &w[1], &c__1);
     }
 
 /*     If eigenvalues are not in increasing order, then sort them, */
@@ -679,7 +679,7 @@ L39:
 
     if (nsplit > 1) {
 	if (! wantz) {
-	    odsrt_("I", m, &w[1], &iinfo);
+	    ext_odsrt_("I", m, &w[1], &iinfo);
 	    if (iinfo != 0) {
 		*info = 3;
 		return 0;
@@ -701,7 +701,7 @@ L39:
 		    w[i__] = w[j];
 		    w[j] = tmp;
 		    if (wantz) {
-			odswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * 
+			ext_odswap_(n, &z__[i__ * z_dim1 + 1], &c__1, &z__[j * 
 				z_dim1 + 1], &c__1);
 			itmp = isuppz[(i__ << 1) - 1];
 			isuppz[(i__ << 1) - 1] = isuppz[(j << 1) - 1];
@@ -723,4 +723,4 @@ L39:
 
 /*     End of ODSTMR */
 
-} /* odstmr_ */
+} /* ext_odstmr_ */

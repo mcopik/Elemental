@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdrrj_(int *n, long double *d__, long double *e2, 
+int ext_xdrrj_(int *n, long double *d__, long double *e2, 
 	int *ifirst, int *ilast, long double *rtol, int *offset, 
 	long double *w, long double *werr, long double *work, int *iwork, 
 	long double *pivmin, long double *spdiam, int *info)
@@ -330,4 +330,4 @@ L100:
 
 /*     End of XDRRJ */
 
-} /* xdrrj_ */
+} /* ext_xdrrj_ */

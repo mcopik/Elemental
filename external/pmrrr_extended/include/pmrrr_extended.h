@@ -265,77 +265,77 @@ int PMR_comm_eigvals(MPI_Comm comm, int *nz, int *ifirst, long double *W);
 extern void pmrrr_dscal(int*, double*, double*, int*);
 extern void pmrrr_xscal(int*, long double*, long double*, int*);
 
-extern long double xdnst_(char*, int*, long double*, long double*);
-extern int   xdrrr_(int*, long double*, long double*, int*);
-extern int   xdrra_(int*, long double*, long double*, long double*, long double*, 
+extern long double ext_xdnst_(char*, int*, long double*, long double*);
+extern int   ext_xdrrr_(int*, long double*, long double*, int*);
+extern int   ext_xdrra_(int*, long double*, long double*, long double*, long double*, 
 		      long double*, int*, int*, int*);
-extern int   xdrrb_(int*, long double*, long double*, int*, int*, long double*,
+extern int   ext_xdrrb_(int*, long double*, long double*, int*, int*, long double*,
 		      long double*, int*, long double*, long double*, long double*, long double*,
 		      int*, long double*, long double*, int*, int*);
-extern int   xdrrc_(char*, int*, long double*, long double*, long double*, long double*,
+extern int   ext_xdrrc_(char*, int*, long double*, long double*, long double*, long double*,
 		      long double*, int*, int*, int*, int*);
-extern int     xdrrd_(char*, char*, int*, long double*, long double*, int*, 
+extern int     ext_xdrrd_(char*, char*, int*, long double*, long double*, int*, 
 		      int*, long double*, long double*, long double*, long double*, 
 		      long double*, long double*, int*, int*, int*, long double*, 
 		      long double*, long double*, long double*, int*, int*, long double*, 
 		      int*, int*);
-extern int   xdrrk_(int*, int*, long double*, long double*, long double*, long double*,
+extern int   ext_xdrrk_(int*, int*, long double*, long double*, long double*, long double*,
 		      long double*, long double*, long double*, long double*, int*);
-extern int   xdebz_(int*, int*, int*, int*, int*, int*, long double*, 
+extern int   ext_xdebz_(int*, int*, int*, int*, int*, int*, long double*, 
 		      long double*, long double*, long double*, long double*, long double*,
 		      int*, long double*, long double*, int*, int*, long double*,
 		      int*, int*);
-extern int   xdrnv_(int*, int*, int*, long double*);
-extern int   xdrrf_(int*, long double*, long double*, long double*, int*, int*, 
+extern int   ext_xdrnv_(int*, int*, int*, long double*);
+extern int   ext_xdrrf_(int*, long double*, long double*, long double*, int*, int*, 
 		      long double*, long double*, long double*, long double*, long double*, 
 		      long double*, long double*, long double*, long double*, long double*, 
 		      long double*, int*);
-extern int   xdr1v_(int*, int*, int*, long double*, long double*, long double*, 
+extern int   ext_xdr1v_(int*, int*, int*, long double*, long double*, long double*, 
 		      long double*, long double*, long double*, long double*, long double*, 
 		      bool*, int*, long double*, long double*, int*, int*, 
 		      long double*, long double*, long double*, long double*);
-extern int   xdrrj_(int*, long double*, long double*, int*, int*, long double*, 
+extern int   ext_xdrrj_(int*, long double*, long double*, int*, int*, long double*, 
 		      int*, long double*, long double*, long double*, int*, long double*, 
 		      long double*, int*);
-extern int   xdstmr_(char*, char*, int*, long double*, long double*, long double*, 
+extern int   ext_xdstmr_(char*, char*, int*, long double*, long double*, long double*, 
 		      long double*, int*, int*, int*, long double*, long double*, 
 		      int*, int*, int*, int*, long double*, int*, int*, 
 		      int*, int*);
 
 
-extern double odnst_(char*, int*, double*, double*);
-extern void   odrrr_(int*, double*, double*, int*);
-extern void   odrra_(int*, double*, double*, double*, double*, 
+extern double ext_odnst_(char*, int*, double*, double*);
+extern void   ext_odrrr_(int*, double*, double*, int*);
+extern void   ext_odrra_(int*, double*, double*, double*, double*, 
 		      double*, int*, int*, int*);
-extern void   odrrb_(int*, double*, double*, int*, int*, double*,
+extern void   ext_odrrb_(int*, double*, double*, int*, int*, double*,
 		      double*, int*, double*, double*, double*, double*,
 		      int*, double*, double*, int*, int*);
-extern void   odrrc_(char*, int*, double*, double*, double*, double*,
+extern void   ext_odrrc_(char*, int*, double*, double*, double*, double*,
 		      double*, int*, int*, int*, int*);
-extern void   odrrd_(char*, char*, int*, double*, double*, int*, 
+extern void   ext_odrrd_(char*, char*, int*, double*, double*, int*, 
 		      int*, double*, double*, double*, double*, 
 		      double*, double*, int*, int*, int*, double*, 
 		      double*, double*, double*, int*, int*, double*, 
 		      int*, int*);
-extern void   odrrk_(int*, int*, double*, double*, double*, double*,
+extern void   ext_odrrk_(int*, int*, double*, double*, double*, double*,
 		      double*, double*, double*, double*, int*);
-extern void   odebz_(int*, int*, int*, int*, int*, int*, double*, 
+extern void   ext_odebz2_(int*, int*, int*, int*, int*, int*, double*, 
 		      double*, double*, double*, double*, double*,
 		      int*, double*, double*, int*, int*, double*,
 		      int*, int*);
-extern void   odrnv_(int*, int*, int*, double*);
-extern void   odrrf_(int*, double*, double*, double*, int*, int*, 
+extern void   ext_odrnv_(int*, int*, int*, double*);
+extern void   ext_odrrf_(int*, double*, double*, double*, int*, int*, 
 		      double*, double*, double*, double*, double*, 
 		      double*, double*, double*, double*, double*, 
 		      double*, int*);
-extern void   odr1v_(int*, int*, int*, double*, double*, double*, 
+extern void   ext_odr1v_(int*, int*, int*, double*, double*, double*, 
 		      double*, double*, double*, double*, double*, 
 		      bool*, int*, double*, double*, int*, int*, 
 		      double*, double*, double*, double*);
-extern void   odrrj_(int*, double*, double*, int*, int*, double*, 
+extern void   ext_odrrj_(int*, double*, double*, int*, int*, double*, 
 		      int*, double*, double*, double*, int*, double*, 
 		      double*, int*);
-extern void   odstmr_(char*, char*, int*, double*, double*, double*, 
+extern void   ext_odstmr_(char*, char*, int*, double*, double*, double*, 
 		      double*, int*, int*, int*, double*, double*, 
 		      int*, int*, int*, int*, double*, int*, int*, 
 		      int*, int*);

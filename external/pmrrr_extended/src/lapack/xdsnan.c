@@ -7,7 +7,7 @@
 #include <float.h>
 #include <assert.h>
 
-int xdsnan_(long double *din1, long double *din2)
+int ext_xdsnan_(long double *din1, long double *din2)
 {
     /* System generated locals */
     int ret_val;
@@ -48,5 +48,5 @@ int xdsnan_(long double *din1, long double *din2)
 /*  .. Executable Statements .. */
     ret_val = *din1 != *din2;
     return ret_val;
-} /* xdsnan_ */
+} /* ext_xdsnan_ */
 

@@ -13,7 +13,7 @@
 static int c__1 = 1;
 
 /* Subroutine */ 
-int xdrrf_(int *n, long double *d__, long double *l, 
+int ext_xdrrf_(int *n, long double *d__, long double *l, 
 	long double *ld, int *clstrt, int *clend, long double *w, 
 	long double *wgap, long double *werr, long double *spdiam, long double *
 	clgapl, long double *clgapr, long double *pivmin, long double *sigma, 
@@ -35,14 +35,14 @@ int xdrrf_(int *n, long double *d__, long double *l,
     int ktry;
     long double fail2, avgap, ldmax, rdmax;
     int shift;
-    extern /* Subroutine */ int xdcpy_(int *, long double *, int *, 
+    extern /* Subroutine */ int ext_xdcpy_(int *, long double *, int *, 
 	    long double *, int *);
     int dorrr1;
     // extern long double odmch_(char *);
     long double ldelta;
     int nofail;
     long double mingap, lsigma, rdelta;
-    extern int xdnan_(long double *);
+    extern int ext_xdnan_(long double *);
     int forcer;
     long double rsigma, clwdth;
     int sawnan1, sawnan2, tryrrr1;
@@ -247,7 +247,7 @@ L5:
 	max1 = fmaxl(d__2,d__3);
 /* L6: */
     }
-    sawnan1 = sawnan1 || xdnan_(&max1);
+    sawnan1 = sawnan1 || ext_xdnan_(&max1);
     if (forcer || max1 <= growthbound && ! sawnan1) {
 	*sigma = lsigma;
 	shift = 1;
@@ -279,7 +279,7 @@ L5:
 	max2 = fmaxl(d__2,d__3);
 /* L7: */
     }
-    sawnan2 = sawnan2 || xdnan_(&max2);
+    sawnan2 = sawnan2 || ext_xdnan_(&max2);
     if (forcer || max2 <= growthbound && ! sawnan2) {
 	*sigma = rsigma;
 	shift = 2;
@@ -408,12 +408,12 @@ L100:
     if (shift == 1) {
     } else if (shift == 2) {
 /*        store new L and D back into DPLUS, LPLUS */
-	xdcpy_(n, &work[1], &c__1, &dplus[1], &c__1);
+	ext_xdcpy_(n, &work[1], &c__1, &dplus[1], &c__1);
 	i__1 = *n - 1;
-	xdcpy_(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
+	ext_xdcpy_(&i__1, &work[*n + 1], &c__1, &lplus[1], &c__1);
     }
     return 0;
 
 /*     End of XDRRF */
 
-} /* xdrrf_ */
+} /* ext_xdrrf_ */

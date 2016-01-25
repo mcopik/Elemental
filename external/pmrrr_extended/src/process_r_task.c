@@ -54,7 +54,7 @@
 #include "process_task.h"
 
 
-int PMR_process_r_task(refine_t *rf, proc_t *procinfo, val_t *Wstruct,
+int ext_PMR_process_r_task(refine_t *rf, proc_t *procinfo, val_t *Wstruct,
 		       tol_t *tolstruct, long double *work, int *iwork);
 
 
@@ -63,7 +63,7 @@ int PMR_process_r_task(refine_t *rf, proc_t *procinfo, val_t *Wstruct,
  * call. This routine is called to make sure that all tasks in the 
  * queue are dequeued before continueing with other tasks.
  */
-void PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct, 
+void ext_PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct, 
 			 vec_t *Zstruct, tol_t *tolstruct, 
 			 workQ_t *workQ, counter_t *num_left, 
 			 long double *work, int *iwork)
@@ -73,7 +73,7 @@ void PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct,
   int        status;
   task_t     *task;
 
-  num_tasks = PMR_get_num_tasks(workQ->r_queue);
+  num_tasks = ext_PMR_get_num_tasks(workQ->r_queue);
 
   for (t=0; t<num_tasks; t++) {
     
@@ -86,7 +86,7 @@ void PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct,
 	if (thread_support != MPI_THREAD_FUNNELED || tid == 0) {
 	  /* if MPI_THREAD_FUNNELED only tid==0 should process 
            * these tasks, otherwise any thread can do it */
-	  status = PMR_process_c_task((cluster_t *) task->data,
+	  status = ext_PMR_process_c_task((cluster_t *) task->data,
 				      tid, procinfo, Wstruct,
 				      Zstruct, tolstruct, workQ,
 				      num_left, work, iwork);
@@ -94,16 +94,16 @@ void PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct,
 	  if (status == C_TASK_PROCESSED) {
 	    free(task);
 	  } else {
-	    PMR_insert_task_at_back(workQ->r_queue, task);
+	    ext_PMR_insert_task_at_back(workQ->r_queue, task);
 	  }
 	} else {
-	    PMR_insert_task_at_back(workQ->r_queue, task);
+	    ext_PMR_insert_task_at_back(workQ->r_queue, task);
 	}
 
       } /* end if cluster task */
 
       if (task->flag == REFINE_TASK_FLAG) {
-	PMR_process_r_task((refine_t *) task->data, procinfo,
+	ext_PMR_process_r_task((refine_t *) task->data, procinfo,
 			   Wstruct, tolstruct, work, iwork);
 	free(task);
       }
@@ -118,7 +118,7 @@ void PMR_process_r_queue(int tid, proc_t *procinfo, val_t *Wstruct,
 /*
  * Process the task of refining a subset of eigenvalues.
  */
-int PMR_process_r_task(refine_t *rf, proc_t *procinfo, 
+int ext_PMR_process_r_task(refine_t *rf, proc_t *procinfo, 
 		       val_t *Wstruct, tol_t *tolstruct, 
 		       long double *work, int *iwork)
 {
@@ -152,7 +152,7 @@ int PMR_process_r_task(refine_t *rf, proc_t *procinfo,
     Wgap[ts_begin] = 0.0;
   }  
 
-  xdrrb_(&bl_size, D, DLL, &p, &q, &rtol1, &rtol2, &offset, 
+  ext_xdrrb_(&bl_size, D, DLL, &p, &q, &rtol1, &rtol2, &offset, 
 	  &Wshifted[ts_begin], &Wgap[ts_begin], &Werr[ts_begin],
 	  work, iwork, &pivmin, &bl_spdiam, &bl_size, &info);
   assert(info == 0);

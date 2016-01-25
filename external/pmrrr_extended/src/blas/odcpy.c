@@ -1,4 +1,4 @@
-/* odcpy.f -- translated by f2c (version 20061008) */
+/* ext_odcpy.f -- translated by f2c (version 20061008) */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odcpy_(int *n, double *dx, int *incx, 
+int ext_odcpy_(int *n, double *dx, int *incx, 
 	double *dy, int *incy)
 {
     /* System generated locals */
@@ -99,4 +99,4 @@ L40:
 /* L50: */
     }
     return 0;
-} /* odcpy_ */
+} /* ext_odcpy_ */

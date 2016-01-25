@@ -10,7 +10,7 @@
 #define imax(a,b) ( (a) > (b) ? (a) : (b) )
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
-int xdneg_(int *n, long double *d__, long double *lld, long double *
+int ext_xdneg_(int *n, long double *d__, long double *lld, long double *
 	sigma, long double *pivmin, int *r__)
 {
     /* System generated locals */
@@ -23,7 +23,7 @@ int xdneg_(int *n, long double *d__, long double *lld, long double *
     long double tmp;
     int neg1, neg2;
     long double bsav, gamma, dplus;
-    extern int xdnan_(long double *);
+    extern int ext_xdnan_(long double *);
     int negcnt;
     int sawnan;
     long double dminus;
@@ -132,7 +132,7 @@ int xdneg_(int *n, long double *d__, long double *lld, long double *
 	    t = tmp * lld[j] - *sigma;
 /* L21: */
 	}
-	sawnan = xdnan_(&t);
+	sawnan = ext_xdnan_(&t);
 /*     Run a slower version of the above loop if a NaN is detected. */
 /*     A NaN should occur only with a zero pivot after an infinite */
 /*     pivot.  In that case, substituting 1 for T/DPLUS is the */
@@ -149,7 +149,7 @@ int xdneg_(int *n, long double *d__, long double *lld, long double *
 		    ++neg1;
 		}
 		tmp = t / dplus;
-		if (xdnan_(&tmp)) {
+		if (ext_xdnan_(&tmp)) {
 		    tmp = 1.;
 		}
 		t = tmp * lld[j] - *sigma;
@@ -178,7 +178,7 @@ int xdneg_(int *n, long double *d__, long double *lld, long double *
 	    p = tmp * d__[j] - *sigma;
 /* L23: */
 	}
-	sawnan = xdnan_(&p);
+	sawnan = ext_xdnan_(&p);
 /*     As above, run a slower version that substitutes 1 for Inf/Inf. */
 
 	if (sawnan) {
@@ -193,7 +193,7 @@ int xdneg_(int *n, long double *d__, long double *lld, long double *
 		    ++neg2;
 		}
 		tmp = p / dminus;
-		if (xdnan_(&tmp)) {
+		if (ext_xdnan_(&tmp)) {
 		    tmp = 1.;
 		}
 		p = tmp * d__[j] - *sigma;
@@ -212,4 +212,4 @@ int xdneg_(int *n, long double *d__, long double *lld, long double *
     }
     ret_val = negcnt;
     return ret_val;
-} /* xdneg_ */
+} /* ext_xdneg_ */

@@ -16,7 +16,7 @@ static int c__4 = 4;
 static int c__11 = 11;
 
 /* Subroutine */ 
-int odsq2_(int *n, double *z__, int *info)
+int ext_odsq2_(int *n, double *z__, int *info)
 {
     /* System generated locals */
     int i__1, i__2, i__3;
@@ -45,7 +45,7 @@ int odsq2_(int *n, double *z__, int *info)
     int nfail;
     double desig, trace, sigma;
     int iinfo, ttype;
-    extern /* Subroutine */ int odsq3_(int *, int *, double *, 
+    extern /* Subroutine */ int ext_odsq3_(int *, int *, double *, 
 	    int *, double *, double *, double *, double *, 
 	     int *, int *, int *, int *, int *, 
 	    double *, double *, double *, double *, 
@@ -54,10 +54,10 @@ int odsq2_(int *n, double *z__, int *info)
     double deemin;
     int iwhila, iwhilb;
     double oldemn, safmin;
-    extern /* Subroutine */ int oerbla_(char *, int *);
+    extern /* Subroutine */ int ext_oerbla_(char *, int *);
     /* extern int oienv_(int *, char *, char *, int *, int *,  */
     /* 	    int *, int *); */
-    extern /* Subroutine */ int odsrt_(char *, int *, double *, 
+    extern /* Subroutine */ int ext_odsrt_(char *, int *, double *, 
 	    int *);
 
 
@@ -159,7 +159,7 @@ int odsq2_(int *n, double *z__, int *info)
 
     if (*n < 0) {
 	*info = -1;
-	oerbla_("ODSQ2", &c__1);
+	ext_oerbla_("ODSQ2", &c__1);
 	return 0;
     } else if (*n == 0) {
 	return 0;
@@ -169,7 +169,7 @@ int odsq2_(int *n, double *z__, int *info)
 
 	if (z__[1] < 0.) {
 	    *info = -201;
-	    oerbla_("ODSQ2", &c__2);
+	    ext_oerbla_("ODSQ2", &c__2);
 	}
 	return 0;
     } else if (*n == 2) {
@@ -178,7 +178,7 @@ int odsq2_(int *n, double *z__, int *info)
 
 	if (z__[2] < 0. || z__[3] < 0.) {
 	    *info = -2;
-	    oerbla_("ODSQ2", &c__2);
+	    ext_oerbla_("ODSQ2", &c__2);
 	    return 0;
 	} else if (z__[3] > z__[1]) {
 	    d__ = z__[3];
@@ -216,11 +216,11 @@ int odsq2_(int *n, double *z__, int *info)
     for (k = 1; k <= i__1; k += 2) {
 	if (z__[k] < 0.) {
 	    *info = -(k + 200);
-	    oerbla_("ODSQ2", &c__2);
+	    ext_oerbla_("ODSQ2", &c__2);
 	    return 0;
 	} else if (z__[k + 1] < 0.) {
 	    *info = -(k + 201);
-	    oerbla_("ODSQ2", &c__2);
+	    ext_oerbla_("ODSQ2", &c__2);
 	    return 0;
 	}
 	d__ += z__[k];
@@ -238,7 +238,7 @@ int odsq2_(int *n, double *z__, int *info)
     }
     if (z__[(*n << 1) - 1] < 0.) {
 	*info = -((*n << 1) + 199);
-	oerbla_("ODSQ2", &c__2);
+	ext_oerbla_("ODSQ2", &c__2);
 	return 0;
     }
     d__ += z__[(*n << 1) - 1];
@@ -255,7 +255,7 @@ int odsq2_(int *n, double *z__, int *info)
 	    z__[k] = z__[(k << 1) - 1];
 /* L20: */
 	}
-	odsrt_("D", n, &z__[1], &iinfo);
+	ext_odsrt_("D", n, &z__[1], &iinfo);
 	z__[(*n << 1) - 1] = d__;
 	return 0;
     }
@@ -498,7 +498,7 @@ L100:
 
 /*           While submatrix unfinished take a good dqds step. */
 
-	    odsq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &
+	    ext_odsq3_(&i0, &n0, &z__[1], &pp, &dmin__, &sigma, &desig, &qmax, &
 		    nfail, &iter, &ndiv, &ieee, &ttype, &dmin1, &dmin2, &dn, &
 		    dn1, &dn2, &g, &tau);
 
@@ -570,7 +570,7 @@ L170:
     }
 
 /*     Sort and compute sum of eigenvalues. */
-    odsrt_("D", n, &z__[1], &iinfo);
+    ext_odsrt_("D", n, &z__[1], &iinfo);
 
     e = 0.;
     for (k = *n; k >= 1; --k) {
@@ -590,4 +590,4 @@ L170:
 
 /*     End of ODSQ2 */
 
-} /* odsq2_ */
+} /* ext_odsq2_ */

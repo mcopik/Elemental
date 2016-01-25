@@ -17,7 +17,7 @@ static double c_b5 = 0.;
 static int c__1 = 1;
 static int c__2 = 2;
 
-/* Subroutine */ int odrrv_(int *n, double *vl, double *vu, 
+/* Subroutine */ int ext_odrrv_(int *n, double *vl, double *vu, 
 	double *d__, double *l, double *pivmin, int *isplit, 
 	int *m, int *dol, int *dou, double *minrgp, 
 	double *rtol1, double *rtol2, double *w, double *werr, 
@@ -47,7 +47,7 @@ static int c__2 = 2;
     int wend, iter;
     double bstw;
     int itmp1;
-    extern /* Subroutine */ int odscl_(int *, double *, double *, 
+    extern /* Subroutine */ int ext_odscl_(int *, double *, double *, 
 	    int *);
     int indld;
     double fudge;
@@ -57,12 +57,12 @@ static int c__2 = 2;
     double resid;
     int eskip;
     double right;
-    extern /* Subroutine */ int odcpy_(int *, double *, int *, 
+    extern /* Subroutine */ int ext_odcpy_(int *, double *, int *, 
 	    double *, int *);
     int nclus, zfrom;
     double rqtol;
     int iindc1, iindc2;
-    extern /* Subroutine */ int odr1v_(int *, int *, int *, 
+    extern /* Subroutine */ int ext_odr1v_(int *, int *, int *, 
 	    double *, double *, double *, double *, 
 	    double *, double *, double *, double *, int *, 
 	     int *, double *, double *, int *, int *, 
@@ -74,14 +74,14 @@ static int c__2 = 2;
     int needbs;
     int indlld;
     double sgndef, mingma;
-    extern /* Subroutine */ int odrrb_(int *, double *, double *, 
+    extern /* Subroutine */ int ext_odrrb_(int *, double *, double *, 
 	     int *, int *, double *, double *, int *, 
 	    double *, double *, double *, double *, int *, 
 	     double *, double *, int *, int *);
     int oldien, oldncl, wbegin;
     double spdiam;
     int negcnt;
-    extern /* Subroutine */ int odrrf_(int *, double *, double *, 
+    extern /* Subroutine */ int ext_odrrf_(int *, double *, double *, 
 	     double *, int *, int *, double *, double *, 
 	    double *, double *, double *, double *, 
 	    double *, double *, double *, double *, 
@@ -90,7 +90,7 @@ static int c__2 = 2;
     double savgap;
     int ndepth;
     double ssigma;
-    extern /* Subroutine */ int odset_(char *, int *, int *, 
+    extern /* Subroutine */ int ext_odset_(char *, int *, int *, 
 	    double *, double *, double *, int *);
     int usedbs;
     int iindwk, offset;
@@ -329,7 +329,7 @@ static int c__2 = 2;
     }
 /*     The width of the part of Z that is used */
     zusedw = zusedu - zusedl + 1;
-    odset_("Full", n, &zusedw, &c_b5, &c_b5, &z__[zusedl * z_dim1 + 1], ldz);
+    ext_odset_("Full", n, &zusedw, &c_b5, &c_b5, &z__[zusedl * z_dim1 + 1], ldz);
     eps = DBL_EPSILON; // eps = odmch_("Precision");
     rqtol = eps * 2.;
 
@@ -412,7 +412,7 @@ L15:
 /*        The eigenvalue approximations will be refined when necessary as */
 /*        high relative accuracy is required for the computation of the */
 /*        corresponding eigenvectors. */
-	odcpy_(&im, &w[wbegin], &c__1, &work[wbegin], &c__1);
+	ext_odcpy_(&im, &w[wbegin], &c__1, &work[wbegin], &c__1);
 /*        We store in W the eigenvalue approximations w.r.t. the original */
 /*        matrix T. */
 	i__2 = im;
@@ -485,14 +485,14 @@ L40:
 			    j = wbegin + oldfst - 1;
 			}
 		    }
-		    odcpy_(&in, &z__[ibegin + j * z_dim1], &c__1, &d__[ibegin]
+		    ext_odcpy_(&in, &z__[ibegin + j * z_dim1], &c__1, &d__[ibegin]
 , &c__1);
 		    i__3 = in - 1;
-		    odcpy_(&i__3, &z__[ibegin + (j + 1) * z_dim1], &c__1, &l[
+		    ext_odcpy_(&i__3, &z__[ibegin + (j + 1) * z_dim1], &c__1, &l[
 			    ibegin], &c__1);
 		    sigma = z__[iend + (j + 1) * z_dim1];
 /*                 Set the corresponding entries in Z to zero */
-		    odset_("Full", &in, &c__2, &c_b5, &c_b5, &z__[ibegin + j 
+		    ext_odset_("Full", &in, &c__2, &c_b5, &c_b5, &z__[ibegin + j 
 			    * z_dim1], ldz);
 		}
 /*              Compute DL and DLL of current RRR */
@@ -514,7 +514,7 @@ L40:
 		    offset = indexw[wbegin] - 1;
 /*                 perform limited bisection (if necessary) to get approximate */
 /*                 eigenvalues to the precision needed. */
-		    odrrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, 
+		    ext_odrrb_(&in, &d__[ibegin], &work[indlld + ibegin - 1], &p, 
 			     &q, rtol1, rtol2, &offset, &work[wbegin], &wgap[
 			    wbegin], &werr[wbegin], &work[indwrk], &iwork[
 			    iindwk], pivmin, &spdiam, &in, &iinfo);
@@ -625,7 +625,7 @@ L40:
 				p = indexw[wbegin - 1 + newlst];
 			    }
 			    offset = indexw[wbegin] - 1;
-			    odrrb_(&in, &d__[ibegin], &work[indlld + ibegin 
+			    ext_odrrb_(&in, &d__[ibegin], &work[indlld + ibegin 
 				    - 1], &p, &p, &rqtol, &rqtol, &offset, &
 				    work[wbegin], &wgap[wbegin], &werr[wbegin]
 , &work[indwrk], &iwork[iindwk], pivmin, &
@@ -650,7 +650,7 @@ L40:
 /*                    Note that the new RRR is stored in Z */
 
 /*                    ODRRF needs LWORK = 2*N */
-			odrrf_(&in, &d__[ibegin], &l[ibegin], &work[indld + 
+			ext_odrrf_(&in, &d__[ibegin], &l[ibegin], &work[indld + 
 				ibegin - 1], &newfst, &newlst, &work[wbegin], 
 				&wgap[wbegin], &werr[wbegin], &spdiam, &lgap, 
 				&rgap, pivmin, &tau, &z__[ibegin + newftt * 
@@ -784,7 +784,7 @@ L120:
 			    itmp1 = iwork[iindr + windex];
 			    offset = indexw[wbegin] - 1;
 			    d__1 = eps * 2.;
-			    odrrb_(&in, &d__[ibegin], &work[indlld + ibegin 
+			    ext_odrrb_(&in, &d__[ibegin], &work[indlld + ibegin 
 				    - 1], &indeig, &indeig, &c_b5, &d__1, &
 				    offset, &work[wbegin], &wgap[wbegin], &
 				    werr[wbegin], &work[indwrk], &iwork[
@@ -800,7 +800,7 @@ L120:
 			}
 /*                    Given LAMBDA, compute the eigenvector. */
 			L__1 = ! usedbs;
-			odr1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[
+			ext_odr1v_(&in, &c__1, &in, &lambda, &d__[ibegin], &l[
 				ibegin], &work[indld + ibegin - 1], &work[
 				indlld + ibegin - 1], pivmin, &gaptol, &z__[
 				ibegin + windex * z_dim1], &L__1, &negcnt, &
@@ -897,7 +897,7 @@ L120:
 			    if (stp2ii) {
 /*                          improve error angle by second step */
 				L__1 = ! usedbs;
-				odr1v_(&in, &c__1, &in, &lambda, &d__[ibegin]
+				ext_odr1v_(&in, &c__1, &in, &lambda, &d__[ibegin]
 , &l[ibegin], &work[indld + ibegin - 
 					1], &work[indlld + ibegin - 1], 
 					pivmin, &gaptol, &z__[ibegin + windex 
@@ -933,7 +933,7 @@ L120:
 			    }
 			}
 			i__4 = zto - zfrom + 1;
-			odscl_(&i__4, &nrminv, &z__[zfrom + windex * z_dim1], 
+			ext_odscl_(&i__4, &nrminv, &z__[zfrom + windex * z_dim1], 
 				&c__1);
 L125:
 /*                    Update W */
@@ -983,4 +983,4 @@ L170:
 
 /*     End of ODRRV */
 
-} /* odrrv_ */
+} /* ext_odrrv_ */

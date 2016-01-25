@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdrrk_(int *n, int *iw, long double *gl, 
+int ext_xdrrk_(int *n, int *iw, long double *gl, 
 	long double *gu, long double *d__, long double *e2, long double *pivmin, 
 	long double *reltol, long double *w, long double *werr, int *info)
 {
@@ -185,4 +185,4 @@ L30:
 
 /*     End of XDRRK */
 
-} /* xdrrk_ */
+} /* ext_xdrrk_ */

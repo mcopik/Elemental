@@ -11,7 +11,7 @@
 #define FALSE_ (0)
 
 /* Subroutine */ 
-int odrrr_(int *n, double *d__, double *e, 
+int ext_odrrr_(int *n, double *d__, double *e, 
 	int *info)
 {
     /* System generated locals */
@@ -171,4 +171,4 @@ L11:
 
 /*     END OF ODRRR */
 
-} /* odrrr_ */
+} /* ext_odrrr_ */

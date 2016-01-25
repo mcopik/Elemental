@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int xdsq4_(int *i0, int *n0, long double *z__, 
+int ext_xdsq4_(int *i0, int *n0, long double *z__, 
 	    int *pp, int *n0in, long double *dmin__, long double *dmin1, 
 	    long double *dmin2, long double *dn, long double *dn1, long double *dn2, 
 	    long double *tau, int *ttype, long double *g)
@@ -395,4 +395,4 @@ L80:
 
 /*     End of XDSQ4 */
 
-} /* xdsq4_ */
+} /* ext_xdsq4_ */

@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odsq4_(int *i0, int *n0, double *z__, 
+int ext_odsq4_(int *i0, int *n0, double *z__, 
 	    int *pp, int *n0in, double *dmin__, double *dmin1, 
 	    double *dmin2, double *dn, double *dn1, double *dn2, 
 	    double *tau, int *ttype, double *g)
@@ -395,4 +395,4 @@ L80:
 
 /*     End of ODSQ4 */
 
-} /* odsq4_ */
+} /* ext_odsq4_ */

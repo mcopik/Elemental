@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odrrb_(int *n, double *d__, double *lld, 
+int ext_odrrb_(int *n, double *d__, double *lld, 
 	int *ifirst, int *ilast, double *rtol1, double *rtol2, 
 	 int *offset, double *w, double *wgap, double *werr, 
 	double *work, int *iwork, double *pivmin, double *
@@ -26,7 +26,7 @@ int odrrb_(int *n, double *d__, double *lld,
     double gap, mid, tmp, back, lgap, rgap, left;
     int iter, nint, prev, next;
     double cvrgd, right, width;
-    extern int odneg_(int *, double *, double *, double *
+    extern int ext_odneg_(int *, double *, double *, double *
 , double *, int *);
     int negcnt;
     double mnwdth;
@@ -196,7 +196,7 @@ int odrrb_(int *n, double *d__, double *lld,
 
 	back = werr[ii];
 L20:
-	negcnt = odneg_(n, &d__[1], &lld[1], &left, pivmin, &r__);
+	negcnt = ext_odneg_(n, &d__[1], &lld[1], &left, pivmin, &r__);
 	if (negcnt > i__ - 1) {
 	    left -= back;
 	    back *= 2.;
@@ -208,7 +208,7 @@ L20:
 
 	back = werr[ii];
 L50:
-	negcnt = odneg_(n, &d__[1], &lld[1], &right, pivmin, &r__);
+	negcnt = ext_odneg_(n, &d__[1], &lld[1], &right, pivmin, &r__);
 	if (negcnt < i__) {
 	    right += back;
 	    back *= 2.;
@@ -296,7 +296,7 @@ L80:
 
 /*        Perform one bisection step */
 
-	negcnt = odneg_(n, &d__[1], &lld[1], &mid, pivmin, &r__);
+	negcnt = ext_odneg_(n, &d__[1], &lld[1], &mid, pivmin, &r__);
 	if (negcnt <= i__ - 1) {
 	    work[k - 1] = mid;
 	} else {
@@ -341,4 +341,4 @@ L100:
 
 /*     End of ODRRB */
 
-} /* odrrb_ */
+} /* ext_odrrb_ */

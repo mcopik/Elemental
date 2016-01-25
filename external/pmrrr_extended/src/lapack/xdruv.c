@@ -11,7 +11,7 @@
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
 /* Subroutine */ 
-int xdruv_(int *iseed, int *n, long double *x)
+int ext_xdruv_(int *iseed, int *n, long double *x)
 {
     /* Initialized data */
 
@@ -187,4 +187,4 @@ L20:
 
 /*     End of XDRUV */
 
-} /* xdruv_ */
+} /* ext_xdruv_ */

@@ -8,7 +8,7 @@
 #include <assert.h>
 
 /* Subroutine */ 
-int odrra_(int *n, double *d__, double *e, 
+int ext_odrra_(int *n, double *d__, double *e, 
 	double *e2, double *spltol, double *tnrm, int *nsplit, 
 	 int *isplit, int *info)
 {
@@ -148,4 +148,4 @@ int odrra_(int *n, double *d__, double *e,
 
 /*     End of ODRRA */
 
-} /* odrra_ */
+} /* ext_odrra_ */

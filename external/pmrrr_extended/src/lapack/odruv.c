@@ -11,7 +11,7 @@
 #define imin(a,b) ( (a) < (b) ? (a) : (b) )
 
 /* Subroutine */ 
-int odruv_(int *iseed, int *n, double *x)
+int ext_odruv_(int *iseed, int *n, double *x)
 {
     /* Initialized data */
 
@@ -187,4 +187,4 @@ L20:
 
 /*     End of ODRUV */
 
-} /* odruv_ */
+} /* ext_odruv_ */
