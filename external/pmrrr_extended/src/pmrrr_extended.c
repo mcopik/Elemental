@@ -90,32 +90,6 @@ int pmrrr_extended(char *jobz, char *range, int *np, double  *D_dbl,
 	  int *offsetp, double *W_dbl, double *Z, int *ldz,
 	  int *Zsupp)
 {
-  printf("hello from pmrrr extended\n");
-  printf("jobz = %s\n",jobz);
-  printf("range = %s\n",range);
-  printf("np = %d\n",*np);
-  int my_i;
-  for(my_i=0; my_i<*np-1; my_i++)
-    printf("%e %e\n",D_dbl[my_i],E_dbl[my_i]);
-  printf("%e\n",D_dbl[*np-1]);
-  printf("vl = %e\n",*vl_dbl);
-  printf("vu = %e\n",*vu_dbl);
-  printf("il = %d\n",*il);
-  printf("iu = %d\n",*iu);
-  printf("tryracp = %d\n",*tryracp);
-  char comm_name[MPI_MAX_OBJECT_NAME];
-  comm_name[0] = 0;
-  int resultlen;
-  MPI_Comm_get_name(comm, comm_name, &resultlen);
-  int rank; MPI_Comm_rank(comm,&rank);
-  printf("rank = %d\n", rank);
-  printf("comm = %s\n",comm_name);
-  printf("nzp = %d\n",*nzp);
-  printf("offsetp = %d\n",*offsetp);
-  printf("ldz = %d\n",*ldz);
-  printf("Zsupp = %d\n",*Zsupp);
-  
-  
   /* Input parameter */
   int         n      = *np;
   bool        onlyW  = (jobz[0]  == 'N' || jobz[0]  == 'n');

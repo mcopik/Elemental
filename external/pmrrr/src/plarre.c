@@ -106,7 +106,6 @@ static int cmp(const void*, const void*);
 int plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
 	       val_t *Wstruct, tol_t *tolstruct, int *nzp, int *offsetp)
 {
-  printf("hello from plarre\n");
   /* input variables */
   int              nproc  = procinfo->nproc;
   bool             wantZ  = (jobz[0]  == 'V' || jobz[0]  == 'v');

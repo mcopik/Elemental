@@ -114,7 +114,6 @@ static int ext_cmp(const void*, const void*);
 int ext_plarre(proc_t *procinfo, char *jobz, char *range, in_t *Dstruct, 
 	       val_t *Wstruct, tol_t *tolstruct, int *nzp, int *offsetp)
 {
-  printf("hello from ext_plarre extended\n");
   /* input variables */
   int              pid    = procinfo->pid;
   int              nproc  = procinfo->nproc;
