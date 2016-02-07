@@ -293,7 +293,7 @@ void HermitianEig
     const Int subdiagonal = ( uplo==LOWER ? -1 : +1 );
     auto d = GetRealPartOfDiagonal(A);
     auto e = GetRealPartOfDiagonal(A,subdiagonal);
-    HermitianTridiagEig( d, e, w, sort, subset );
+    HermitianTridiagEig( d, e, w, sort, subset, ctrl.xtd );
 
     if( ctrl.timeStages )
     {
@@ -605,7 +605,7 @@ void HermitianEig
           subset.lowerBound, subset.upperBound );
     else
         HermitianTridiagEig
-        ( d_STAR_STAR, e_STAR_STAR, w, Z_STAR_VR, UNSORTED, subset );
+        ( d_STAR_STAR, e_STAR_STAR, w, Z_STAR_VR, UNSORTED, subset, ctrl.xtd );
 
     if( ctrl.timeStages )
     {

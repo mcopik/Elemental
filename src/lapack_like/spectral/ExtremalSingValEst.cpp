@@ -12,11 +12,12 @@ namespace El {
 
 template<typename F>
 pair<Base<F>,Base<F>>
-ExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize )
+ExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize, bool xtd )
 {
     DEBUG_ONLY(CSE cse("ExtremalSingValEst"))
     typedef Base<F> Real;
     Matrix<Real> T;
+    HermitianEigSubset<Base<F>> subset;
     ProductLanczos( A, T, basisSize );
     const Int k = T.Height();
     if( k == 0 )
@@ -27,7 +28,7 @@ ExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize )
     dSub = GetDiagonal( T, -1 );
     
     Matrix<Real> w;
-    HermitianTridiagEig( d, dSub, w, ASCENDING );
+    HermitianTridiagEig( d, dSub, w, ASCENDING, subset, xtd );
     
     pair<Real,Real> extremal;
     extremal.first = Sqrt( Max(w.Get(0,0),Real(0)) );
@@ -37,12 +38,13 @@ ExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize )
 
 template<typename F>
 pair<Base<F>,Base<F>>
-ExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize )
+ExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize, bool xtd )
 {
     DEBUG_ONLY(CSE cse("ExtremalSingValEst"))
     typedef Base<F> Real;
     Grid grid( A.Comm() );
     DistMatrix<Real,STAR,STAR> T(grid);
+    HermitianEigSubset<Base<F>> subset; 
     ProductLanczos( A, T, basisSize );
     const Int k = T.Height();
     if( k == 0 )
@@ -52,7 +54,7 @@ ExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize )
     auto dSub = GetDiagonal( T.Matrix(), -1 );
     
     Matrix<Real> w;
-    HermitianTridiagEig( d, dSub, w, ASCENDING );
+    HermitianTridiagEig( d, dSub, w, ASCENDING, subset, xtd );
     
     pair<Real,Real> extremal;
     extremal.first = Sqrt( Max(w.Get(0,0),Real(0)) );
@@ -62,11 +64,12 @@ ExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize )
 
 template<typename F>
 pair<Base<F>,Base<F>>
-HermitianExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize )
+HermitianExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize, bool xtd )
 {
     DEBUG_ONLY(CSE cse("HermitianExtremalSingValEst"))
     typedef Base<F> Real;
     Matrix<Real> T;
+    HermitianEigSubset<Base<F>> subset;
     Lanczos( A, T, basisSize );
     const Int k = T.Height();
     if( k == 0 )
@@ -77,7 +80,7 @@ HermitianExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize )
     dSub = GetDiagonal( T, -1 );
     
     Matrix<Real> w;
-    HermitianTridiagEig( d, dSub, w );
+    HermitianTridiagEig( d, dSub, w, ASCENDING, subset, xtd );
     
     pair<Real,Real> extremal;
     extremal.second = MaxNorm(w);
@@ -89,13 +92,13 @@ HermitianExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize )
 
 template<typename F>
 pair<Base<F>,Base<F>>
-HermitianExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize )
+HermitianExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize, bool xtd )
 {
     DEBUG_ONLY(CSE cse("HermitianExtremalSingValEst"))
     typedef Base<F> Real;
     Grid grid( A.Comm() );
-
     DistMatrix<Real,STAR,STAR> T(grid);
+    HermitianEigSubset<Base<F>> subset;
     Lanczos( A, T, basisSize );
     const Int k = T.Height();
     if( k == 0 )
@@ -105,7 +108,7 @@ HermitianExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize )
     auto dSub = GetDiagonal( T.Matrix(), -1 );
 
     Matrix<Real> w;
-    HermitianTridiagEig( d, dSub, w );
+    HermitianTridiagEig( d, dSub, w, ASCENDING, subset, xtd );
 
     pair<Real,Real> extremal;
     extremal.second = MaxNorm(w);
@@ -118,13 +121,13 @@ HermitianExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize )
 
 #define PROTO(F) \
   template pair<Base<F>,Base<F>> ExtremalSingValEst \
-  ( const SparseMatrix<F>& A, Int basisSize ); \
+  ( const SparseMatrix<F>& A, Int basisSize, bool xtd ); \
   template pair<Base<F>,Base<F>> ExtremalSingValEst \
-  ( const DistSparseMatrix<F>& A, Int basisSize ); \
+  ( const DistSparseMatrix<F>& A, Int basisSize, bool xtd ); \
   template pair<Base<F>,Base<F>> HermitianExtremalSingValEst \
-  ( const SparseMatrix<F>& A, Int basisSize ); \
+  ( const SparseMatrix<F>& A, Int basisSize, bool xtd ); \
   template pair<Base<F>,Base<F>> HermitianExtremalSingValEst \
-  ( const DistSparseMatrix<F>& A, Int basisSize );
+  ( const DistSparseMatrix<F>& A, Int basisSize, bool xtd );
 
 #define EL_NO_INT_PROTO
 #include "El/macros/Instantiate.h"

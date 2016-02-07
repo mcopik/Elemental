@@ -41,6 +41,7 @@ struct HermitianEigCtrl
     HermitianSDCCtrl<Base<F>> sdcCtrl;
     bool useSDC=false;
     bool timeStages=false;
+    bool xtd = false;
 };
 
 // Compute eigenvalues
@@ -642,17 +643,17 @@ Base<F> ProductLanczosDecomp
 
 template<typename F>
 pair<Base<F>,Base<F>> 
-ExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize=20 );
+ExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize=20, bool xtd = false );
 template<typename F>
 pair<Base<F>,Base<F>> 
-ExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize=20 );
+ExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize=20, bool xtd = false );
 
 template<typename F>
 pair<Base<F>,Base<F>> 
-HermitianExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize=20 );
+HermitianExtremalSingValEst( const SparseMatrix<F>& A, Int basisSize=20, bool xtd = false );
 template<typename F>
 pair<Base<F>,Base<F>> 
-HermitianExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize=20 );
+HermitianExtremalSingValEst( const DistSparseMatrix<F>& A, Int basisSize=20, bool xtd = false );
 
 // Pseudospectra
 // =============
